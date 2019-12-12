@@ -1,24 +1,18 @@
 module.exports = {
   up: (queryInterface, Sequelize) => {
     return queryInterface.createTable('appointments', {
-      date: {
-        allowNull: false,
-        type: Sequelize.DATE,
-      },
-      description: {
-        allowNull: false,
-        type: Sequelize.STRING,
-      },
-      gender: {
-        allowNull: false,
-        type: Sequelize.STRING,
-      },
+      created_at: { allowNull: false, type: Sequelize.DATE },
+      updated_at: { allowNull: false, type: Sequelize.DATE },
+
       id: {
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,
         type: Sequelize.INTEGER,
       },
+
+      date: { allowNull: false, type: Sequelize.DATE },
+      description: { allowNull: false, type: Sequelize.STRING },
       customer_id: {
         allowNull: true,
         onDelete: 'SET NULL',
@@ -32,14 +26,6 @@ module.exports = {
         onUpdate: 'CASCADE',
         references: { model: 'users', key: 'id' },
         type: Sequelize.INTEGER,
-      },
-      created_at: {
-        allowNull: false,
-        type: Sequelize.DATE,
-      },
-      updated_at: {
-        allowNull: false,
-        type: Sequelize.DATE,
       },
     });
   },

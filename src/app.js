@@ -2,11 +2,9 @@ import './database';
 import cors from 'cors';
 import express, { json } from 'express';
 import helmet from 'helmet';
-import path from 'path';
 
 import {
   appointments,
-  files,
   notifications,
   providers,
   schedules,
@@ -29,15 +27,10 @@ class App {
     this.server.use(cors());
     this.server.use(helmet());
     this.server.use(json());
-    this.server.use(
-      '/files',
-      express.static(path.resolve(__dirname, '..', 'tmp', 'uploads'))
-    );
   }
 
   routes() {
     this.server.use(`${BASE_PREFIX}/appointments`, appointments);
-    this.server.use(`${BASE_PREFIX}/files`, files);
     this.server.use(`${BASE_PREFIX}/notifications`, notifications);
     this.server.use(`${BASE_PREFIX}/providers`, providers);
     this.server.use(`${BASE_PREFIX}/schedules`, schedules);

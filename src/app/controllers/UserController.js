@@ -5,7 +5,17 @@ import { storeUserSchema, updateUserSchema } from '../schemas';
 class UserController {
   async store(req, res) {
     try {
-      // await storeUserSchema.validateAsync(req.body);
+      const user = await User.create(req.body);
+      return res.json(user);
+    } catch (e) {
+      console.log(e.message);
+      return res.json(e);
+    }
+  }
+  /*
+  async store(req, res) {
+    try {
+      await storeUserSchema.validateAsync(req.body);
 
       const userExists = await User.findOne({
         where: {
@@ -38,6 +48,7 @@ class UserController {
       });
     }
   }
+  */
 
   async update(req, res) {
     try {

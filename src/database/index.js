@@ -1,9 +1,25 @@
 import mongoose from 'mongoose';
 import Sequelize from 'sequelize';
 import { databaseConfig } from '../config';
-import { Appointment, File, Service, User, UsersServices } from '../app/models';
+import {
+  Adress,
+  Appointment,
+  Customer,
+  Provider,
+  Service,
+  User,
+  UsersServices,
+} from '../app/models';
 
-const models = [Appointment, File, Service, User, UsersServices];
+const models = [
+  Adress,
+  Appointment,
+  Customer,
+  Provider,
+  Service,
+  User,
+  UsersServices,
+];
 
 class Database {
   constructor() {

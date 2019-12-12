@@ -1,12 +1,16 @@
 module.exports = {
   up: (queryInterface, Sequelize) => {
     return queryInterface.createTable('users_services', {
+      created_at: { allowNull: false, type: Sequelize.DATE },
+      updated_at: { allowNull: false, type: Sequelize.DATE },
+
       id: {
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,
         type: Sequelize.INTEGER,
       },
+
       provider_id: {
         allowNull: false,
         onDelete: 'CASCADE',
@@ -19,18 +23,7 @@ module.exports = {
         references: { model: 'services', key: 'id' },
         type: Sequelize.INTEGER,
       },
-      value: {
-        allowNull: false,
-        type: Sequelize.DOUBLE,
-      },
-      created_at: {
-        allowNull: false,
-        type: Sequelize.DATE,
-      },
-      updated_at: {
-        allowNull: false,
-        type: Sequelize.DATE,
-      },
+      value: { allowNull: false, type: Sequelize.DOUBLE },
     });
   },
 
