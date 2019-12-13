@@ -1,6 +1,6 @@
 module.exports = {
   up: (queryInterface, Sequelize) => {
-    return queryInterface.addColumn('users', 'provider_id', {
+    return queryInterface.addColumn('profiles', 'provider_id', {
       allowNull: true,
       onDelete: 'SET NULL',
       onUpdate: 'CASCADE',
@@ -10,6 +10,6 @@ module.exports = {
   },
 
   down: queryInterface => {
-    return queryInterface.removeColumn('users', 'provider_id');
+    return queryInterface.removeColumn('profiles', 'provider_id');
   },
 };

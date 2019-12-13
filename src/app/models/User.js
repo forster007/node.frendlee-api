@@ -45,19 +45,14 @@ class User extends Model {
   }
 
   static associate(models) {
-    this.belongsTo(models.Adress, {
+    this.hasOne(models.Adress, {
       as: 'address',
       foreignKey: 'adress_id',
     });
 
-    this.belongsTo(models.Customer, {
-      as: 'customer',
-      foreignKey: 'customer_id',
-    });
-
-    this.belongsTo(models.Provider, {
-      as: 'provider',
-      foreignKey: 'provider_id',
+    this.hasOne(models.Profile, {
+      as: 'profile',
+      foreignKey: 'profile_id',
     });
 
     this.belongsToMany(models.Service, {
