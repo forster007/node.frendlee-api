@@ -1,6 +1,13 @@
-import { Address, Profile, Provider, User } from '../models';
+import {
+  Address,
+  Profile,
+  Provider,
+  Service,
+  User,
+  UsersServices,
+} from '../models';
 
-class ProviderController {
+class CustomerController {
   async index(req, res) {
     const providers = await User.findAll({
       attributes: [
@@ -62,51 +69,6 @@ class ProviderController {
 
     return res.json(providers);
   }
-
-  async store(req, res) {
-    try {
-      const provider = await Provider.create(req.body, {
-        include: [
-          { as: 'user', model: User },
-          { as: 'user_address', model: Address },
-        ],
-      });
-
-      return res.json(provider);
-    } catch (e) {
-      console.log('ERROR --> ', e);
-      return res.json(e);
-    }
-  }
-  /*
-  async index(req, res) {
-    const providers = await User.findAll({
-      attributes: ['avatar_id', 'email', 'id', 'name'],
-      include: [
-        {
-          as: 'avatar',
-          attributes: ['name', 'path', 'url'],
-          model: File,
-        },
-        {
-          as: 'services',
-          include: [],
-          model: Service,
-          through: {
-            as: 'service_value',
-            attributes: ['value'],
-            model: UsersServices,
-          },
-        },
-      ],
-      where: {
-        provider: true,
-      },
-    });
-
-    return res.json(providers);
-  }
-  */
 }
 
-export default new ProviderController();
+export default new CustomerController();

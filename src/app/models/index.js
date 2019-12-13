@@ -1,4 +1,4 @@
-import Adress from './Adress';
+import Address from './Address';
 import Appointment from './Appointment';
 import Customer from './Customer';
 import Profile from './Profile';
@@ -8,7 +8,7 @@ import User from './User';
 import UsersServices from './UsersServices';
 
 export {
-  Adress,
+  Address,
   Appointment,
   Customer,
   Profile,

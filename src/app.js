@@ -5,6 +5,7 @@ import helmet from 'helmet';
 
 import {
   appointments,
+  customers,
   notifications,
   providers,
   schedules,
@@ -31,6 +32,7 @@ class App {
 
   routes() {
     this.server.use(`${BASE_PREFIX}/appointments`, appointments);
+    this.server.use(`${BASE_PREFIX}/customers`, customers);
     this.server.use(`${BASE_PREFIX}/notifications`, notifications);
     this.server.use(`${BASE_PREFIX}/providers`, providers);
     this.server.use(`${BASE_PREFIX}/schedules`, schedules);

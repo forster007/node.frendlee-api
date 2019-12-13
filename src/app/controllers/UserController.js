@@ -1,14 +1,31 @@
 import { isEmpty } from '../../lib';
-import { User, UsersServices } from '../models';
+import { Address, Profile, Provider, User, UsersServices } from '../models';
 import { storeUserSchema, updateUserSchema } from '../schemas';
 
 class UserController {
   async store(req, res) {
     try {
-      const user = await User.create(req.body);
+      const user = await User.create(req.body, {
+        include: [
+          {
+            as: 'user_address',
+            model: Address,
+          },
+          {
+            as: 'user_profile',
+            model: Profile,
+            include: [
+              {
+                as: 'user_provider',
+                model: Provider,
+              },
+            ],
+          },
+        ],
+      });
       return res.json(user);
     } catch (e) {
-      console.log(e.message);
+      console.log(e);
       return res.json(e);
     }
   }

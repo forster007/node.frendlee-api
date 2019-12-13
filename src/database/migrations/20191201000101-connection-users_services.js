@@ -14,7 +14,7 @@ module.exports = {
       provider_id: {
         allowNull: false,
         onDelete: 'CASCADE',
-        references: { model: 'users', key: 'id' },
+        references: { model: 'providers', key: 'id' },
         type: Sequelize.INTEGER,
       },
       service_id: {

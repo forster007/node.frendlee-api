@@ -2,7 +2,7 @@ import mongoose from 'mongoose';
 import Sequelize from 'sequelize';
 import { databaseConfig } from '../config';
 import {
-  Adress,
+  Address,
   Appointment,
   Customer,
   Profile,
@@ -13,7 +13,7 @@ import {
 } from '../app/models';
 
 const models = [
-  Adress,
+  Address,
   Appointment,
   Customer,
   Profile,
