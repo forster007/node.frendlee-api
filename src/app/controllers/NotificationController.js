@@ -1,7 +1,7 @@
 import { User } from '../models';
 import { Notification } from '../schemas';
 
-import { isEmpty } from '../../lib';
+import isEmpty from '../../lib/Helpers';
 
 class NotificationController {
   async index(req, res) {

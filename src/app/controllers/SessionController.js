@@ -1,6 +1,6 @@
 import jwt from 'jsonwebtoken';
 import { authConfig } from '../../config';
-import { isEmpty } from '../../lib';
+import isEmpty from '../../lib/Helpers';
 import User from '../models/User';
 import { storeSessionSchema } from '../schemas';
 

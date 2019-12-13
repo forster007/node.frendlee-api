@@ -1,3 +1,3 @@
 import AuthMiddleware from './auth';
 
-export { AuthMiddleware };
+export default AuthMiddleware;

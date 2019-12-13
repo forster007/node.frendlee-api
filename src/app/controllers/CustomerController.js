@@ -1,11 +1,4 @@
-import {
-  Address,
-  Profile,
-  Provider,
-  Service,
-  User,
-  UsersServices,
-} from '../models';
+import { Address, Profile, Provider, User } from '../models';
 
 class CustomerController {
   async index(req, res) {

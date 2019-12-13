@@ -2,7 +2,7 @@ import moment from 'moment';
 import { Op } from 'sequelize';
 import { Appointment, User } from '../models';
 
-import { isEmpty } from '../../lib';
+import isEmpty from '../../lib/Helpers';
 
 class ScheduleController {
   async index(req, res) {

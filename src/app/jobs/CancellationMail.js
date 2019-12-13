@@ -1,5 +1,5 @@
 import moment from 'moment';
-import { Mail } from '../../lib';
+import Mail from '../../lib/Mail';
 
 class CancellationMail {
   get key() {

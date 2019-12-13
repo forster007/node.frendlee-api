@@ -21,6 +21,7 @@ module.exports = {
   rules: {
     "class-methods-use-this": "off",
     "camelcase": "off",
+    "no-console": "off",
     "no-param-reassign": "off",
     "no-unused-vars": ["error", { "argsIgnorePattern": "next" }],
     "prettier/prettier": "error"

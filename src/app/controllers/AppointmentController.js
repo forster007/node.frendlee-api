@@ -1,9 +1,9 @@
 import moment from 'moment';
-import { Appointment, File, User } from '../models';
+import { Appointment, User } from '../models';
 import { Notification, storeAppointment } from '../schemas';
 
 import CancellationMail from '../jobs/CancellationMail';
-import { isEmpty } from '../../lib';
+import isEmpty from '../../lib/Helpers';
 import Queue from '../../lib/Queue';
 
 class AppointmentController {
@@ -44,13 +44,6 @@ class AppointmentController {
         {
           as: 'provider',
           attributes: ['email', 'name'],
-          include: [
-            {
-              as: 'avatar',
-              attributes: ['id', 'path', 'url'],
-              model: File,
-            },
-          ],
           model: User,
         },
       ],

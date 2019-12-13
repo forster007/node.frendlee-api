@@ -12,4 +12,4 @@ function isEmpty(v) {
   return `Is not array or object. Returned: ${typeof v}`;
 }
 
-export { isEmpty };
+export default isEmpty;
