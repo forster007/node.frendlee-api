@@ -4,7 +4,7 @@ import AuthMiddleware from '../app/middlewares';
 
 const router = express.Router();
 
-router.use(AuthMiddleware);
+// router.use(AuthMiddleware);
 router.post('/', ServiceController.store);
 
 export default router;

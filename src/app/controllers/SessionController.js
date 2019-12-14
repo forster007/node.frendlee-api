@@ -2,13 +2,10 @@ import jwt from 'jsonwebtoken';
 import { authConfig } from '../../config';
 import isEmpty from '../../lib/Helpers';
 import User from '../models/User';
-import { storeSessionSchema } from '../schemas';
 
 class SessionController {
   async store(req, res) {
     try {
-      await storeSessionSchema.validateAsync(req.body);
-
       const user = await User.findOne({
         where: {
           email: req.body.email,

@@ -15,7 +15,7 @@ class Provider extends Model {
         lastname: Sequelize.STRING,
         name: Sequelize.STRING,
         onesignal: Sequelize.STRING,
-        phone_number: Sequelize.INTEGER,
+        phone_number: Sequelize.STRING,
         phone_number_is_whatsapp: Sequelize.BOOLEAN,
         picture_address: Sequelize.BLOB('tiny'),
         picture_certification: Sequelize.BLOB('tiny'),
@@ -40,6 +40,12 @@ class Provider extends Model {
     this.belongsTo(models.User, {
       as: 'user',
       foreignKey: 'user_id',
+    });
+
+    this.belongsToMany(models.Service, {
+      as: 'services',
+      foreignKey: 'provider_id',
+      through: 'user_services',
     });
   }
 }

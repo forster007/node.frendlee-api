@@ -15,6 +15,7 @@ module.exports = {
       password_hash: { allowNull: false, type: Sequelize.STRING },
       status: {
         allowNull: false,
+        defaultValue: 'locked',
         type: Sequelize.ENUM,
         values: ['disabled', 'enabled', 'locked'],
       },

@@ -18,10 +18,10 @@ class Service extends Model {
   }
 
   static associate(models) {
-    this.belongsToMany(models.User, {
-      as: 'users',
+    this.belongsToMany(models.Provider, {
+      as: 'providers',
       foreignKey: 'service_id',
-      through: 'users_services',
+      through: 'user_services',
     });
   }
 }

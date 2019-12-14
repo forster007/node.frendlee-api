@@ -19,21 +19,6 @@ module.exports = {
         values: ['female', 'male'],
       },
       gps: { allowNull: true, type: Sequelize.STRING },
-      have_allergy: {
-        allowNull: false,
-        defaultValue: false,
-        type: Sequelize.BOOLEAN,
-      },
-      have_diseases: {
-        allowNull: false,
-        defaultValue: false,
-        type: Sequelize.BOOLEAN,
-      },
-      have_treatment: {
-        allowNull: false,
-        defaultValue: false,
-        type: Sequelize.BOOLEAN,
-      },
       is_medical_provider: {
         allowNull: false,
         defaultValue: false,

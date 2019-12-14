@@ -5,7 +5,7 @@ import Profile from './Profile';
 import Provider from './Provider';
 import Service from './Service';
 import User from './User';
-import UsersServices from './UsersServices';
+import UserServices from './UserServices';
 
 export {
   Address,
@@ -15,5 +15,5 @@ export {
   Provider,
   Service,
   User,
-  UsersServices,
+  UserServices,
 };

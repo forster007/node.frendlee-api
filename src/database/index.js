@@ -9,7 +9,7 @@ import {
   Provider,
   Service,
   User,
-  UsersServices,
+  UserServices,
 } from '../app/models';
 
 const models = [
@@ -20,7 +20,7 @@ const models = [
   Provider,
   Service,
   User,
-  UsersServices,
+  UserServices,
 ];
 
 class Database {

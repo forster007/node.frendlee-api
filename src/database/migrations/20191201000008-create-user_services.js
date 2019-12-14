@@ -1,6 +1,6 @@
 module.exports = {
   up: (queryInterface, Sequelize) => {
-    return queryInterface.createTable('users_services', {
+    return queryInterface.createTable('user_services', {
       created_at: { allowNull: false, type: Sequelize.DATE },
       updated_at: { allowNull: false, type: Sequelize.DATE },
 
@@ -14,12 +14,14 @@ module.exports = {
       provider_id: {
         allowNull: false,
         onDelete: 'CASCADE',
+        onUpdate: 'CASCADE',
         references: { model: 'providers', key: 'id' },
         type: Sequelize.INTEGER,
       },
       service_id: {
         allowNull: false,
         onDelete: 'CASCADE',
+        onUpdate: 'CASCADE',
         references: { model: 'services', key: 'id' },
         type: Sequelize.INTEGER,
       },
@@ -28,6 +30,6 @@ module.exports = {
   },
 
   down: queryInterface => {
-    return queryInterface.dropTable('users_services');
+    return queryInterface.dropTable('user_services');
   },
 };

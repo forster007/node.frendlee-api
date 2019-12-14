@@ -20,6 +20,18 @@ class Address extends Model {
 
     return this;
   }
+
+  static associate(models) {
+    this.belongsTo(models.Customer, {
+      as: 'customer',
+      foreignKey: 'id',
+    });
+
+    this.belongsTo(models.Provider, {
+      as: 'provider',
+      foreignKey: 'id',
+    });
+  }
 }
 
 export default Address;

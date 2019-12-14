@@ -1,13 +1,12 @@
-import { Address, Profile, Provider, User } from '../models';
+import { Address, Provider, Service, User, UserServices } from '../models';
+import isEmpty from '../../lib/Helpers';
 
 class ProviderController {
   async index(req, res) {
-    const providers = await User.findAll({
+    const providers = await Provider.findAll({
       attributes: [
         'id',
-        'account_type',
         'birthdate',
-        'email',
         'gender',
         'gps',
         'lastname',
@@ -18,11 +17,14 @@ class ProviderController {
         'picture_address',
         'picture_profile',
         'ssn',
-        'status',
         'address_id',
-        'profile_id',
       ],
       include: [
+        {
+          as: 'user',
+          attributes: ['email', 'status'],
+          model: User,
+        },
         {
           as: 'user_address',
           attributes: [
@@ -38,26 +40,16 @@ class ProviderController {
           model: Address,
         },
         {
-          as: 'user_profile',
-          attributes: ['id'],
-          include: [
-            {
-              as: 'user_provider',
-              attributes: [
-                'formation',
-                'is_medical_provider',
-                'picture_certification',
-                'picture_license',
-              ],
-              model: Provider,
-            },
-          ],
-          model: Profile,
+          as: 'services',
+          attributes: ['id', 'name'],
+          model: Service,
+          through: {
+            as: 'service_value',
+            attributes: ['value'],
+            model: UserServices,
+          },
         },
       ],
-      where: {
-        account_type: 'provider',
-      },
     });
 
     return res.json(providers);
@@ -65,16 +57,26 @@ class ProviderController {
 
   async store(req, res) {
     try {
-      const provider = await Provider.create(req.body, {
+      const { user_services, ...body } = req.body;
+      const provider = await Provider.create(body, {
         include: [
           { as: 'user', model: User },
           { as: 'user_address', model: Address },
         ],
       });
 
+      if (user_services && !isEmpty(user_services)) {
+        const srvcs = user_services.map(service => ({
+          ...service,
+          provider_id: provider.id,
+        }));
+
+        await UserServices.bulkCreate(srvcs);
+      }
+
       return res.json(provider);
     } catch (e) {
-      console.log('ERROR --> ', e);
+      console.log(e);
       return res.json(e);
     }
   }
