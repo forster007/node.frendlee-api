@@ -4,23 +4,27 @@ import { databaseConfig } from '../config';
 import {
   Address,
   Appointment,
+  Clock,
   Customer,
+  Period,
   Profile,
   Provider,
+  ProviderServices,
   Service,
   User,
-  UserServices,
 } from '../app/models';
 
 const models = [
   Address,
   Appointment,
+  Clock,
   Customer,
+  Period,
   Profile,
   Provider,
+  ProviderServices,
   Service,
   User,
-  UserServices,
 ];
 
 class Database {

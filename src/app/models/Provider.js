@@ -33,7 +33,7 @@ class Provider extends Model {
 
   static associate(models) {
     this.belongsTo(models.Address, {
-      as: 'user_address',
+      as: 'provider_address',
       foreignKey: 'address_id',
     });
 
@@ -45,7 +45,19 @@ class Provider extends Model {
     this.belongsToMany(models.Service, {
       as: 'services',
       foreignKey: 'provider_id',
-      through: 'user_services',
+      through: 'provider_services',
+    });
+
+    this.belongsToMany(models.Clock, {
+      as: 'clocks',
+      foreignKey: 'provider_id',
+      through: 'provider_clocks',
+    });
+
+    this.belongsToMany(models.Period, {
+      as: 'periods',
+      foreignKey: 'provider_id',
+      through: 'provider_periods',
     });
   }
 }

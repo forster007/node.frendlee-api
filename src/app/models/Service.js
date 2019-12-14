@@ -21,7 +21,7 @@ class Service extends Model {
     this.belongsToMany(models.Provider, {
       as: 'providers',
       foreignKey: 'service_id',
-      through: 'user_services',
+      through: 'provider_services',
     });
   }
 }

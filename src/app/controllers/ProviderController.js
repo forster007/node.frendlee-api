@@ -1,4 +1,12 @@
-import { Address, Provider, Service, User, UserServices } from '../models';
+import {
+  Address,
+  Clock,
+  Period,
+  Provider,
+  ProviderServices,
+  Service,
+  User,
+} from '../models';
 import isEmpty from '../../lib/Helpers';
 
 class ProviderController {
@@ -26,7 +34,7 @@ class ProviderController {
           model: User,
         },
         {
-          as: 'user_address',
+          as: 'provider_address',
           attributes: [
             'city',
             'complement',
@@ -40,13 +48,25 @@ class ProviderController {
           model: Address,
         },
         {
+          as: 'clocks',
+          attributes: ['name'],
+          model: Clock,
+          through: { attributes: [] },
+        },
+        {
+          as: 'periods',
+          attributes: ['name'],
+          model: Period,
+          through: { attributes: [] },
+        },
+        {
           as: 'services',
           attributes: ['id', 'name'],
           model: Service,
           through: {
             as: 'service_value',
             attributes: ['value'],
-            model: UserServices,
+            model: ProviderServices,
           },
         },
       ],
@@ -57,21 +77,35 @@ class ProviderController {
 
   async store(req, res) {
     try {
-      const { user_services, ...body } = req.body;
+      const {
+        provider_clocks,
+        provider_periods,
+        provider_services,
+        ...body
+      } = req.body;
+
       const provider = await Provider.create(body, {
         include: [
           { as: 'user', model: User },
-          { as: 'user_address', model: Address },
+          { as: 'provider_address', model: Address },
         ],
       });
 
-      if (user_services && !isEmpty(user_services)) {
-        const srvcs = user_services.map(service => ({
+      if (!isEmpty(provider_clocks)) {
+        await provider.setClocks(provider_clocks);
+      }
+
+      if (!isEmpty(provider_periods)) {
+        await provider.setPeriods(provider_periods);
+      }
+
+      if (!isEmpty(provider_services)) {
+        const srvcs = provider_services.map(service => ({
           ...service,
           provider_id: provider.id,
         }));
 
-        await UserServices.bulkCreate(srvcs);
+        await ProviderServices.bulkCreate(srvcs);
       }
 
       return res.json(provider);
@@ -80,35 +114,6 @@ class ProviderController {
       return res.json(e);
     }
   }
-  /*
-  async index(req, res) {
-    const providers = await User.findAll({
-      attributes: ['avatar_id', 'email', 'id', 'name'],
-      include: [
-        {
-          as: 'avatar',
-          attributes: ['name', 'path', 'url'],
-          model: File,
-        },
-        {
-          as: 'services',
-          include: [],
-          model: Service,
-          through: {
-            as: 'service_value',
-            attributes: ['value'],
-            model: UsersServices,
-          },
-        },
-      ],
-      where: {
-        provider: true,
-      },
-    });
-
-    return res.json(providers);
-  }
-  */
 }
 
 export default new ProviderController();

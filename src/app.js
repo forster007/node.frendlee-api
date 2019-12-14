@@ -5,8 +5,10 @@ import helmet from 'helmet';
 
 import {
   appointments,
+  clocks,
   customers,
   notifications,
+  periods,
   providers,
   schedules,
   services,
@@ -32,8 +34,10 @@ class App {
 
   routes() {
     this.server.use(`${BASE_PREFIX}/appointments`, appointments);
+    this.server.use(`${BASE_PREFIX}/clocks`, clocks);
     this.server.use(`${BASE_PREFIX}/customers`, customers);
     this.server.use(`${BASE_PREFIX}/notifications`, notifications);
+    this.server.use(`${BASE_PREFIX}/periods`, periods);
     this.server.use(`${BASE_PREFIX}/providers`, providers);
     this.server.use(`${BASE_PREFIX}/schedules`, schedules);
     this.server.use(`${BASE_PREFIX}/services`, services);
