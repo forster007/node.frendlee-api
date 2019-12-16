@@ -86,8 +86,8 @@ class ProviderController {
 
       const provider = await Provider.create(body, {
         include: [
+          { as: 'address', model: Address },
           { as: 'user', model: User },
-          { as: 'provider_address', model: Address },
         ],
       });
 

@@ -33,7 +33,7 @@ class Provider extends Model {
 
   static associate(models) {
     this.belongsTo(models.Address, {
-      as: 'provider_address',
+      as: 'address',
       foreignKey: 'address_id',
     });
 

@@ -1,4 +1,4 @@
-import { Address, Profile, Provider, User } from '../models';
+import { Address, Customer, Profile, Provider, User } from '../models';
 
 class CustomerController {
   async index(req, res) {
@@ -61,6 +61,24 @@ class CustomerController {
     });
 
     return res.json(providers);
+  }
+
+  async store(req, res) {
+    try {
+      const customer = await Customer.create(req.body, {
+        include: [
+          { as: 'address', model: Address },
+          { as: 'user', model: User },
+        ],
+      });
+
+      return res.json(customer);
+    } catch (e) {
+      console.log(e);
+      return res.status(e.status || 400).json({
+        error: e.message || 'Internal server error',
+      });
+    }
   }
 }
 

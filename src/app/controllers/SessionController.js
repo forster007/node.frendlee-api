@@ -13,26 +13,22 @@ class SessionController {
       });
 
       if (isEmpty(user)) {
-        return res.status(401).json({
-          error: 'User not found',
-        });
+        throw new Error('User not found');
       }
 
       if (!(await user.checkPassword(req.body.password))) {
-        return res.status(401).json({
-          error: 'Password does not match',
-        });
+        throw new Error('Password does not match');
       }
 
-      const { email, id, name } = user;
+      const { account_type, email, id } = user;
       return res.json({
-        token: jwt.sign({ id }, authConfig.secret, {
+        token: jwt.sign({ account_type, id }, authConfig.secret, {
           expiresIn: authConfig.expiresIn,
         }),
         user: {
+          account_type,
           email,
           id,
-          name,
         },
       });
     } catch (e) {

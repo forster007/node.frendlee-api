@@ -1,3 +1,4 @@
 import AuthMiddleware from './auth';
+import AdminMiddleware from './admin';
 
-export default AuthMiddleware;
+export { AdminMiddleware, AuthMiddleware };

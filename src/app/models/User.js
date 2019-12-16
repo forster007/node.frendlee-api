@@ -5,6 +5,10 @@ class User extends Model {
   static init(sequelize) {
     super.init(
       {
+        account_type: {
+          type: Sequelize.ENUM,
+          values: ['administrator', 'customer', 'provider'],
+        },
         email: Sequelize.STRING,
         password: Sequelize.VIRTUAL,
         password_hash: Sequelize.STRING,

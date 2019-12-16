@@ -3,6 +3,8 @@ import cors from 'cors';
 import express, { json } from 'express';
 import helmet from 'helmet';
 
+import { AdminMiddleware, AuthMiddleware } from './app/middlewares';
+
 import {
   administrators,
   appointments,
@@ -31,6 +33,9 @@ class App {
     this.server.use(cors());
     this.server.use(helmet());
     this.server.use(json());
+
+    this.server.use(AuthMiddleware);
+    this.server.use(AdminMiddleware);
   }
 
   routes() {
