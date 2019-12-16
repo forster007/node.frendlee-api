@@ -7,25 +7,38 @@ module.exports = {
         primaryKey: true,
         type: Sequelize.INTEGER,
       },
-
-      created_at: { allowNull: false, type: Sequelize.DATE },
-      updated_at: { allowNull: false, type: Sequelize.DATE },
-
       provider_id: {
         allowNull: false,
         onDelete: 'CASCADE',
         onUpdate: 'CASCADE',
-        references: { model: 'providers', key: 'id' },
+        references: {
+          key: 'id',
+          model: 'providers',
+        },
         type: Sequelize.INTEGER,
       },
       service_id: {
         allowNull: false,
         onDelete: 'CASCADE',
         onUpdate: 'CASCADE',
-        references: { model: 'services', key: 'id' },
+        references: {
+          key: 'id',
+          model: 'services',
+        },
         type: Sequelize.INTEGER,
       },
-      value: { allowNull: false, type: Sequelize.DOUBLE },
+      value: {
+        allowNull: false,
+        type: Sequelize.DOUBLE,
+      },
+      created_at: {
+        allowNull: false,
+        type: Sequelize.DATE,
+      },
+      updated_at: {
+        allowNull: false,
+        type: Sequelize.DATE,
+      },
     });
   },
 

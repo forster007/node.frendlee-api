@@ -1,5 +1,5 @@
 import moment from 'moment';
-import { Appointment, User } from '../models';
+import { Appointment, Customer, Provider, User } from '../models';
 import { Notification, storeAppointment } from '../schemas';
 
 import CancellationMail from '../jobs/CancellationMail';
@@ -49,7 +49,7 @@ class AppointmentController {
       ],
       order: ['date'],
       where: {
-        user_id: req.headers.user_id,
+        user_id: req.headers.id,
       },
     });
 
@@ -58,60 +58,74 @@ class AppointmentController {
 
   async store(req, res) {
     try {
-      await storeAppointment.validateAsync(req.body);
-
-      const provider = await User.findOne({
-        where: { id: req.body.provider_id, provider: true },
+      const provider = await Provider.findOne({
+        include: [
+          {
+            as: 'user',
+            attributes: ['email', 'status'],
+            model: User,
+            where: {
+              status: 'enabled',
+            },
+          },
+        ],
+        where: {
+          id: req.body.provider_id,
+        },
       });
 
       if (isEmpty(provider)) {
-        return res.status(400).json({
-          error: 'Provider does not exists',
-        });
-      }
-
-      if (req.headers.user_id === req.body.provider_id) {
-        return res.status(400).json({
-          error: 'Customer can not be a provider',
-        });
+        throw new Error('Provider does not exists or he is unavailable');
       }
 
       const dateToStart = moment(req.body.date).startOf('hour');
       const dateNow = moment();
 
       if (moment(dateToStart).isBefore(dateNow)) {
-        return res.status(400).json({
-          error: 'Past date are not permitted',
-        });
+        throw new Error('Past date are not permitted');
       }
 
       const dateAvailable = await Appointment.findOne({
         where: {
-          canceled_at: null,
           date: dateToStart,
-          provider_id: req.body.provider_id,
+          provider_id: provider.id,
         },
       });
 
       if (!isEmpty(dateAvailable)) {
-        return res.status(400).json({
-          error: 'Appointment date is not available',
-        });
+        throw new Error('Appointment date is not available');
+      }
+
+      const customer = await Customer.findByPk(req.headers.id, {
+        include: [
+          {
+            as: 'user',
+            attributes: ['email', 'status'],
+            model: User,
+            where: {
+              status: 'enabled',
+            },
+          },
+        ],
+      });
+
+      if (isEmpty(customer)) {
+        throw new Error('Your user cannot store a new appointment');
       }
 
       const appointment = await Appointment.create({
+        customer_id: customer.id,
         date: dateToStart,
-        provider_id: req.body.provider_id,
-        user_id: req.headers.user_id,
+        description: req.body.description,
+        provider_id: provider.id,
       });
 
-      const customer = await User.findByPk(req.headers.user_id);
-      const dateTime = moment(dateToStart).format('DD/MM/YYYY');
-      const hourTime = moment(dateToStart).format('HH:mm');
+      const appointmentDateTime = moment(dateToStart).format('DD/MM/YYYY');
+      const appointmentClockTime = moment(dateToStart).format('HH:mm');
 
       await Notification.create({
-        content: `Novo agendamento de ${customer.name} para o dia ${dateTime} às ${hourTime}`,
-        user: req.body.provider_id,
+        content: `Novo agendamento de ${customer.name} para o dia ${appointmentDateTime} às ${appointmentClockTime}`,
+        user: provider.id,
       });
 
       return res.json(appointment);

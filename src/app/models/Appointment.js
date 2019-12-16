@@ -4,8 +4,10 @@ class Appointment extends Model {
   static init(sequelize) {
     super.init(
       {
-        canceled_at: Sequelize.DATE,
         date: Sequelize.DATE,
+        description: Sequelize.STRING,
+        provider_id: Sequelize.INTEGER,
+        customer_id: Sequelize.INTEGER,
       },
       {
         sequelize,
@@ -16,8 +18,7 @@ class Appointment extends Model {
   }
 
   static associate(models) {
-    this.belongsTo(models.User, { as: 'provider', foreignKey: 'provider_id' });
-    this.belongsTo(models.User, { as: 'user', foreignKey: 'user_id' });
+    this.belongsTo(models.Customer, { as: 'customer' });
   }
 }
 

@@ -1,34 +1,44 @@
 module.exports = {
   up: (queryInterface, Sequelize) => {
-    return queryInterface.createTable('provider_clocks', {
+    return queryInterface.createTable('provider_periods', {
       id: {
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,
         type: Sequelize.INTEGER,
       },
-
-      created_at: { allowNull: false, type: Sequelize.DATE },
-      updated_at: { allowNull: false, type: Sequelize.DATE },
-
+      period_id: {
+        allowNull: false,
+        onDelete: 'CASCADE',
+        onUpdate: 'CASCADE',
+        references: {
+          key: 'id',
+          model: 'periods',
+        },
+        type: Sequelize.INTEGER,
+      },
       provider_id: {
         allowNull: false,
         onDelete: 'CASCADE',
         onUpdate: 'CASCADE',
-        references: { model: 'providers', key: 'id' },
+        references: {
+          key: 'id',
+          model: 'providers',
+        },
         type: Sequelize.INTEGER,
       },
-      clock_id: {
+      created_at: {
         allowNull: false,
-        onDelete: 'CASCADE',
-        onUpdate: 'CASCADE',
-        references: { model: 'clocks', key: 'id' },
-        type: Sequelize.INTEGER,
+        type: Sequelize.DATE,
+      },
+      updated_at: {
+        allowNull: false,
+        type: Sequelize.DATE,
       },
     });
   },
 
   down: queryInterface => {
-    return queryInterface.dropTable('provider_clocks');
+    return queryInterface.dropTable('provider_periods');
   },
 };

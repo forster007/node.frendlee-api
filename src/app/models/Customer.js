@@ -22,7 +22,6 @@ class Customer extends Model {
         onesignal: Sequelize.STRING,
         phone_number: Sequelize.STRING,
         phone_number_is_whatsapp: Sequelize.BOOLEAN,
-        picture_address: Sequelize.BLOB('tiny'),
         picture_profile: Sequelize.BLOB('tiny'),
         ssn: Sequelize.STRING,
       },
