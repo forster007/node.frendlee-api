@@ -1,3 +1,4 @@
+import administrators from './administrator';
 import appointments from './appointment';
 import clocks from './clock';
 import customers from './customer';
@@ -10,6 +11,7 @@ import sessions from './session';
 import users from './user';
 
 export {
+  administrators,
   appointments,
   clocks,
   customers,

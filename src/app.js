@@ -4,6 +4,7 @@ import express, { json } from 'express';
 import helmet from 'helmet';
 
 import {
+  administrators,
   appointments,
   clocks,
   customers,
@@ -33,6 +34,7 @@ class App {
   }
 
   routes() {
+    this.server.use(`${BASE_PREFIX}/administrators`, administrators);
     this.server.use(`${BASE_PREFIX}/appointments`, appointments);
     this.server.use(`${BASE_PREFIX}/clocks`, clocks);
     this.server.use(`${BASE_PREFIX}/customers`, customers);
