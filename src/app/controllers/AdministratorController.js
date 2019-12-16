@@ -9,6 +9,7 @@ class ProviderController {
 
       return res.json(administrator);
     } catch (e) {
+      console.log(e);
       return res.json(e);
     }
   }

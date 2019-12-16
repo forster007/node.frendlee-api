@@ -26,6 +26,7 @@ class Administrator extends Model {
 
   static associate(models) {
     this.belongsTo(models.User, {
+      as: 'user',
       foreignKey: 'user_id',
     });
   }

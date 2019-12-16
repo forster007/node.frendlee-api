@@ -35,13 +35,14 @@ class Customer extends Model {
   }
 
   static associate(models) {
+    this.belongsTo(models.User, {
+      as: 'user',
+      foreignKey: 'user_id',
+    });
+
     this.belongsTo(models.Address, {
       as: 'user_address',
       foreignKey: 'address_id',
-    });
-
-    this.belongsTo(models.User, {
-      foreignKey: 'user_id',
     });
   }
 }
