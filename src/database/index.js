@@ -3,6 +3,7 @@ import Sequelize from 'sequelize';
 import { databaseConfig } from '../config';
 import {
   Address,
+  Administrator,
   Appointment,
   Clock,
   Customer,
@@ -16,6 +17,7 @@ import {
 
 const models = [
   Address,
+  Administrator,
   Appointment,
   Clock,
   Customer,

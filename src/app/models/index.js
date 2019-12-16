@@ -1,4 +1,5 @@
 import Address from './Address';
+import Administrator from './Administrator';
 import Appointment from './Appointment';
 import Clock from './Clock';
 import Customer from './Customer';
@@ -13,6 +14,7 @@ import User from './User';
 
 export {
   Address,
+  Administrator,
   Appointment,
   Clock,
   Customer,
