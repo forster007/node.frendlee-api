@@ -12,6 +12,7 @@ import {
   Provider,
   ProviderServices,
   Service,
+  Stuff,
   User,
 } from '../app/models';
 
@@ -26,6 +27,7 @@ const models = [
   Provider,
   ProviderServices,
   Service,
+  Stuff,
   User,
 ];
 

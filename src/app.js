@@ -16,6 +16,7 @@ import {
   schedules,
   services,
   sessions,
+  stuffs,
   users,
 } from './routes';
 
@@ -49,6 +50,7 @@ class App {
     this.server.use(`${BASE_PREFIX}/schedules`, schedules);
     this.server.use(`${BASE_PREFIX}/services`, services);
     this.server.use(`${BASE_PREFIX}/sessions`, sessions);
+    this.server.use(`${BASE_PREFIX}/stuffs`, stuffs);
     this.server.use(`${BASE_PREFIX}/users`, users);
 
     this.server.all('*', (req, res) => {

@@ -8,6 +8,7 @@ import providers from './provider';
 import schedules from './schedule';
 import services from './service';
 import sessions from './session';
+import stuffs from './stuff';
 import users from './user';
 
 export {
@@ -21,5 +22,6 @@ export {
   schedules,
   services,
   sessions,
+  stuffs,
   users,
 };
