@@ -5,6 +5,7 @@ import {
   Provider,
   ProviderServices,
   Service,
+  Stuff,
   User,
 } from '../models';
 import isEmpty from '../../lib/Helpers';
@@ -34,7 +35,7 @@ class ProviderController {
           model: User,
         },
         {
-          as: 'provider_address',
+          as: 'address',
           attributes: [
             'city',
             'complement',
@@ -69,6 +70,12 @@ class ProviderController {
             model: ProviderServices,
           },
         },
+        {
+          as: 'stuffs',
+          attributes: ['name'],
+          model: Stuff,
+          through: { attributes: [] },
+        },
       ],
     });
 
@@ -81,6 +88,7 @@ class ProviderController {
         provider_clocks,
         provider_periods,
         provider_services,
+        provider_stuffs,
         ...body
       } = req.body;
 
@@ -108,9 +116,12 @@ class ProviderController {
         await ProviderServices.bulkCreate(srvcs);
       }
 
+      if (!isEmpty(provider_stuffs)) {
+        await provider.setStuffs(provider_stuffs);
+      }
+
       return res.json(provider);
     } catch (e) {
-      console.log(e);
       return res.json(e);
     }
   }

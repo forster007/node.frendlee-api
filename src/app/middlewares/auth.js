@@ -3,24 +3,24 @@ import { promisify } from 'util';
 import { authConfig } from '../../config';
 
 export default async (req, res, next) => {
-  const { method, path } = req;
-
-  // skip auth middleware when it is used to store a new PROVIDER or CUSTOMER
-  if (
-    (method === 'POST' && path === '/api/customers') ||
-    (method === 'POST' && path === '/api/providers') ||
-    (method === 'POST' && path === '/api/sessions')
-  ) {
-    return next();
-  }
-
-  const { authorization } = req.headers;
-
-  if (!authorization)
-    return res.status(401).json({ error: 'Token not provided' });
-
-  const [, token] = authorization.split(' ');
   try {
+    const { method, path } = req;
+
+    if (
+      (method === 'POST' && path === '/api/customers') ||
+      (method === 'POST' && path === '/api/providers') ||
+      (method === 'POST' && path === '/api/sessions')
+    ) {
+      return next();
+    }
+
+    const { authorization } = req.headers;
+
+    if (!authorization) {
+      throw new Error('Token not provided');
+    }
+
+    const [, token] = authorization.split(' ');
     const { account_type, id } = await promisify(jwt.verify)(
       token,
       authConfig.secret
@@ -31,6 +31,8 @@ export default async (req, res, next) => {
 
     return next();
   } catch (e) {
-    return res.status(401).json({ error: 'Token invalid' });
+    return res.status(e.status || 401).json({
+      error: e.message || 'Token invalid',
+    });
   }
 };

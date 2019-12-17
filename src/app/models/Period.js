@@ -5,6 +5,12 @@ class Period extends Model {
     super.init(
       {
         name: Sequelize.STRING,
+        state: {
+          type: Sequelize.VIRTUAL,
+          get() {
+            return false;
+          },
+        },
       },
       {
         sequelize,
