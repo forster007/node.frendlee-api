@@ -59,6 +59,12 @@ class Provider extends Model {
       foreignKey: 'provider_id',
       through: 'provider_periods',
     });
+
+    this.belongsToMany(models.Stuff, {
+      as: 'stuffs',
+      foreignKey: 'provider_id',
+      through: 'provider_stuffs',
+    });
   }
 }
 

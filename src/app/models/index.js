@@ -9,6 +9,7 @@ import Provider from './Provider';
 import ProviderClocks from './ProviderClocks';
 import ProviderPeriods from './ProviderPeriods';
 import ProviderServices from './ProviderServices';
+import ProviderStuffs from './ProviderStuffs';
 import Service from './Service';
 import User from './User';
 
@@ -25,5 +26,6 @@ export {
   ProviderPeriods,
   ProviderServices,
   Service,
+  ProviderStuffs,
   User,
 };
