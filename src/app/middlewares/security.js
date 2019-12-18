@@ -6,16 +6,25 @@ export default async (req, res, next) => {
       return next();
     }
 
-    const block = [
-      { method: 'ANY', path: '/api/administrators' },
-      { method: 'ANY', path: '/api/users' },
-      { method: 'DELETE||POST||PUT', path: '/api/clocks' },
-      { method: 'DELETE||POST||PUT', path: '/api/periods' },
-      { method: 'DELETE||POST||PUT', path: '/api/services' },
-      { method: 'DELETE||POST||PUT', path: '/api/stuffs' },
+    if (method === 'DELETE') {
+      throw new Error('You cannot access this route');
+    }
+
+    const fullLocks = ['/api/administrators', '/api/users'];
+    const halfLocks = [
+      { method: 'POST||PUT', path: '/api/clocks' },
+      { method: 'POST||PUT', path: '/api/periods' },
+      { method: 'POST||PUT', path: '/api/services' },
+      { method: 'POST||PUT', path: '/api/stuffs' },
     ];
 
-    block.forEach(e => {
+    fullLocks.forEach(e => {
+      if (e === path) {
+        throw new Error('You cannot access this route');
+      }
+    });
+
+    halfLocks.forEach(e => {
       const regex = new RegExp(method, 'gi');
       if (
         (e.method === 'ANY' && e.path === path) ||

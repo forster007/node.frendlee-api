@@ -10,77 +10,90 @@ import {
 } from '../models';
 import isEmpty from '../../lib/Helpers';
 
+const attributes = [
+  'id',
+  'birthdate',
+  'gender',
+  'gps',
+  'lastname',
+  'name',
+  'onesignal',
+  'phone_number',
+  'phone_number_is_whatsapp',
+  'picture_address',
+  'picture_profile',
+  'ssn',
+];
+
+const userInclude = {
+  as: 'user',
+  attributes: ['email'],
+  model: User,
+  where: { status: 'enabled' },
+};
+
+const addressInclude = {
+  as: 'address',
+  attributes: [
+    'city',
+    'complement',
+    'country',
+    'district',
+    'number',
+    'postal_code',
+    'state',
+    'street',
+  ],
+  model: Address,
+};
+
+const clockInclude = {
+  as: 'clocks',
+  attributes: ['id', 'name', 'state'],
+  model: Clock,
+  through: { attributes: [] },
+  where: { enabled: true },
+};
+
+const periodInclude = {
+  as: 'periods',
+  attributes: ['id', 'name', 'state'],
+  model: Period,
+  through: { attributes: [] },
+  where: { enabled: true },
+};
+
+const serviceInclude = {
+  as: 'services',
+  attributes: ['id', 'name'],
+  model: Service,
+  through: {
+    as: 'service_value',
+    attributes: ['value'],
+    model: ProviderServices,
+  },
+  where: { enabled: true },
+};
+
+const stuffInclude = {
+  as: 'stuffs',
+  attributes: ['id', 'name', 'state'],
+  model: Stuff,
+  through: { attributes: [] },
+  where: { enabled: true },
+};
+
 class ProviderController {
   async index(req, res) {
     const providers = await Provider.findAll({
-      attributes: [
-        'id',
-        'birthdate',
-        'gender',
-        'gps',
-        'lastname',
-        'name',
-        'onesignal',
-        'phone_number',
-        'phone_number_is_whatsapp',
-        'picture_address',
-        'picture_profile',
-        'ssn',
-        'address_id',
-      ],
+      attributes,
       include: [
-        {
-          as: 'user',
-          attributes: ['email'],
-          model: User,
-          where: { status: 'enabled' },
-        },
-        {
-          as: 'address',
-          attributes: [
-            'city',
-            'complement',
-            'country',
-            'district',
-            'number',
-            'postal_code',
-            'state',
-            'street',
-          ],
-          model: Address,
-        },
-        {
-          as: 'clocks',
-          attributes: ['id', 'name', 'state'],
-          model: Clock,
-          through: { attributes: [] },
-          where: { enabled: true },
-        },
-        {
-          as: 'periods',
-          attributes: ['id', 'name', 'state'],
-          model: Period,
-          through: { attributes: [] },
-          where: { enabled: true },
-        },
-        {
-          as: 'services',
-          attributes: ['id', 'name'],
-          model: Service,
-          through: {
-            as: 'service_value',
-            attributes: ['value'],
-            model: ProviderServices,
-          },
-          where: { enabled: true },
-        },
-        {
-          as: 'stuffs',
-          attributes: ['id', 'name', 'state'],
-          model: Stuff,
-          through: { attributes: [] },
-          where: { enabled: true },
-        },
+        userInclude,
+        addressInclude,
+        clockInclude,
+        periodInclude,
+        serviceInclude,
+        stuffInclude,
       ],
     });
 
@@ -126,6 +139,64 @@ class ProviderController {
       }
 
       return res.json(provider);
+    } catch (e) {
+      return res.json(e);
+    }
+  }
+
+  async update(req, res) {
+    try {
+      const { body, headers, params } = req;
+      const {
+        provider_clocks,
+        provider_periods,
+        provider_services,
+        provider_stuffs,
+      } = body;
+      const id = params.id || headers.id;
+
+      const provider = await Provider.findByPk(id);
+
+      await provider.update(body);
+
+      if (!isEmpty(provider_clocks)) {
+        await provider.setClocks(provider_clocks);
+      }
+
+      if (!isEmpty(provider_periods)) {
+        await provider.setPeriods(provider_periods);
+      }
+
+      if (!isEmpty(provider_services)) {
+        await ProviderServices.destroy({
+          where: { provider_id: provider.id },
+        });
+
+        const srvcs = provider_services.map(service => ({
+          ...service,
+          provider_id: provider.id,
+        }));
+
+        await ProviderServices.bulkCreate(srvcs);
+      }
+
+      if (!isEmpty(provider_stuffs)) {
+        await provider.setStuffs(provider_stuffs);
+      }
+
+      const updated = await Provider.findByPk(id, {
+        attributes,
+        include: [
+          userInclude,
+          addressInclude,
+          clockInclude,
+          periodInclude,
+          serviceInclude,
+          stuffInclude,
+        ],
+      });
+
+      return res.json(updated);
     } catch (e) {
       return res.json(e);
     }
