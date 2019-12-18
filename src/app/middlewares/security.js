@@ -7,16 +7,19 @@ export default async (req, res, next) => {
     }
 
     const block = [
-      { m: 'DELETE||POST||PUT', p: '/api/clocks' },
-      { m: 'DELETE||POST||PUT', p: '/api/periods' },
-      { m: 'DELETE||POST||PUT', p: '/api/services' },
-      { m: 'DELETE||POST||PUT', p: '/api/stuffs' },
-      { m: 'ANY', p: '/api/users' },
+      { method: 'DELETE||POST||PUT', path: '/api/clocks' },
+      { method: 'DELETE||POST||PUT', path: '/api/periods' },
+      { method: 'DELETE||POST||PUT', path: '/api/services' },
+      { method: 'DELETE||POST||PUT', path: '/api/stuffs' },
+      { method: 'ANY', path: '/api/users' },
     ];
 
-    block.forEach(({ m, p }) => {
+    block.forEach(e => {
       const regex = new RegExp(method, 'gi');
-      if ((m === 'ANY' && p === path) || (m.match(regex) && p === path)) {
+      if (
+        (e.method === 'ANY' && e.path === path) ||
+        (e.method.match(regex) && e.path === path)
+      ) {
         throw new Error('You cannot access this route');
       }
     });
