@@ -7,11 +7,11 @@ export default async (req, res, next) => {
     }
 
     const block = [
+      { method: 'ANY', path: '/api/users' },
       { method: 'DELETE||POST||PUT', path: '/api/clocks' },
       { method: 'DELETE||POST||PUT', path: '/api/periods' },
       { method: 'DELETE||POST||PUT', path: '/api/services' },
       { method: 'DELETE||POST||PUT', path: '/api/stuffs' },
-      { method: 'ANY', path: '/api/users' },
     ];
 
     block.forEach(e => {
