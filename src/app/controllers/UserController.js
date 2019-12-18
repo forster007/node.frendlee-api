@@ -1,108 +1,69 @@
-import isEmpty from '../../lib/Helpers';
-import { Address, Profile, Provider, User } from '../models';
+import { Address, Administrator, Customer, Provider, User } from '../models';
 
 class UserController {
-  async store(req, res) {
-    try {
-      const user = await User.create(req.body, {
-        include: [
-          {
-            as: 'user_address',
-            model: Address,
-          },
-          {
-            as: 'user_profile',
-            model: Profile,
-            include: [
-              {
-                as: 'user_provider',
-                model: Provider,
+  async index(req, res) {
+    const users = await User.findAll({
+      attributes: ['id', 'account_type', 'email'],
+    });
+
+    const extendedUsers = await Promise.all(
+      users.map(async user => {
+        switch (user.account_type) {
+          case 'administrator': {
+            user.dataValues.administrator = await Administrator.findOne({
+              attributes: {
+                exclude: ['createdAt', 'updatedAt', 'user_id'],
               },
-            ],
-          },
-        ],
-      });
-      return res.json(user);
-    } catch (e) {
-      console.log(e);
-      return res.json(e);
-    }
-  }
-  /*
-  async store(req, res) {
-    try {
-      await storeUserSchema.validateAsync(req.body);
+              where: { user_id: user.id },
+            });
 
-      const userExists = await User.findOne({
-        where: {
-          email: req.body.email,
-        },
-      });
+            return user;
+          }
 
-      if (!isEmpty(userExists)) {
-        return res.status(400).json({
-          error: 'User already exists',
-        });
-      }
+          case 'customer': {
+            user.dataValues.customer = await Customer.findOne({
+              attributes: {
+                exclude: ['createdAt', 'updatedAt', 'address_id', 'user_id'],
+              },
+              include: [
+                {
+                  as: 'address',
+                  attributes: { exclude: ['createdAt', 'updatedAt'] },
+                  model: Address,
+                },
+              ],
+              where: { user_id: user.id },
+            });
 
-      const { services, ...data } = req.body;
-      const user = await User.create(data);
+            return user;
+          }
 
-      if (services && services.length > 0) {
-        const newServices = services.map(service => ({
-          provider_id: user.id,
-          ...service,
-        }));
+          case 'provider': {
+            user.dataValues.provider = await Provider.findOne({
+              attributes: {
+                exclude: ['createdAt', 'updatedAt', 'address_id', 'user_id'],
+              },
+              include: [
+                {
+                  as: 'address',
+                  attributes: { exclude: ['createdAt', 'updatedAt'] },
+                  model: Address,
+                },
+              ],
+              where: { user_id: user.id },
+            });
 
-        await UsersServices.bulkCreate(newServices);
-      }
+            return user;
+          }
 
-      return res.json(user);
-    } catch (e) {
-      return res.status(e.status || 400).json({
-        error: e.message || 'User already exists',
-      });
-    }
-  }
-  */
-
-  async update(req, res) {
-    try {
-      // await updateUserSchema.validateAsync(req.body);
-
-      const { oldPassword } = req.body;
-
-      const userid = req.params.userid || req.headers.user_id;
-
-      const user = await User.findByPk(userid);
-
-      if (req.body.email && req.body.email !== user.email) {
-        const userExists = await User.findOne({
-          where: { email: req.body.email },
-        });
-
-        if (!isEmpty(userExists)) {
-          return res.status(400).json({ error: 'User already exists' });
+          default: {
+            return user;
+          }
         }
-      }
+      })
+    );
 
-      if (oldPassword && !(await user.checkPassword(oldPassword))) {
-        return res.status(401).json({ error: 'Password does not match' });
-      }
-
-      const { email, id, name, provider } = await user.update(req.body);
-
-      return res.json({
-        email,
-        id,
-        name,
-        provider,
-      });
-    } catch (e) {
-      return res.status(e.status || 400).json({
-        error: e.message || 'User can not be updated',
-      });
-    }
+    return res.json(extendedUsers);
   }
 }
 

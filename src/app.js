@@ -3,7 +3,7 @@ import cors from 'cors';
 import express, { json } from 'express';
 import helmet from 'helmet';
 
-import { AdminMiddleware, AuthMiddleware } from './app/middlewares';
+import { AuthMiddleware, SecurityMiddleware } from './app/middlewares';
 
 import {
   administrators,
@@ -20,8 +20,6 @@ import {
   users,
 } from './routes';
 
-const BASE_PREFIX = '/api';
-
 class App {
   constructor() {
     this.server = express();
@@ -36,22 +34,24 @@ class App {
     this.server.use(json());
 
     this.server.use(AuthMiddleware);
-    this.server.use(AdminMiddleware);
+    this.server.use(SecurityMiddleware);
   }
 
   routes() {
-    this.server.use(`${BASE_PREFIX}/administrators`, administrators);
-    this.server.use(`${BASE_PREFIX}/appointments`, appointments);
-    this.server.use(`${BASE_PREFIX}/clocks`, clocks);
-    this.server.use(`${BASE_PREFIX}/customers`, customers);
-    this.server.use(`${BASE_PREFIX}/notifications`, notifications);
-    this.server.use(`${BASE_PREFIX}/periods`, periods);
-    this.server.use(`${BASE_PREFIX}/providers`, providers);
-    this.server.use(`${BASE_PREFIX}/schedules`, schedules);
-    this.server.use(`${BASE_PREFIX}/services`, services);
-    this.server.use(`${BASE_PREFIX}/sessions`, sessions);
-    this.server.use(`${BASE_PREFIX}/stuffs`, stuffs);
-    this.server.use(`${BASE_PREFIX}/users`, users);
+    const PREFIX = '/api';
+
+    this.server.use(`${PREFIX}/administrators`, administrators);
+    this.server.use(`${PREFIX}/appointments`, appointments);
+    this.server.use(`${PREFIX}/clocks`, clocks);
+    this.server.use(`${PREFIX}/customers`, customers);
+    this.server.use(`${PREFIX}/notifications`, notifications);
+    this.server.use(`${PREFIX}/periods`, periods);
+    this.server.use(`${PREFIX}/providers`, providers);
+    this.server.use(`${PREFIX}/schedules`, schedules);
+    this.server.use(`${PREFIX}/services`, services);
+    this.server.use(`${PREFIX}/sessions`, sessions);
+    this.server.use(`${PREFIX}/stuffs`, stuffs);
+    this.server.use(`${PREFIX}/users`, users);
 
     this.server.all('*', (req, res) => {
       const error = {

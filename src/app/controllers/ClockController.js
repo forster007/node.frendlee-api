@@ -14,6 +14,10 @@ class ClockController {
 
     return res.json(clock);
   }
+
+  async update(req, res) {
+    return res.json(req.body);
+  }
 }
 
 export default new ClockController();

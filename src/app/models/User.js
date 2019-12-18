@@ -33,6 +33,23 @@ class User extends Model {
   checkPassword(password) {
     return bcrypt.compare(password, this.password_hash);
   }
+
+  static associate(models) {
+    this.belongsTo(models.Administrator, {
+      as: 'administrator',
+      foreignKey: 'id',
+    });
+
+    this.belongsTo(models.Customer, {
+      as: 'customer',
+      foreignKey: 'id',
+    });
+
+    this.belongsTo(models.Provider, {
+      as: 'provider',
+      foreignKey: 'id',
+    });
+  }
 }
 
 export default User;

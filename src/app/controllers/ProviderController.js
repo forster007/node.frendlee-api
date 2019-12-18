@@ -31,8 +31,9 @@ class ProviderController {
       include: [
         {
           as: 'user',
-          attributes: ['email', 'status'],
+          attributes: ['email'],
           model: User,
+          where: { status: 'enabled' },
         },
         {
           as: 'address',
@@ -50,15 +51,17 @@ class ProviderController {
         },
         {
           as: 'clocks',
-          attributes: ['name'],
+          attributes: ['id', 'name', 'state'],
           model: Clock,
           through: { attributes: [] },
+          where: { enabled: true },
         },
         {
           as: 'periods',
-          attributes: ['name'],
+          attributes: ['id', 'name', 'state'],
           model: Period,
           through: { attributes: [] },
+          where: { enabled: true },
         },
         {
           as: 'services',
@@ -69,12 +72,14 @@ class ProviderController {
             attributes: ['value'],
             model: ProviderServices,
           },
+          where: { enabled: true },
         },
         {
           as: 'stuffs',
-          attributes: ['name'],
+          attributes: ['id', 'name', 'state'],
           model: Stuff,
           through: { attributes: [] },
+          where: { enabled: true },
         },
       ],
     });

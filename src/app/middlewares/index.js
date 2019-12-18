@@ -1,4 +1,4 @@
 import AuthMiddleware from './auth';
-import AdminMiddleware from './admin';
+import SecurityMiddleware from './security';
 
-export { AdminMiddleware, AuthMiddleware };
+export { AuthMiddleware, SecurityMiddleware };
