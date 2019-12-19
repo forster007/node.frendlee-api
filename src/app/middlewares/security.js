@@ -1,3 +1,5 @@
+import Path from 'path';
+
 export default async (req, res, next) => {
   try {
     const { headers, method, path } = req;
@@ -12,6 +14,7 @@ export default async (req, res, next) => {
 
     const fullLocks = ['/api/administrators', '/api/users'];
     const halfLocks = [
+      { method: 'GET', path: '/api/customers' },
       { method: 'POST||PUT', path: '/api/clocks' },
       { method: 'POST||PUT', path: '/api/periods' },
       { method: 'POST||PUT', path: '/api/services' },
@@ -25,11 +28,11 @@ export default async (req, res, next) => {
     });
 
     halfLocks.forEach(e => {
-      const regex = new RegExp(method, 'gi');
-      if (
-        (e.method === 'ANY' && e.path === path) ||
-        (e.method.match(regex) && e.path === path)
-      ) {
+      const regexMethod = new RegExp(method, 'gim');
+
+      if (e.method.match(regexMethod) && e.path === path) {
+        throw new Error('You cannot access this route');
+      } else if (e.method.match(regexMethod) && e.path === Path.dirname(path)) {
         throw new Error('You cannot access this route');
       }
     });

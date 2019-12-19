@@ -5,6 +5,6 @@ const router = express.Router();
 
 router.get('/', ClockController.index);
 router.post('/', ClockController.store);
-router.put('/', ClockController.update);
+router.put('/:id', ClockController.update);
 
 export default router;
