@@ -125,10 +125,16 @@ class AppointmentController {
       const appointmentDateTime = moment(dateToStart).format('DD/MM/YYYY');
       const appointmentClockTime = moment(dateToStart).format('HH:mm');
 
-      await Notification.create({
+      const notification = await Notification.create({
         content: `Novo agendamento de ${customer.name} para o dia ${appointmentDateTime} às ${appointmentClockTime}`,
         user: provider.id,
       });
+
+      const socket = req.connected_users[provider.id];
+
+      if (socket) {
+        req.io.to(socket).emit('notification', notification);
+      }
 
       return res.json(appointment);
     } catch (e) {

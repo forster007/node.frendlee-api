@@ -24,7 +24,7 @@ module.exports = {
       blood_pressure: {
         allowNull: false,
         type: Sequelize.ENUM,
-        values: ['low', 'medium', 'high'],
+        values: ['low', 'normal', 'high'],
       },
       gender: {
         allowNull: false,
