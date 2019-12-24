@@ -1,6 +1,6 @@
 import moment from 'moment';
 import { Appointment, Customer, Provider, User } from '../models';
-import { Notification, storeAppointment } from '../schemas';
+import { Notification } from '../schemas';
 
 import CancellationMail from '../jobs/CancellationMail';
 import isEmpty from '../../lib/Helpers';
@@ -114,10 +114,12 @@ class AppointmentController {
       }
 
       const appointment = await Appointment.create({
+        address_id: req.body.address_id,
         customer_id: customer.id,
         date: dateToStart,
         description: req.body.description,
         provider_id: provider.id,
+        service_id: req.body.service_id,
       });
 
       const appointmentDateTime = moment(dateToStart).format('DD/MM/YYYY');

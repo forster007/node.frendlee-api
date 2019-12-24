@@ -2,58 +2,56 @@ import './database';
 import cors from 'cors';
 import express, { json } from 'express';
 import helmet from 'helmet';
+import http from 'http';
+import io from 'socket.io';
 
 import { AuthMiddleware, SecurityMiddleware } from './app/middlewares';
 
-import {
-  administrators,
-  appointments,
-  clocks,
-  customers,
-  notifications,
-  periods,
-  providers,
-  schedules,
-  services,
-  sessions,
-  stuffs,
-  users,
-} from './routes';
+import * as router from './routes';
 
 class App {
   constructor() {
-    this.server = express();
+    this.app = express();
+    this.connected_users = {};
+    this.server = http.Server(this.app);
 
     this.middlewares();
     this.routes();
+    this.socket();
   }
 
   middlewares() {
-    this.server.use(cors());
-    this.server.use(helmet());
-    this.server.use(json());
+    this.app.use(cors());
+    this.app.use(helmet());
+    this.app.use(json());
 
-    this.server.use(AuthMiddleware);
-    this.server.use(SecurityMiddleware);
+    this.app.use(AuthMiddleware);
+    this.app.use(SecurityMiddleware);
+    this.app.use((req, res, next) => {
+      req.io = this.io;
+      req.connected_users = this.connected_users;
+
+      next();
+    });
   }
 
   routes() {
     const PREFIX = '/api';
 
-    this.server.use(`${PREFIX}/administrators`, administrators);
-    this.server.use(`${PREFIX}/appointments`, appointments);
-    this.server.use(`${PREFIX}/clocks`, clocks);
-    this.server.use(`${PREFIX}/customers`, customers);
-    this.server.use(`${PREFIX}/notifications`, notifications);
-    this.server.use(`${PREFIX}/periods`, periods);
-    this.server.use(`${PREFIX}/providers`, providers);
-    this.server.use(`${PREFIX}/schedules`, schedules);
-    this.server.use(`${PREFIX}/services`, services);
-    this.server.use(`${PREFIX}/sessions`, sessions);
-    this.server.use(`${PREFIX}/stuffs`, stuffs);
-    this.server.use(`${PREFIX}/users`, users);
+    this.app.use(`${PREFIX}/administrators`, router.administrators);
+    this.app.use(`${PREFIX}/appointments`, router.appointments);
+    this.app.use(`${PREFIX}/clocks`, router.clocks);
+    this.app.use(`${PREFIX}/customers`, router.customers);
+    this.app.use(`${PREFIX}/notifications`, router.notifications);
+    this.app.use(`${PREFIX}/periods`, router.periods);
+    this.app.use(`${PREFIX}/providers`, router.providers);
+    this.app.use(`${PREFIX}/schedules`, router.schedules);
+    this.app.use(`${PREFIX}/services`, router.services);
+    this.app.use(`${PREFIX}/sessions`, router.sessions);
+    this.app.use(`${PREFIX}/stuffs`, router.stuffs);
+    this.app.use(`${PREFIX}/users`, router.users);
 
-    this.server.all('*', (req, res) => {
+    this.app.all('*', (req, res) => {
       const error = {
         code: 404,
         message: 'Route not available',
@@ -61,6 +59,18 @@ class App {
       };
 
       res.status(404).send(error);
+    });
+  }
+
+  socket() {
+    this.io = io(this.server);
+    this.io.on('connection', socket => {
+      const { user_id } = socket.handshake.query;
+      this.connected_users[user_id] = socket.id;
+
+      socket.on('disconnect', () => {
+        delete this.connected_users[user_id];
+      });
     });
   }
 }

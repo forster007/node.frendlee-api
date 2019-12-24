@@ -14,7 +14,7 @@ const attributes = [
 
 const userInclude = {
   as: 'user',
-  attributes: ['email'],
+  attributes: ['account_type', 'email'],
   model: User,
 };
 
