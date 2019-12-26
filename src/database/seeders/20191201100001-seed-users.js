@@ -30,6 +30,15 @@ module.exports = {
           created_at: new Date(),
           updated_at: new Date(),
         },
+        {
+          account_type: 'provider',
+          email: 'andre@gmail.com',
+          password_hash:
+            '$2y$08$Ab5XuM1hi6xmQRnH3iIJPOF.hTtWuXUgOIuVrAk2josppnLC4T6A6',
+          status: 'enabled',
+          created_at: new Date(),
+          updated_at: new Date(),
+        },
       ],
       {}
     );

@@ -10,6 +10,7 @@ import ProviderClocks from './ProviderClocks';
 import ProviderPeriods from './ProviderPeriods';
 import ProviderServices from './ProviderServices';
 import ProviderStuffs from './ProviderStuffs';
+import Rating from './Rating';
 import Service from './Service';
 import Stuff from './Stuff';
 import User from './User';
@@ -27,6 +28,7 @@ export {
   ProviderPeriods,
   ProviderServices,
   ProviderStuffs,
+  Rating,
   Service,
   Stuff,
   User,

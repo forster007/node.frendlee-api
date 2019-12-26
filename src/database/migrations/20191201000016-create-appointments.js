@@ -7,13 +7,39 @@ module.exports = {
         primaryKey: true,
         type: Sequelize.INTEGER,
       },
-      date: {
+      start_at: {
         allowNull: false,
         type: Sequelize.DATE,
       },
-      description: {
+      duration: {
+        allowNull: false,
+        type: Sequelize.INTEGER,
+      },
+      finish_at: {
+        allowNull: false,
+        type: Sequelize.DATE,
+      },
+      observation: {
         allowNull: false,
         type: Sequelize.STRING,
+      },
+      status: {
+        allowNull: false,
+        type: Sequelize.ENUM,
+        values: [
+          'canceled',
+          'confirmed',
+          'finished',
+          'opened',
+          'payed',
+          'waiting payment',
+          'waiting rating',
+          'waiting start',
+        ],
+      },
+      value: {
+        allowNull: false,
+        type: Sequelize.DOUBLE,
       },
       address_id: {
         allowNull: false,
@@ -45,13 +71,13 @@ module.exports = {
         },
         type: Sequelize.INTEGER,
       },
-      service_id: {
+      provider_service_id: {
         allowNull: false,
         onDelete: 'SET NULL',
         onUpdate: 'CASCADE',
         references: {
           key: 'id',
-          model: 'services',
+          model: 'provider_services',
         },
         type: Sequelize.INTEGER,
       },

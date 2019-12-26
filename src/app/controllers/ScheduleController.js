@@ -1,8 +1,22 @@
 import moment from 'moment';
-import { Op } from 'sequelize';
-import { Appointment, Customer, Provider, User } from '../models';
+import {
+  Address,
+  Appointment,
+  Customer,
+  Provider,
+  ProviderServices,
+  Rating,
+  Service,
+  User,
+} from '../models';
 
-import isEmpty from '../../lib/Helpers';
+const exclude = ['createdAt', 'updatedAt'];
+
+const userInclude = {
+  as: 'user',
+  attributes: ['email'],
+  model: User,
+};
 
 class ScheduleController {
   async index(req, res) {
@@ -12,61 +26,108 @@ class ScheduleController {
       switch (account_type) {
         case 'customer': {
           const customer = await Customer.findByPk(id, {
-            include: {
-              as: 'user',
-              attributes: ['email'],
-              model: User,
+            include: [userInclude],
+          });
+
+          const appointments = await Appointment.findAll({
+            attributes: { exclude },
+            include: [
+              {
+                as: 'address',
+                attributes: { exclude: [...exclude, 'id'] },
+                model: Address,
+              },
+              {
+                as: 'detail',
+                attributes: ['id'],
+                include: [
+                  { as: 'service', attributes: ['name'], model: Service },
+                ],
+                model: ProviderServices,
+              },
+              {
+                as: 'provider',
+                attributes: ['id', 'lastname', 'name', 'picture_profile'],
+                include: [{ as: 'user', attributes: ['email'], model: User }],
+                model: Provider,
+              },
+              {
+                as: 'rating',
+                attributes: ['provider_rating'],
+                model: Rating,
+              },
+            ],
+            order: [['id', 'asc']],
+            where: {
+              customer_id: customer.id,
             },
           });
 
-          return res.json(customer);
+          const schedule = appointments.map(e => ({
+            id: e.id,
+            address: e.address,
+            start_at: e.start_at,
+            finish_at: e.finish_at,
+            provider_id: e.provider.id,
+            provider_email: e.provider.user.email,
+            provider_name: `${e.provider.name} ${e.provider.lastname}`,
+            observation: e.observation,
+            status: e.status,
+            title: e.detail.service.name,
+            value: e.value,
+          }));
+
+          return res.json(schedule);
         }
 
         case 'provider': {
           const provider = await Provider.findByPk(id, {
-            include: [
-              {
-                as: 'user',
-                attributes: ['email'],
-                model: User,
-              },
-            ],
+            include: [userInclude],
           });
 
           const appointments = await Appointment.findAll({
-            attributes: ['id', 'date', 'description'],
+            attributes: { exclude },
             include: [
               {
-                as: 'customer',
-                attributes: {
-                  exclude: [
-                    'blood_pressure',
-                    'createdAt',
-                    'have_allergy',
-                    'have_diseases',
-                    'have_treatment',
-                    'password_hash',
-                    'updatedAt',
-                    'address_id',
-                    'user_id',
-                  ],
-                },
+                as: 'address',
+                attributes: { exclude: [...exclude, 'id'] },
+                model: Address,
+              },
+              {
+                as: 'detail',
+                attributes: ['id'],
                 include: [
-                  {
-                    as: 'user',
-                    attributes: ['email'],
-                    model: User,
-                  },
+                  { as: 'service', attributes: ['name'], model: Service },
                 ],
+                model: ProviderServices,
+              },
+              {
+                as: 'customer',
+                attributes: ['id', 'lastname', 'name', 'picture_profile'],
+                include: [{ as: 'user', attributes: ['email'], model: User }],
                 model: Customer,
               },
+              { as: 'rating', attributes: ['customer_rating'], model: Rating },
             ],
-            where: {
-              provider_id: provider.id,
-            },
+            order: [['id', 'asc']],
+            where: { provider_id: provider.id },
           });
 
-          return res.json(appointments);
+          const schedule = appointments.map(e => ({
+            id: e.id,
+            address: e.address,
+            start_at: e.date,
+            finish_at: moment(e.date).add('hour', e.duration),
+            customer_id: e.customer.id,
+            customer_email: e.customer.user.email,
+            customer_name: `${e.customer.name} ${e.customer.lastname}`,
+            observation: e.observation,
+            status: e.status,
+            title: e.detail.service.name,
+            value: e.value,
+          }));
+
+          return res.json(schedule);
         }
 
         default:
@@ -75,36 +136,10 @@ class ScheduleController {
           );
       }
     } catch (e) {
-      console.log(e);
       return res.status(e.status || 400).json({
         error: e.message || 'User already exists',
       });
     }
-
-    // const provider = await Provider.findOne({
-    //   where: { id: req.headers.id },
-    // });
-
-    // if (isEmpty(provider)) {
-    //   throw new Error('Provider does not exists or him is unavailable');
-    // }
-
-    // const { date } = req.query;
-    // const startOfDay = moment(date).startOf('day');
-    // const endOfDay = moment(date).endOf('day');
-
-    // const appointments = await Appointment.findAll({
-    //   order: ['date'],
-    //   where: {
-    //     canceled_at: null,
-    //     date: {
-    //       [Op.between]: [startOfDay, endOfDay],
-    //     },
-    //     provider_id: req.headers.user_id,
-    //   },
-    // });
-
-    // return res.json(appointments);
   }
 }
 

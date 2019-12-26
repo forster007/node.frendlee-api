@@ -1,10 +1,25 @@
 import moment from 'moment';
-import { Appointment, Customer, Provider, User } from '../models';
+import { Op } from 'sequelize';
+import {
+  Appointment,
+  Customer,
+  Provider,
+  ProviderServices,
+  User,
+} from '../models';
 import { Notification } from '../schemas';
 
 import CancellationMail from '../jobs/CancellationMail';
 import isEmpty from '../../lib/Helpers';
 import Queue from '../../lib/Queue';
+
+const exclude = ['createdAt', 'updatedAt'];
+
+const userInclude = {
+  as: 'user',
+  attributes: ['email', 'status'],
+  model: User,
+};
 
 class AppointmentController {
   async delete(req, res) {
@@ -58,32 +73,127 @@ class AppointmentController {
 
   async store(req, res) {
     try {
-      const provider = await Provider.findOne({
-        include: [
-          {
-            as: 'user',
-            attributes: ['email', 'status'],
-            model: User,
-            where: {
-              status: 'enabled',
-            },
+      const { body, headers } = req;
+      const { account_type } = headers;
+
+      if (account_type === 'customer') {
+        const customer = await Customer.findOne({
+          attributes: { exclude },
+          include: [userInclude],
+          where: { id: headers.id },
+        });
+
+        if (isEmpty(customer)) {
+          throw new Error('You cannot store an appointment');
+        }
+
+        if (
+          customer.user.status === 'disabled' ||
+          customer.user.status === 'locked'
+        ) {
+          throw new Error(
+            `You cannot store an appointment because your account was ${customer.user.status}`
+          );
+        }
+
+        const provider = await Provider.findOne({
+          attributes: { exclude },
+          include: [userInclude],
+          where: { id: body.provider_id },
+        });
+
+        if (isEmpty(provider)) {
+          throw new Error('Provider does not exists or he was unavailable');
+        }
+
+        if (
+          provider.user.status === 'disabled' ||
+          provider.user.status === 'locked'
+        ) {
+          throw new Error(
+            `You cannot store an appointment because this provider account was ${provider.user.status}`
+          );
+        }
+
+        const start_at = moment(body.date).toDate();
+        const finish_at = moment(body.date)
+          .add(body.duration, 'hour')
+          .toDate();
+        const dateNow = moment.utc();
+
+        if (moment(start_at).isBefore(dateNow)) {
+          throw new Error(
+            'You cannot store an appointment because past dates are not permitted'
+          );
+        }
+
+        const customerAvailable = await Appointment.findOne({
+          where: {
+            [Op.and]: [
+              {
+                [Op.or]: [
+                  { start_at: { [Op.between]: [start_at, finish_at] } },
+                  { finish_at: { [Op.between]: [start_at, finish_at] } },
+                ],
+              },
+              {
+                customer_id: customer.id,
+              },
+            ],
           },
-        ],
-        where: {
-          id: req.body.provider_id,
-        },
-      });
+        });
 
-      if (isEmpty(provider)) {
-        throw new Error('Provider does not exists or he is unavailable');
+        if (!isEmpty(customerAvailable)) {
+          throw new Error('You are not avaiable on this date');
+        }
+
+        const providerAvailable = await Appointment.findOne({
+          where: {
+            [Op.and]: [
+              {
+                [Op.or]: [
+                  { start_at: { [Op.between]: [start_at, finish_at] } },
+                  { finish_at: { [Op.between]: [start_at, finish_at] } },
+                ],
+              },
+              {
+                provider_id: provider.id,
+              },
+            ],
+          },
+        });
+
+        if (!isEmpty(providerAvailable)) {
+          throw new Error('Provider is not avaiable on this date');
+        }
+
+        const providerService = await ProviderServices.findByPk(
+          body.provider_service_id
+        );
+
+        if (isEmpty(providerService)) {
+          throw new Error('This provider service is not avaiable');
+        }
+
+        const value = providerService.value * body.duration;
+
+        const appointment = await Appointment.create({
+          start_at,
+          duration: body.duration,
+          finish_at,
+          observation: body.observation,
+          status: body.status,
+          value,
+          address_id: body.address_id,
+          customer_id: customer.id,
+          provider_id: provider.id,
+          provider_service_id: providerService.id,
+        });
+
+        return res.json(appointment);
       }
 
-      const dateToStart = moment(req.body.date).startOf('hour');
-      const dateNow = moment();
-
-      if (moment(dateToStart).isBefore(dateNow)) {
-        throw new Error('Past date are not permitted');
-      }
+      throw new Error('You cannot store an appointment');
 
       const dateAvailable = await Appointment.findOne({
         where: {
@@ -138,6 +248,7 @@ class AppointmentController {
 
       return res.json(appointment);
     } catch (e) {
+      console.log(e);
       return res.status(e.status || 400).json({
         error: e.message || 'Appointment already exists',
       });

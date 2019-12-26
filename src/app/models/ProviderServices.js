@@ -15,6 +15,10 @@ class ProviderServices extends Model {
 
     return this;
   }
+
+  static associate(models) {
+    this.belongsTo(models.Service, { as: 'service', foreignKey: 'id' });
+  }
 }
 
 export default ProviderServices;
