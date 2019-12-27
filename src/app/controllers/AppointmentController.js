@@ -87,12 +87,11 @@ class AppointmentController {
           throw new Error('You cannot store an appointment');
         }
 
-        if (
-          customer.user.status === 'disabled' ||
-          customer.user.status === 'locked'
-        ) {
+        const cUser = customer.user;
+
+        if (cUser.status === 'disabled' || cUser.status === 'locked') {
           throw new Error(
-            `You cannot store an appointment because your account was ${customer.user.status}`
+            `You cannot store an appointment because your account was ${cUser.status}`
           );
         }
 
@@ -106,20 +105,21 @@ class AppointmentController {
           throw new Error('Provider does not exists or he was unavailable');
         }
 
-        if (
-          provider.user.status === 'disabled' ||
-          provider.user.status === 'locked'
-        ) {
+        const pUser = provider.user;
+
+        if (pUser.status === 'disabled' || pUser.status === 'locked') {
           throw new Error(
-            `You cannot store an appointment because this provider account was ${provider.user.status}`
+            `You cannot store an appointment because this provider account was ${pUser.status}`
           );
         }
 
-        const start_at = moment(body.date).toDate();
-        const finish_at = moment(body.date)
-          .add(body.duration, 'hour')
+        const { date, duration, observation, status } = body;
+
+        const dateNow = moment().toDate();
+        const start_at = moment(date).toDate();
+        const finish_at = moment(date)
+          .add(duration, 'hour')
           .toDate();
-        const dateNow = moment.utc();
 
         if (moment(start_at).isBefore(dateNow)) {
           throw new Error(
@@ -179,10 +179,10 @@ class AppointmentController {
 
         const appointment = await Appointment.create({
           start_at,
-          duration: body.duration,
+          duration,
           finish_at,
-          observation: body.observation,
-          status: body.status,
+          observation,
+          status,
           value,
           address_id: body.address_id,
           customer_id: customer.id,
