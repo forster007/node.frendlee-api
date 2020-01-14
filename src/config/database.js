@@ -1,12 +1,12 @@
 module.exports = {
-  database: 'frendlee_db',
+  database: process.env.PG_DATABASE,
   define: {
-    timestamps: true,
-    underscored: true,
-    underscoredAll: true,
+    timestamps: process.env.PG_DEFINE_TIMESTAMPS,
+    underscored: process.env.PG_DEFINE_UNDERSCORED,
+    underscoredAll: process.env.PG_DEFINE_UNDERSCOREDALL,
   },
-  dialect: 'postgres',
-  host: 'localhost',
-  password: 'docker',
-  username: 'postgres',
+  dialect: process.env.PG_DIALECT,
+  host: process.env.PG_HOST,
+  password: process.env.PG_PASSWORD,
+  username: process.env.PG_USERNAME,
 };
