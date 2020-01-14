@@ -35,9 +35,11 @@
   "main": "index.js",
   "name": "node.frendlee",
   "scripts": {
+    "build": "sucrase ./src/ -d ./dist --transforms imports",
     "dev": "nodemon src/server.js",
-    "queue": "nodemon src/queue.js",
-    "dev:debug": "nodemon --inspect src/server.js"
+    "dev:debug": "nodemon --inspect src/server.js",
+    "start": "node -r dotenv/config dist/server.js",
+    "queue": "nodemon src/queue.js"
   },
   "version": "1.0.0"
 }
