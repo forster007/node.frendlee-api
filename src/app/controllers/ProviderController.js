@@ -13,6 +13,7 @@ import isEmpty from '../../lib/Helpers';
 const attributes = [
   'id',
   'birthdate',
+  'formation',
   'gender',
   'gps',
   'lastname',
