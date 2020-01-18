@@ -158,6 +158,8 @@ class ProviderController {
 
       const provider = await Provider.findByPk(id);
 
+      console.log(body);
+
       await provider.update(body);
 
       if (!isEmpty(provider_clocks)) {
