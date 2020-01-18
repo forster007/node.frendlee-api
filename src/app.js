@@ -26,7 +26,13 @@ class App {
     this.app.use(helmet());
     this.app.use(json());
     this.app.use(bodyParser.json({ limit: '50mb' }));
-    this.app.use(bodyParser.urlencoded({ limit: '50mb', extended: true }));
+    this.app.use(
+      bodyParser.urlencoded({
+        extended: true,
+        limit: '50mb',
+        parameterLimit: 50000,
+      })
+    );
 
     this.app.use(AuthMiddleware);
     this.app.use(SecurityMiddleware);
