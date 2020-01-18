@@ -158,7 +158,7 @@ class ProviderController {
 
       const provider = await Provider.findByPk(id);
 
-      console.log(req.files);
+      console.log(req);
 
       await provider.update(body);
 
