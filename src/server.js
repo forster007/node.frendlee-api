@@ -6,6 +6,4 @@ app.listen(process.env.PORT, () => {
   const { PORT } = process.env;
 
   console.log(`Started server at ${DATE} on port ${PORT}`);
-  console.log(`Started server at ${DATE} on port ${PORT}`);
-  console.log(`Started server at ${DATE} on port ${PORT}`);
 });
