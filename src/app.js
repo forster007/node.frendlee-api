@@ -1,4 +1,5 @@
 import './database';
+import bodyParser from 'body-parser';
 import cors from 'cors';
 import express, { json } from 'express';
 import helmet from 'helmet';
@@ -24,6 +25,7 @@ class App {
     this.app.use(cors());
     this.app.use(helmet());
     this.app.use(json());
+    this.app.use(bodyParser.json({ limit: '20mb' }));
 
     this.app.use(AuthMiddleware);
     this.app.use(SecurityMiddleware);
