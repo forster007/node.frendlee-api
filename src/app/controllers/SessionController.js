@@ -40,6 +40,7 @@ class SessionController {
               account_type,
               email,
               id: administrator.id,
+              uid: id,
             },
           });
         }
@@ -61,6 +62,7 @@ class SessionController {
               account_type,
               email,
               id: customer.id,
+              uid: id,
             },
           });
         }
@@ -82,6 +84,7 @@ class SessionController {
               account_type,
               email,
               id: provider.id,
+              uid: id,
             },
           });
         }
