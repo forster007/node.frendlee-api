@@ -20,7 +20,7 @@ class Provider extends Model {
         picture_address: Sequelize.BLOB('tiny'),
         picture_certification: Sequelize.BLOB('tiny'),
         picture_license: Sequelize.BLOB('tiny'),
-        picture_profile: Sequelize.BLOB('tiny'),
+        picture_profile: Sequelize.TEXT,
         ssn: Sequelize.STRING,
       },
       {
