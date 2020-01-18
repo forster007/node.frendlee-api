@@ -17,6 +17,20 @@ module.exports = {
           created_at: new Date(),
           updated_at: new Date(),
         },
+        {
+          provider_id: 2,
+          service_id: 1,
+          value: 150.0,
+          created_at: new Date(),
+          updated_at: new Date(),
+        },
+        {
+          provider_id: 2,
+          service_id: 2,
+          value: 75.0,
+          created_at: new Date(),
+          updated_at: new Date(),
+        },
       ],
       {}
     );
