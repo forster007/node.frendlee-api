@@ -159,6 +159,7 @@ class ProviderController {
       const provider = await Provider.findByPk(id);
 
       console.log(req);
+      console.log(req.form);
 
       await provider.update(body);
 

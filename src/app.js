@@ -26,7 +26,11 @@ class App {
     this.app.use(helmet());
     this.app.use(json());
     this.app.use(bodyParser.json());
-    this.app.use(bodyParser.urlencoded());
+    this.app.use(
+      bodyParser.urlencoded({
+        extended: true,
+      })
+    );
 
     this.app.use(AuthMiddleware);
     this.app.use(SecurityMiddleware);
