@@ -6,5 +6,6 @@ const router = express.Router();
 router.get('/', ProviderController.index);
 router.post('/', ProviderController.store);
 router.put('/', ProviderController.update);
+router.put('/:id', ProviderController.update);
 
 export default router;
