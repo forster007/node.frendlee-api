@@ -24,13 +24,7 @@ class App {
   middlewares() {
     this.app.use(cors());
     this.app.use(helmet());
-    this.app.use(json());
-    this.app.use(bodyParser.json());
-    this.app.use(
-      bodyParser.urlencoded({
-        extended: true,
-      })
-    );
+    this.app.use(json({ limit: '50mb' }));
 
     this.app.use(AuthMiddleware);
     this.app.use(SecurityMiddleware);

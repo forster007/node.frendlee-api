@@ -74,7 +74,7 @@ module.exports = {
       },
       picture_profile: {
         allowNull: true,
-        type: Sequelize.BLOB('tiny'),
+        type: Sequelize.TEXT,
       },
       ssn: {
         allowNull: false,

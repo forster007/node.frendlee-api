@@ -63,19 +63,19 @@ module.exports = {
       },
       picture_address: {
         allowNull: true,
-        type: Sequelize.BLOB('tiny'),
+        type: Sequelize.TEXT,
       },
       picture_certification: {
         allowNull: true,
-        type: Sequelize.BLOB('tiny'),
+        type: Sequelize.TEXT,
       },
       picture_profile: {
         allowNull: true,
-        type: Sequelize.BLOB('tiny'),
+        type: Sequelize.TEXT,
       },
       picture_license: {
         allowNull: true,
-        type: Sequelize.BLOB('tiny'),
+        type: Sequelize.TEXT,
       },
       ssn: {
         allowNull: true,
