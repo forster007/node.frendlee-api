@@ -22,7 +22,9 @@ const attributes = [
   'phone_number',
   'phone_number_is_whatsapp',
   'picture_address',
+  'picture_address_url',
   'picture_profile',
+  'picture_profile_url',
   'ssn',
 ];
 
@@ -147,18 +149,25 @@ class ProviderController {
 
   async update(req, res) {
     try {
-      const { body, headers, params } = req;
+      const { body, files, headers, params } = req;
+
       const {
         provider_clocks,
         provider_periods,
         provider_services,
         provider_stuffs,
       } = body;
+      const { picture_address, picture_profile } = files;
       const id = params.id || headers.id;
-
       const provider = await Provider.findByPk(id);
 
-      await provider.update(body);
+      if (!isEmpty(picture_address)) {
+        body.picture_address = picture_address[0].filename;
+      }
+
+      if (!isEmpty(picture_profile)) {
+        body.picture_profile = picture_profile[0].filename;
+      }
 
       if (!isEmpty(provider_clocks)) {
         await provider.setClocks(provider_clocks);
@@ -184,6 +193,8 @@ class ProviderController {
       if (!isEmpty(provider_stuffs)) {
         await provider.setStuffs(provider_stuffs);
       }
+
+      await provider.update(body);
 
       const updated = await Provider.findByPk(id, {
         attributes,

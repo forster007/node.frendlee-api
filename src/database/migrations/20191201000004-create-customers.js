@@ -74,7 +74,7 @@ module.exports = {
       },
       picture_profile: {
         allowNull: true,
-        type: Sequelize.TEXT,
+        type: Sequelize.STRING,
       },
       ssn: {
         allowNull: false,

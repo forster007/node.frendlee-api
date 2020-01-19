@@ -1,10 +1,10 @@
 import './database';
-import bodyParser from 'body-parser';
 import cors from 'cors';
 import express, { json } from 'express';
 import helmet from 'helmet';
 import http from 'http';
 import io from 'socket.io';
+import path from 'path';
 
 import { AuthMiddleware, SecurityMiddleware } from './app/middlewares';
 
@@ -38,6 +38,10 @@ class App {
 
   routes() {
     const PREFIX = '/api';
+    this.app.use(
+      '/files',
+      express.static(path.resolve(__dirname, '..', 'tmp', 'uploads'))
+    );
 
     this.app.use(`${PREFIX}/administrators`, router.administrators);
     this.app.use(`${PREFIX}/appointments`, router.appointments);

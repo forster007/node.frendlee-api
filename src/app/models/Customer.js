@@ -22,7 +22,13 @@ class Customer extends Model {
         onesignal: Sequelize.STRING,
         phone_number: Sequelize.STRING,
         phone_number_is_whatsapp: Sequelize.BOOLEAN,
-        picture_profile: Sequelize.TEXT,
+        picture_profile: Sequelize.STRING,
+        picture_profile_url: {
+          type: Sequelize.VIRTUAL,
+          get() {
+            return `http://localhost:3333/files/${this.picture_profile}`;
+          },
+        },
         ssn: Sequelize.STRING,
       },
       {

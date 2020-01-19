@@ -63,19 +63,19 @@ module.exports = {
       },
       picture_address: {
         allowNull: true,
-        type: Sequelize.TEXT,
+        type: Sequelize.STRING,
       },
       picture_certification: {
         allowNull: true,
-        type: Sequelize.TEXT,
+        type: Sequelize.STRING,
       },
       picture_profile: {
         allowNull: true,
-        type: Sequelize.TEXT,
+        type: Sequelize.STRING,
       },
       picture_license: {
         allowNull: true,
-        type: Sequelize.TEXT,
+        type: Sequelize.STRING,
       },
       ssn: {
         allowNull: true,
