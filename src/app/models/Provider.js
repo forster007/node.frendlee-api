@@ -21,7 +21,7 @@ class Provider extends Model {
         picture_address_url: {
           type: Sequelize.VIRTUAL,
           get() {
-            return `http://localhost:3333/files/${this.picture_address}`;
+            return `${process.env.APP_URL}/files/${this.picture_address}`;
           },
         },
         picture_certification: Sequelize.STRING,
@@ -30,7 +30,7 @@ class Provider extends Model {
         picture_profile_url: {
           type: Sequelize.VIRTUAL,
           get() {
-            return `http://localhost:3333/files/${this.picture_profile}`;
+            return `${process.env.APP_URL}/files/${this.picture_profile}`;
           },
         },
         ssn: Sequelize.STRING,

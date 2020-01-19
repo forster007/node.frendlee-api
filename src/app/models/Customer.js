@@ -26,7 +26,7 @@ class Customer extends Model {
         picture_profile_url: {
           type: Sequelize.VIRTUAL,
           get() {
-            return `http://localhost:3333/files/${this.picture_profile}`;
+            return `${process.env.APP_URL}/files/${this.picture_profile}`;
           },
         },
         ssn: Sequelize.STRING,
