@@ -8,7 +8,7 @@ module.exports = {
           gender: 'male',
           lastname: 'Forster',
           name: 'Thomas',
-          phone_number: '51981605401',
+          phone_number: '51982809822',
           phone_number_is_whatsapp: true,
           ssn: '01758240024',
           user_id: 1,

@@ -1,4 +1,7 @@
+import jwt from 'jsonwebtoken';
 import { Address, Customer, User } from '../models';
+import isEmpty from '../../lib/Helpers';
+import { authConfig } from '../../config';
 
 const attributes = [
   'id',
@@ -11,6 +14,7 @@ const attributes = [
   'phone_number',
   'phone_number_is_whatsapp',
   'picture_profile',
+  'picture_profile_url',
   'ssn',
 ];
 
@@ -45,14 +49,30 @@ class CustomerController {
     return res.json(customers);
   }
 
+  async show(req, res) {
+    const { params } = req;
+    const { id } = params;
+    const customer = await Customer.findByPk(id);
+
+    return res.json(customer);
+  }
+
   async store(req, res) {
     try {
-      const customer = await Customer.create(req.body, {
+      const { body } = req;
+
+      const customer = await Customer.create(body, {
         include: [
           { as: 'address', model: Address },
           { as: 'user', model: User },
         ],
       });
+
+      customer.dataValues.token = jwt.sign(
+        { account_type: 'customer', id: customer.id },
+        authConfig.secret,
+        { expiresIn: authConfig.expiresIn }
+      );
 
       return res.json(customer);
     } catch (e) {
@@ -64,10 +84,14 @@ class CustomerController {
 
   async update(req, res) {
     try {
-      const { body, headers, params } = req;
+      const { body, files, headers, params } = req;
+      const { picture_profile } = files;
       const id = params.id || headers.id;
-
       const customer = await Customer.findByPk(id);
+
+      if (!isEmpty(picture_profile)) {
+        body.picture_profile = picture_profile[0].filename;
+      }
 
       await customer.update(body);
 

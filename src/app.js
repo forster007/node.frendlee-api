@@ -25,13 +25,11 @@ class App {
     this.app.use(cors());
     this.app.use(helmet());
     this.app.use(json({ limit: '50mb' }));
-
     this.app.use(AuthMiddleware);
     this.app.use(SecurityMiddleware);
     this.app.use((req, res, next) => {
       req.io = this.io;
       req.connected_users = this.connected_users;
-
       next();
     });
   }
@@ -45,6 +43,7 @@ class App {
 
     this.app.use(`${PREFIX}/administrators`, router.administrators);
     this.app.use(`${PREFIX}/appointments`, router.appointments);
+    this.app.use(`${PREFIX}/checks`, router.checks);
     this.app.use(`${PREFIX}/clocks`, router.clocks);
     this.app.use(`${PREFIX}/customers`, router.customers);
     this.app.use(`${PREFIX}/notifications`, router.notifications);

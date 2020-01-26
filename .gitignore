@@ -3,3 +3,4 @@ node_modules/
 insomnia.json
 .vscode/
 .env
+.DS_Store

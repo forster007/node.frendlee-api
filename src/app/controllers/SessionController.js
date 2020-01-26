@@ -32,9 +32,7 @@ class SessionController {
             token: jwt.sign(
               { account_type, id: administrator.id },
               authConfig.secret,
-              {
-                expiresIn: authConfig.expiresIn,
-              }
+              { expiresIn: authConfig.expiresIn }
             ),
             user: {
               account_type,
@@ -54,9 +52,7 @@ class SessionController {
             token: jwt.sign(
               { account_type, id: customer.id },
               authConfig.secret,
-              {
-                expiresIn: authConfig.expiresIn,
-              }
+              { expiresIn: authConfig.expiresIn }
             ),
             user: {
               account_type,
@@ -76,9 +72,7 @@ class SessionController {
             token: jwt.sign(
               { account_type, id: provider.id },
               authConfig.secret,
-              {
-                expiresIn: authConfig.expiresIn,
-              }
+              { expiresIn: authConfig.expiresIn }
             ),
             user: {
               account_type,

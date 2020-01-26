@@ -5,13 +5,15 @@ import { authConfig } from '../../config';
 export default async (req, res, next) => {
   try {
     const { method, path } = req;
-    const regexPath = new RegExp('/files', 'gim');
+    const regexChecks = new RegExp('/api/checks', 'gim');
+    const regexFiles = new RegExp('/files', 'gim');
 
     if (
       (method === 'POST' && path === '/api/customers') ||
       (method === 'POST' && path === '/api/providers') ||
       (method === 'POST' && path === '/api/sessions') ||
-      (method === 'GET' && path.match(regexPath))
+      (method === 'GET' && path.match(regexChecks)) ||
+      (method === 'GET' && path.match(regexFiles))
     ) {
       return next();
     }

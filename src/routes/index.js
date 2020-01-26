@@ -1,5 +1,6 @@
 import administrators from './administrator';
 import appointments from './appointment';
+import checks from './check';
 import clocks from './clock';
 import customers from './customer';
 import notifications from './notification';
@@ -14,6 +15,7 @@ import users from './user';
 export {
   administrators,
   appointments,
+  checks,
   clocks,
   customers,
   notifications,

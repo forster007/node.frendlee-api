@@ -17,7 +17,7 @@ module.exports = {
           onesignal: null,
           phone_number: '51981605401',
           phone_number_is_whatsapp: true,
-          picture_profile: null,
+          picture_profile: '6ccdb18a0b085ab02976ab8221a09ea1.jpg',
           ssn: '02812954094',
           user_id: 2,
           created_at: new Date(),
