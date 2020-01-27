@@ -7,13 +7,15 @@ export default async (req, res, next) => {
     const { method, path } = req;
     const regexChecks = new RegExp('/api/checks', 'gim');
     const regexFiles = new RegExp('/files', 'gim');
+    const regexServices = new RegExp('/services', 'gim');
 
     if (
       (method === 'POST' && path === '/api/customers') ||
       (method === 'POST' && path === '/api/providers') ||
       (method === 'POST' && path === '/api/sessions') ||
       (method === 'GET' && path.match(regexChecks)) ||
-      (method === 'GET' && path.match(regexFiles))
+      (method === 'GET' && path.match(regexFiles)) ||
+      (method === 'GET' && path.match(regexServices))
     ) {
       return next();
     }
