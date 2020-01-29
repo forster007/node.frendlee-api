@@ -10,6 +10,7 @@ export default async (req, res, next) => {
     const regexClocks = new RegExp('/clocks', 'gim');
     const regexPeriods = new RegExp('/periods', 'gim');
     const regexServices = new RegExp('/services', 'gim');
+    const regexStuffs = new RegExp('/stuffs', 'gim');
 
     if (
       (method === 'POST' && path === '/api/customers') ||
@@ -19,7 +20,8 @@ export default async (req, res, next) => {
       (method === 'GET' && path.match(regexFiles)) ||
       (method === 'GET' && path.match(regexClocks)) ||
       (method === 'GET' && path.match(regexPeriods)) ||
-      (method === 'GET' && path.match(regexServices))
+      (method === 'GET' && path.match(regexServices)) ||
+      (method === 'GET' && path.match(regexStuffs))
     ) {
       return next();
     }
