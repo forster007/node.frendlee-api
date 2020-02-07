@@ -3,7 +3,12 @@
     {
       "name": "server",
       "script": "npm",
-      "args": "start"
+      "args": "startServer"
+    },
+    {
+      "name": "queue",
+      "script": "npm",
+      "args": "startQueue"
     }
   ]
 }

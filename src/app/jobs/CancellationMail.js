@@ -12,12 +12,12 @@ class CancellationMail {
     await Mail.sendMail({
       context: {
         date: moment(appointment.date).format('DD/MM/YYYY HH:mm'),
-        provider: appointment.provider.name,
-        user: appointment.user.name,
+        provider: appointment.name,
+        user: appointment.email,
       },
       subject: 'Agendamento cancelado',
       template: 'cancellation',
-      to: `${appointment.provider.name} <${appointment.provider.email}>`,
+      to: `${appointment.name} <${appointment.email}>`,
     });
   }
 }

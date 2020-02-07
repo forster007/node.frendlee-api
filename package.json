@@ -13,7 +13,7 @@
     "moment": "^2.24.0",
     "mongoose": "^5.8.0",
     "multer": "^1.4.2",
-    "nodemailer": "^6.4.1",
+    "nodemailer": "^6.4.2",
     "nodemailer-express-handlebars": "^3.1.0",
     "pg": "^7.14.0",
     "pg-hstore": "^2.3.3",
@@ -35,11 +35,11 @@
   "main": "index.js",
   "name": "node.frendlee",
   "scripts": {
-    "build": "sucrase ./src/ -d ./dist --transforms imports",
     "dev": "nodemon src/server.js",
-    "dev:debug": "nodemon --inspect src/server.js",
-    "start": "node -r dotenv/config dist/server.js",
-    "queue": "nodemon src/queue.js"
+    "queue": "nodemon src/queue.js",
+    "build": "sucrase ./src/ -d ./dist --transforms imports",
+    "startQueue": "node -r dotenv/config dist/queue.js",
+    "startServer": "node -r dotenv/config dist/server.js"
   },
   "version": "1.0.0"
 }

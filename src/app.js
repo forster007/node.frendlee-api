@@ -45,10 +45,12 @@ class App {
     this.app.use(`${PREFIX}/appointments`, router.appointments);
     this.app.use(`${PREFIX}/checks`, router.checks);
     this.app.use(`${PREFIX}/clocks`, router.clocks);
+    this.app.use(`${PREFIX}/confirmations`, router.confirmations);
     this.app.use(`${PREFIX}/customers`, router.customers);
     this.app.use(`${PREFIX}/notifications`, router.notifications);
     this.app.use(`${PREFIX}/periods`, router.periods);
     this.app.use(`${PREFIX}/providers`, router.providers);
+    this.app.use(`${PREFIX}/resends`, router.resends);
     this.app.use(`${PREFIX}/schedules`, router.schedules);
     this.app.use(`${PREFIX}/services`, router.services);
     this.app.use(`${PREFIX}/sessions`, router.sessions);

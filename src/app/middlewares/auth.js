@@ -5,10 +5,12 @@ import { authConfig } from '../../config';
 export default async (req, res, next) => {
   try {
     const { method, path } = req;
-    const regexChecks = new RegExp('/api/checks', 'gim');
-    const regexFiles = new RegExp('/files', 'gim');
+    const regexChecks = new RegExp('/checks', 'gim');
     const regexClocks = new RegExp('/clocks', 'gim');
+    const regexConfirmations = new RegExp('/confirmations', 'gim');
+    const regexFiles = new RegExp('/files', 'gim');
     const regexPeriods = new RegExp('/periods', 'gim');
+    const regexResends = new RegExp('/resends', 'gim');
     const regexServices = new RegExp('/services', 'gim');
     const regexStuffs = new RegExp('/stuffs', 'gim');
 
@@ -17,9 +19,11 @@ export default async (req, res, next) => {
       (method === 'POST' && path === '/api/providers') ||
       (method === 'POST' && path === '/api/sessions') ||
       (method === 'GET' && path.match(regexChecks)) ||
-      (method === 'GET' && path.match(regexFiles)) ||
       (method === 'GET' && path.match(regexClocks)) ||
+      (method === 'GET' && path.match(regexConfirmations)) ||
+      (method === 'GET' && path.match(regexFiles)) ||
       (method === 'GET' && path.match(regexPeriods)) ||
+      (method === 'GET' && path.match(regexResends)) ||
       (method === 'GET' && path.match(regexServices)) ||
       (method === 'GET' && path.match(regexStuffs))
     ) {

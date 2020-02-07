@@ -1,3 +1,4 @@
+import crypto from 'crypto';
 import {
   Address,
   Clock,
@@ -8,7 +9,10 @@ import {
   Stuff,
   User,
 } from '../models';
+import { TokenVerification } from '../schemas';
+import SignUpMail from '../jobs/SignUpMail';
 import isEmpty from '../../lib/Helpers';
+import Queue from '../../lib/Queue';
 
 const attributes = [
   'id',
@@ -140,6 +144,17 @@ class ProviderController {
       if (!isEmpty(provider_stuffs)) {
         await provider.setStuffs(provider_stuffs);
       }
+
+      const tokenVerification = await TokenVerification.create({
+        user: provider.dataValues.user.id,
+        token: crypto.randomBytes(16).toString('hex'),
+      });
+
+      await Queue.add(SignUpMail.key, {
+        name: provider.dataValues.name,
+        url: `${process.env.APP_URL}/api/confirmations?token=${tokenVerification.token}`,
+        email: provider.dataValues.user.email,
+      });
 
       return res.json(provider);
     } catch (e) {

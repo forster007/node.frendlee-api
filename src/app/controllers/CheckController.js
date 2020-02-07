@@ -1,7 +1,20 @@
 import { Administrator, Customer, Provider, User } from '../models';
 import isEmpty from '../../lib/Helpers';
+import Queue from '../../lib/Queue';
+import CancellationMail from '../jobs/CancellationMail';
 
 class CheckController {
+  async index(req, res) {
+    await Queue.add(CancellationMail.key, {
+      appointment: {
+        name: 'Thomas',
+        email: 'forster007@gmail.com',
+      },
+    });
+
+    return res.json({ data: true });
+  }
+
   async show(req, res) {
     const { field, value } = req.query;
 

@@ -1,7 +1,11 @@
+import crypto from 'crypto';
 import jwt from 'jsonwebtoken';
 import { Address, Customer, User } from '../models';
-import isEmpty from '../../lib/Helpers';
+import { TokenVerification } from '../schemas';
 import { authConfig } from '../../config';
+import SignUpMail from '../jobs/SignUpMail';
+import isEmpty from '../../lib/Helpers';
+import Queue from '../../lib/Queue';
 
 const attributes = [
   'id',
@@ -73,6 +77,17 @@ class CustomerController {
         authConfig.secret,
         { expiresIn: authConfig.expiresIn }
       );
+
+      const tokenVerification = await TokenVerification.create({
+        user: customer.dataValues.user.id,
+        token: crypto.randomBytes(16).toString('hex'),
+      });
+
+      await Queue.add(SignUpMail.key, {
+        name: customer.dataValues.name,
+        url: `${process.env.APP_URL}/api/confirmations?token=${tokenVerification.token}`,
+        email: customer.dataValues.user.email,
+      });
 
       return res.json(customer);
     } catch (e) {

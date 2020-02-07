@@ -36,7 +36,7 @@ module.exports = {
       },
       picture_profile: {
         allowNull: true,
-        type: Sequelize.BLOB('tiny'),
+        type: Sequelize.STRING,
       },
       ssn: {
         allowNull: false,
