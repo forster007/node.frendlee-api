@@ -5,6 +5,7 @@ import { authConfig } from '../../config';
 export default async (req, res, next) => {
   try {
     const { method, path } = req;
+    const regexConfirmation = new RegExp('/confirmation', 'gim');
     const regexChecks = new RegExp('/checks', 'gim');
     const regexClocks = new RegExp('/clocks', 'gim');
     const regexConfirmations = new RegExp('/confirmations', 'gim');
@@ -18,6 +19,7 @@ export default async (req, res, next) => {
       (method === 'POST' && path === '/api/customers') ||
       (method === 'POST' && path === '/api/providers') ||
       (method === 'POST' && path === '/api/sessions') ||
+      (method === 'GET' && path.match(regexConfirmation)) ||
       (method === 'GET' && path.match(regexChecks)) ||
       (method === 'GET' && path.match(regexClocks)) ||
       (method === 'GET' && path.match(regexConfirmations)) ||

@@ -6,7 +6,6 @@ class SignUpMail {
   }
 
   async handle({ data }) {
-    console.log(data);
     await Mail.sendMail({
       context: {
         email: data.email,

@@ -2,12 +2,12 @@
   "apps": [
     {
       "name": "server",
-      "script": "npm",
+      "script": "yarn",
       "args": "startServer"
     },
     {
       "name": "queue",
-      "script": "npm",
+      "script": "yarn",
       "args": "startQueue"
     }
   ]

@@ -85,7 +85,7 @@ class CustomerController {
 
       await Queue.add(SignUpMail.key, {
         name: customer.dataValues.name,
-        url: `${process.env.APP_URL}/api/confirmations?token=${tokenVerification.token}`,
+        url: `${process.env.APP_URL}/confirmation?token=${tokenVerification.token}`,
         email: customer.dataValues.user.email,
       });
 

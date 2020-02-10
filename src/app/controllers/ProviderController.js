@@ -152,7 +152,7 @@ class ProviderController {
 
       await Queue.add(SignUpMail.key, {
         name: provider.dataValues.name,
-        url: `${process.env.APP_URL}/api/confirmations?token=${tokenVerification.token}`,
+        url: `${process.env.APP_URL}/confirmation?token=${tokenVerification.token}`,
         email: provider.dataValues.user.email,
       });
 

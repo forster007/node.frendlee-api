@@ -41,6 +41,14 @@ class App {
       express.static(path.resolve(__dirname, '..', 'tmp', 'uploads'))
     );
 
+    this.app.use(`/confirmation`, (req, res) => {
+      res.sendFile(
+        path.resolve(
+          path.join(`${__dirname}/app/views/htmls/confirmation.html`)
+        )
+      );
+    });
+
     this.app.use(`${PREFIX}/administrators`, router.administrators);
     this.app.use(`${PREFIX}/appointments`, router.appointments);
     this.app.use(`${PREFIX}/checks`, router.checks);
