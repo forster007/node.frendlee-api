@@ -38,6 +38,7 @@
     "dev": "nodemon src/server.js",
     "queue": "nodemon src/queue.js",
     "build": "sucrase ./src/ -d ./dist --transforms imports",
+    "postbuild": "cp -R ./src/app/views ./dist/app/",
     "startQueue": "node -r dotenv/config dist/queue.js",
     "startServer": "node -r dotenv/config dist/server.js"
   },
