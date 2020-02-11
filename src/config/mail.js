@@ -1,7 +1,7 @@
 export default {
   auth: {
-    user: 'frendleeapp@gmail.com',
-    pass: 'FA123456789',
+    user: 'forster007@gmail.com',
+    pass: 'dkawwhjgzsxgdavx',
   },
   default: {
     from: 'Frendlee <noreply@frendlee.com.br',
