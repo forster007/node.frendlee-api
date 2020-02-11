@@ -1,19 +1,21 @@
 import exphbs from 'express-handlebars';
 import nodemailer from 'nodemailer';
+import smtpTransport from 'nodemailer-smtp-transport';
 import nodemailerhbs from 'nodemailer-express-handlebars';
 import { resolve } from 'path';
 import { mailConfig } from '../config';
 
 class Mail {
   constructor() {
-    const { auth, host, port, secure } = mailConfig;
+    const { auth, host, service } = mailConfig;
 
-    this.transporter = nodemailer.createTransport({
-      auth: auth.user ? auth : null,
-      host,
-      port,
-      secure,
-    });
+    this.transporter = nodemailer.createTransport(
+      smtpTransport({
+        service,
+        host,
+        auth,
+      })
+    );
 
     this.configureTemplates();
   }
