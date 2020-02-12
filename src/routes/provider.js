@@ -12,7 +12,7 @@ router.get('/', ProviderController.index);
 router.post('/', ProviderController.store);
 router.put('/', ProviderController.update);
 
-router.put(
+router.post(
   '/:id/files',
   upload.fields([
     { name: 'picture_address', maxCount: 1 },
