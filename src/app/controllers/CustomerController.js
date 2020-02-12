@@ -2,10 +2,10 @@ import crypto from 'crypto';
 import jwt from 'jsonwebtoken';
 import { Address, Customer, User } from '../models';
 import { TokenVerification } from '../schemas';
-import { authConfig } from '../../config';
 import SignUpMail from '../jobs/SignUpMail';
 import isEmpty from '../../lib/Helpers';
 import Queue from '../../lib/Queue';
+import { authConfig } from '../../config';
 
 const attributes = [
   'id',

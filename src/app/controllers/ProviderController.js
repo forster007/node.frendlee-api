@@ -1,4 +1,5 @@
 import crypto from 'crypto';
+import jwt from 'jsonwebtoken';
 import {
   Address,
   Clock,
@@ -13,6 +14,7 @@ import { TokenVerification } from '../schemas';
 import SignUpMail from '../jobs/SignUpMail';
 import isEmpty from '../../lib/Helpers';
 import Queue from '../../lib/Queue';
+import { authConfig } from '../../config';
 
 const attributes = [
   'id',
@@ -144,6 +146,12 @@ class ProviderController {
       if (!isEmpty(provider_stuffs)) {
         await provider.setStuffs(provider_stuffs);
       }
+
+      provider.dataValues.token = jwt.sign(
+        { account_type: 'customer', id: provider.id },
+        authConfig.secret,
+        { expiresIn: authConfig.expiresIn }
+      );
 
       const tokenVerification = await TokenVerification.create({
         user: provider.dataValues.user.id,
