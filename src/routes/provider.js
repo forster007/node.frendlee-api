@@ -19,7 +19,7 @@ router.put(
     { name: 'picture_license', maxCount: 1 },
     { name: 'picture_profile', maxCount: 1 },
   ]),
-  ProviderController.store
+  ProviderController.storeProvider
 );
 
 export default router;
