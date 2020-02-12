@@ -1,6 +1,7 @@
 import express from 'express';
 import multer from 'multer';
 
+import FileController from '../app/controllers/FileController';
 import ProviderController from '../app/controllers/ProviderController';
 import multerConfig from '../config/multer';
 
@@ -19,7 +20,7 @@ router.put(
     { name: 'picture_license', maxCount: 1 },
     { name: 'picture_profile', maxCount: 1 },
   ]),
-  ProviderController.storeProvider
+  FileController.storeProvider
 );
 
 export default router;
