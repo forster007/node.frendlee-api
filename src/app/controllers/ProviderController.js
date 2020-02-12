@@ -148,7 +148,7 @@ class ProviderController {
       }
 
       provider.dataValues.token = jwt.sign(
-        { account_type: 'customer', id: provider.id },
+        { account_type: 'provider', id: provider.id },
         authConfig.secret,
         { expiresIn: authConfig.expiresIn }
       );
