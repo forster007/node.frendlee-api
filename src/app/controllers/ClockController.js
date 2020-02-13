@@ -1,23 +1,26 @@
 import { Clock } from '../models';
 
+const attributes = ['id', 'name', 'state'];
+
 class ClockController {
   async index(req, res) {
-    try {
-      const { headers } = req;
-      const clocks = await Clock.findAll({
-        attributes: ['enabled', 'id', 'name', 'state'],
-      }).map(clock => {
-        if (headers.account_type === 'administrator') {
-          return clock;
-        }
+    const { account_type } = req.headers;
 
-        delete clock.dataValues.enabled;
-        return clock;
-      });
+    switch (account_type) {
+      case 'administrator': {
+        attributes.push('enabled');
 
-      return res.json(clocks);
-    } catch (e) {
-      return res.json(e);
+        const clocks = await Clock.findAll({ attributes });
+        return res.json(clocks);
+      }
+
+      default: {
+        const clocks = await Clock.findAll({
+          attributes,
+          where: { enabled: true },
+        });
+        return res.json(clocks);
+      }
     }
   }
 

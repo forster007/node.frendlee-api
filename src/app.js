@@ -1,14 +1,17 @@
 import './database';
+import acl from 'express-acl';
 import cors from 'cors';
 import express, { json } from 'express';
 import helmet from 'helmet';
 import http from 'http';
 import io from 'socket.io';
 import path from 'path';
+import unless from 'express-unless';
 
-import { AuthMiddleware, SecurityMiddleware } from './app/middlewares';
+import { aclConfig, unlessConfig } from './config';
 
 import * as router from './routes';
+import mwAuth from './app/middlewares/mwAuth';
 
 class App {
   constructor() {
@@ -22,11 +25,16 @@ class App {
   }
 
   middlewares() {
+    acl.config(aclConfig);
+    mwAuth.unless = unless;
+
     this.app.use(cors());
     this.app.use(helmet());
     this.app.use(json({ limit: '50mb' }));
-    this.app.use(AuthMiddleware);
-    this.app.use(SecurityMiddleware);
+
+    this.app.use(process.env.PREFIX, mwAuth.unless(unlessConfig));
+    this.app.use(acl.authorize.unless(unlessConfig));
+
     this.app.use((req, res, next) => {
       req.io = this.io;
       req.connected_users = this.connected_users;
@@ -35,7 +43,6 @@ class App {
   }
 
   routes() {
-    const PREFIX = '/api';
     this.app.use(
       '/files',
       express.static(path.resolve(__dirname, '..', 'tmp', 'uploads'))
@@ -49,21 +56,21 @@ class App {
       );
     });
 
-    this.app.use(`${PREFIX}/administrators`, router.administrators);
-    this.app.use(`${PREFIX}/appointments`, router.appointments);
-    this.app.use(`${PREFIX}/checks`, router.checks);
-    this.app.use(`${PREFIX}/clocks`, router.clocks);
-    this.app.use(`${PREFIX}/confirmations`, router.confirmations);
-    this.app.use(`${PREFIX}/customers`, router.customers);
-    this.app.use(`${PREFIX}/notifications`, router.notifications);
-    this.app.use(`${PREFIX}/periods`, router.periods);
-    this.app.use(`${PREFIX}/providers`, router.providers);
-    this.app.use(`${PREFIX}/resends`, router.resends);
-    this.app.use(`${PREFIX}/schedules`, router.schedules);
-    this.app.use(`${PREFIX}/services`, router.services);
-    this.app.use(`${PREFIX}/sessions`, router.sessions);
-    this.app.use(`${PREFIX}/stuffs`, router.stuffs);
-    this.app.use(`${PREFIX}/users`, router.users);
+    this.app.use(`${process.env.PREFIX}/administrators`, router.administrators);
+    this.app.use(`${process.env.PREFIX}/appointments`, router.appointments);
+    this.app.use(`${process.env.PREFIX}/checks`, router.checks);
+    this.app.use(`${process.env.PREFIX}/clocks`, router.clocks);
+    this.app.use(`${process.env.PREFIX}/confirmations`, router.confirmations);
+    this.app.use(`${process.env.PREFIX}/customers`, router.customers);
+    this.app.use(`${process.env.PREFIX}/notifications`, router.notifications);
+    this.app.use(`${process.env.PREFIX}/periods`, router.periods);
+    this.app.use(`${process.env.PREFIX}/providers`, router.providers);
+    this.app.use(`${process.env.PREFIX}/resends`, router.resends);
+    this.app.use(`${process.env.PREFIX}/schedules`, router.schedules);
+    this.app.use(`${process.env.PREFIX}/services`, router.services);
+    this.app.use(`${process.env.PREFIX}/sessions`, router.sessions);
+    this.app.use(`${process.env.PREFIX}/stuffs`, router.stuffs);
+    this.app.use(`${process.env.PREFIX}/users`, router.users);
 
     this.app.all('*', (req, res) => {
       const error = {
