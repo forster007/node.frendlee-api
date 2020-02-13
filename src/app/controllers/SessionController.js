@@ -17,13 +17,21 @@ class SessionController {
       }
 
       if (!(await user.checkPassword(req.body.password))) {
-        throw new Error('Password does not match');
+        throw new Error('User password does not match');
       }
 
-      const { account_type, email, id } = user;
+      const { account_type, email, id, status } = user;
+
+      if (account_type !== req.body.account_type) {
+        throw new Error('You cannot make login here.');
+      }
 
       switch (account_type) {
         case 'administrator': {
+          if (status === 'disabled' || status === 'locked') {
+            throw new Error('Your user was not be able to signin.');
+          }
+
           const administrator = await Administrator.findOne({
             where: { user_id: id },
           });
@@ -44,6 +52,12 @@ class SessionController {
         }
 
         case 'customer': {
+          if (status === 'locked') {
+            throw new Error(
+              'Your user was not be able to signin yet. We will tell you when all it done.'
+            );
+          }
+
           const customer = await Customer.findOne({
             where: { user_id: id },
           });
@@ -64,6 +78,18 @@ class SessionController {
         }
 
         case 'provider': {
+          if (status === 'disabled') {
+            throw new Error(
+              'Your user was not be able to signin yet. Maybe you forgot to activate then first.'
+            );
+          }
+
+          if (status === 'locked') {
+            throw new Error(
+              'Your user was not be able to signin yet. We will tell you when all it done.'
+            );
+          }
+
           const provider = await Provider.findOne({
             where: { user_id: id },
           });
@@ -90,7 +116,7 @@ class SessionController {
       }
     } catch (e) {
       return res.status(e.status || 400).json({
-        error: e.message || 'User already exists',
+        message: e.message || 'User already exists',
       });
     }
   }
