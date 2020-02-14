@@ -23,10 +23,7 @@ class ConfirmationController {
       return res.json(user);
     }
 
-    if (
-      (user.account_type === 'customer' || user.account_type === 'provider') &&
-      user.status === 'disabled'
-    ) {
+    if (user.account_type === 'provider' && user.status === 'disabled') {
       return res.status(400).send({
         type: 'already-verified',
         msg: 'Talk to an administrator.',
