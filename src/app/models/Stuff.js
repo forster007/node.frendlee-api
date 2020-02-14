@@ -2,7 +2,7 @@ import Sequelize, { Model } from 'sequelize';
 
 class Stuff extends Model {
   static init(sequelize) {
-    super.init({ name: Sequelize.STRING }, { sequelize });
+    super.init({ name: Sequelize.STRING }, { sequelize, tableName: 'stuffs' });
 
     return this;
   }
