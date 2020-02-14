@@ -1114,6 +1114,15 @@ expect-ct@0.2.0:
   resolved "https://registry.yarnpkg.com/expect-ct/-/expect-ct-0.2.0.tgz#3a54741b6ed34cc7a93305c605f63cd268a54a62"
   integrity sha512-6SK3MG/Bbhm8MsgyJAylg+ucIOU71/FzyFalcfu5nY19dH8y/z0tBJU0wrNBXD4B27EoQtqPF/9wqH0iYAd04g==
 
+express-acl@^2.0.8:
+  version "2.0.8"
+  resolved "https://registry.yarnpkg.com/express-acl/-/express-acl-2.0.8.tgz#30a3d5c2307ebeef0721f2800b1e371348a2059c"
+  integrity sha512-mwJzjgmZi2YlNzORjfNDJoX/l9IdbGji0rpqczay8Kq1GeZFRgyyUbGEEOYYr8jZYNOPmSYQprCsCFuY/kDaBQ==
+  dependencies:
+    express-unless "^0.3.0"
+    js-yaml "^3.6.0"
+    object-path "^0.11.4"
+
 express-handlebars@^3.0.0, express-handlebars@^3.1.0:
   version "3.1.0"
   resolved "https://registry.yarnpkg.com/express-handlebars/-/express-handlebars-3.1.0.tgz#c177ee9a81f6a2abada6b550b77b3e30c6bc0796"
@@ -1124,6 +1133,16 @@ express-handlebars@^3.0.0, express-handlebars@^3.1.0:
     handlebars "^4.1.2"
     object.assign "^4.1.0"
     promise "^8.0.2"
+
+express-unless@^0.3.0:
+  version "0.3.1"
+  resolved "https://registry.yarnpkg.com/express-unless/-/express-unless-0.3.1.tgz#2557c146e75beb903e2d247f9b5ba01452696e20"
+  integrity sha1-JVfBRudb65A+LSR/m1ugFFJpbiA=
+
+express-unless@^0.5.0:
+  version "0.5.0"
+  resolved "https://registry.yarnpkg.com/express-unless/-/express-unless-0.5.0.tgz#c2ece477f4155089143dbb869d07c57c5eb6ab9b"
+  integrity sha1-wuzkd/QVUIkUPbuGnQfFfF62q5s=
 
 express@^4.17.1:
   version "4.17.1"
@@ -1764,7 +1783,7 @@ js-tokens@^4.0.0:
   resolved "https://registry.yarnpkg.com/js-tokens/-/js-tokens-4.0.0.tgz#19203fb59991df98e3a287050d4647cdeaf32499"
   integrity sha512-RdJUflcE3cUzKiMqQgsCu06FPu9UdIJO0beYbPhHN4k6apgJtifcoCtT9bcxOpYBtpD2kCM6Sbzg4CausW/PKQ==
 
-js-yaml@^3.13.1:
+js-yaml@^3.13.1, js-yaml@^3.6.0:
   version "3.13.1"
   resolved "https://registry.yarnpkg.com/js-yaml/-/js-yaml-3.13.1.tgz#aff151b30bfdfa8e49e05da22e7415e9dfa37847"
   integrity sha512-YfbcO7jXDdyj0DGxYVSlSeQNHbD7XPWvrVWeVUujrQEoZzWJIRrCPoyk6kL6IAjAG2IolMK4T0hNUe0HOUs5Jw==
@@ -2274,6 +2293,11 @@ object-keys@^1.0.11, object-keys@^1.0.12, object-keys@^1.1.1:
   version "1.1.1"
   resolved "https://registry.yarnpkg.com/object-keys/-/object-keys-1.1.1.tgz#1c47f272df277f3b1daf061677d9c82e2322c60e"
   integrity sha512-NuAESUOUMrlIXOfHKzD6bpPu3tYt3xvjNdRIQ+FeT0lNb4K8WR70CaDxhuNguS2XG+GjkyMwOzsN5ZktImfhLA==
+
+object-path@^0.11.4:
+  version "0.11.4"
+  resolved "https://registry.yarnpkg.com/object-path/-/object-path-0.11.4.tgz#370ae752fbf37de3ea70a861c23bba8915691949"
+  integrity sha1-NwrnUvvzfePqcKhhwju6iRVpGUk=
 
 object.assign@^4.1.0:
   version "4.1.0"

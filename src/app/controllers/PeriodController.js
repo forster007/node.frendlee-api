@@ -2,23 +2,12 @@ import { Period } from '../models';
 
 class PeriodController {
   async index(req, res) {
-    try {
-      const { headers } = req;
-      const periods = await Period.findAll({
-        attributes: ['enabled', 'id', 'name', 'state'],
-      }).map(period => {
-        if (headers.account_type === 'administrator') {
-          return period;
-        }
+    const periods = await Period.findAll({
+      attributes: { exclude: ['createdAt', 'updatedAt'] },
+      where: { enabled: true },
+    });
 
-        delete period.dataValues.enabled;
-        return period;
-      });
-
-      return res.json(periods);
-    } catch (e) {
-      return res.json(e);
-    }
+    return res.json(periods);
   }
 
   async store(req, res) {

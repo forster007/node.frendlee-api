@@ -2,21 +2,7 @@ import Sequelize, { Model } from 'sequelize';
 
 class Stuff extends Model {
   static init(sequelize) {
-    super.init(
-      {
-        name: Sequelize.STRING,
-        state: {
-          type: Sequelize.VIRTUAL,
-          get() {
-            return false;
-          },
-        },
-      },
-      {
-        sequelize,
-        tableName: 'stuffs',
-      }
-    );
+    super.init({ name: Sequelize.STRING }, { sequelize });
 
     return this;
   }

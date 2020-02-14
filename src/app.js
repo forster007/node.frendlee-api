@@ -1,14 +1,19 @@
 import './database';
+import acl from 'express-acl';
 import cors from 'cors';
 import express, { json } from 'express';
 import helmet from 'helmet';
 import http from 'http';
 import io from 'socket.io';
 import path from 'path';
+import unless from 'express-unless';
 
-import { AuthMiddleware, SecurityMiddleware } from './app/middlewares';
+import { aclConfig, unlessConfig } from './config';
 
 import * as router from './routes';
+import mwAuth from './app/middlewares/mwAuth';
+
+const PREFIX = process.env.BASE_PREFIX;
 
 class App {
   constructor() {
@@ -22,11 +27,16 @@ class App {
   }
 
   middlewares() {
+    acl.config(aclConfig);
+    mwAuth.unless = unless;
+
     this.app.use(cors());
     this.app.use(helmet());
     this.app.use(json({ limit: '50mb' }));
-    this.app.use(AuthMiddleware);
-    this.app.use(SecurityMiddleware);
+
+    this.app.use(PREFIX, mwAuth.unless(unlessConfig));
+    this.app.use(acl.authorize.unless(unlessConfig));
+
     this.app.use((req, res, next) => {
       req.io = this.io;
       req.connected_users = this.connected_users;
@@ -35,7 +45,6 @@ class App {
   }
 
   routes() {
-    const PREFIX = '/api';
     this.app.use(
       '/files',
       express.static(path.resolve(__dirname, '..', 'tmp', 'uploads'))

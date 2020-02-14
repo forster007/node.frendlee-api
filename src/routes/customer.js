@@ -15,7 +15,7 @@ router.put('/', CustomerController.update);
 router.put('/:id', CustomerController.update);
 
 router.post(
-  '/:id/files',
+  '/files',
   upload.fields([{ name: 'picture_profile', maxCount: 1 }]),
   FileController.storeCustomer
 );
