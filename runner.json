@@ -3,12 +3,12 @@
     {
       "name": "nodeServer",
       "script": "npm",
-      "args": "startServer"
+      "args": "run startServer"
     },
     {
       "name": "nodeQueue",
       "script": "npm",
-      "args": "startQueue"
+      "args": "run startQueue"
     }
   ]
 }

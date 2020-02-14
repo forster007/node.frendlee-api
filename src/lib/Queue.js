@@ -17,6 +17,8 @@ class Queue {
       this.queues[key] = {
         bee: new Bee(key, {
           redis: redisConfig,
+          removeOnSuccess: true,
+          removeOnFailure: true,
         }),
         handle,
       };
@@ -30,12 +32,28 @@ class Queue {
   processQueue() {
     jobs.forEach(job => {
       const { bee, handle } = this.queues[job.key];
-      bee.on('failed', this.handleFailure).process(handle);
+      bee
+        .on('failed', this.handleFailure)
+        .on('succeeded', this.handleSucceeded)
+        .process(handle);
     });
   }
 
   handleFailure(job, error) {
     console.log(`Queue ${job.queue.name}: FAILED`, error);
+  }
+
+  handleSucceeded(job) {
+    switch (job.queue.name) {
+      case 'SignUpMail': {
+        console.log(`SignUp e-mail: Sended to ${job.data.email}`);
+        break;
+      }
+
+      default:
+        console.log(`Queue ${job.queue.name} succeeded: ${job.data}`);
+        break;
+    }
   }
 }
 
