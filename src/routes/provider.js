@@ -13,7 +13,7 @@ router.post('/', ProviderController.store);
 router.put('/', ProviderController.update);
 
 router.post(
-  '/:id/files',
+  '/files',
   upload.fields([
     { name: 'picture_address', maxCount: 1 },
     { name: 'picture_certification', maxCount: 1 },

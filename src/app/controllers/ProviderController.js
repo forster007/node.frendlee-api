@@ -94,19 +94,43 @@ const stuffInclude = {
 
 class ProviderController {
   async index(req, res) {
-    const providers = await Provider.findAll({
-      attributes,
-      include: [
-        userInclude,
-        addressInclude,
-        clockInclude,
-        periodInclude,
-        serviceInclude,
-        stuffInclude,
-      ],
-    });
+    const { account_type } = req.headers;
 
-    return res.json(providers);
+    switch (account_type) {
+      case 'administrator': {
+        delete userInclude.where;
+
+        const providers = await Provider.findAll({
+          attributes,
+          include: [
+            userInclude,
+            addressInclude,
+            clockInclude,
+            periodInclude,
+            serviceInclude,
+            stuffInclude,
+          ],
+        });
+
+        return res.json(providers);
+      }
+
+      default: {
+        const providers = await Provider.findAll({
+          attributes,
+          include: [
+            userInclude,
+            addressInclude,
+            clockInclude,
+            periodInclude,
+            serviceInclude,
+            stuffInclude,
+          ],
+        });
+
+        return res.json(providers);
+      }
+    }
   }
 
   async store(req, res) {
