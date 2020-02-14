@@ -2,23 +2,12 @@ import { Stuff } from '../models';
 
 class StuffController {
   async index(req, res) {
-    try {
-      const { headers } = req;
-      const stuffs = await Stuff.findAll({
-        attributes: ['enabled', 'id', 'name', 'state'],
-      }).map(stuff => {
-        if (headers.account_type === 'administrator') {
-          return stuff;
-        }
+    const stuffs = await Stuff.findAll({
+      attributes: { exclude: ['createdAt', 'updatedAt'] },
+      where: { enabled: true },
+    });
 
-        delete stuff.dataValues.enabled;
-        return stuff;
-      });
-
-      return res.json(stuffs);
-    } catch (e) {
-      return res.json(e);
-    }
+    return res.json(stuffs);
   }
 
   async store(req, res) {

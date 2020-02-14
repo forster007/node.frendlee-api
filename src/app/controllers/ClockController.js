@@ -1,27 +1,13 @@
 import { Clock } from '../models';
 
-const attributes = ['id', 'name', 'state'];
-
 class ClockController {
   async index(req, res) {
-    const { account_type } = req.headers;
+    const clocks = await Clock.findAll({
+      attributes: { exclude: ['createdAt', 'updatedAt'] },
+      where: { enabled: true },
+    });
 
-    switch (account_type) {
-      case 'administrator': {
-        attributes.push('enabled');
-
-        const clocks = await Clock.findAll({ attributes });
-        return res.json(clocks);
-      }
-
-      default: {
-        const clocks = await Clock.findAll({
-          attributes,
-          where: { enabled: true },
-        });
-        return res.json(clocks);
-      }
-    }
+    return res.json(clocks);
   }
 
   async store(req, res) {

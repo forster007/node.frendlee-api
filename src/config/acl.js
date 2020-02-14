@@ -1,3 +1,5 @@
+const PREFIX = process.env.BASE_PREFIX;
+
 export default {
   roleSearchPath: 'headers.account_type',
   rules: [
@@ -11,12 +13,12 @@ export default {
         {
           action: 'allow',
           methods: ['GET'],
-          resource: `${process.env.PREFIX}/providers`,
+          resource: `${PREFIX}/providers`,
         },
         {
           action: 'allow',
           methods: ['POST'],
-          resource: `${process.env.PREFIX}/customers/files`,
+          resource: `${PREFIX}/customers/files`,
         },
       ],
     },
@@ -26,7 +28,7 @@ export default {
         {
           action: 'allow',
           methods: ['POST'],
-          resource: `${process.env.PREFIX}/providers/files`,
+          resource: `${PREFIX}/providers/files`,
         },
       ],
     },

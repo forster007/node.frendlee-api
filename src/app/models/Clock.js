@@ -2,20 +2,7 @@ import Sequelize, { Model } from 'sequelize';
 
 class Clock extends Model {
   static init(sequelize) {
-    super.init(
-      {
-        name: Sequelize.STRING,
-        state: {
-          type: Sequelize.VIRTUAL,
-          get() {
-            return false;
-          },
-        },
-      },
-      {
-        sequelize,
-      }
-    );
+    super.init({ name: Sequelize.STRING }, { sequelize });
 
     return this;
   }

@@ -4,20 +4,11 @@ class Service extends Model {
   static init(sequelize) {
     super.init(
       {
-        checked: {
-          type: Sequelize.VIRTUAL,
-          get() {
-            return false;
-          },
-        },
-        enabled: Sequelize.BOOLEAN,
         max_value: Sequelize.DOUBLE,
         min_value: Sequelize.DOUBLE,
         name: Sequelize.STRING,
       },
-      {
-        sequelize,
-      }
+      { sequelize }
     );
 
     return this;
