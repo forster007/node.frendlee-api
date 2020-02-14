@@ -34,7 +34,10 @@ export default {
     },
     {
       group: 'guest',
-      permissions: [{ action: 'allow', methods: '*', resource: 'files/*' }],
+      permissions: [
+        { action: 'allow', methods: '*', resource: 'confirmation' },
+        { action: 'allow', methods: '*', resource: 'files/*' },
+      ],
     },
   ],
 };

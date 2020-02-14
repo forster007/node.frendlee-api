@@ -125,10 +125,19 @@
         <div class="modal-dialog modal-dialog-centered" role="document">
           <div class="modal-content">
             <div class="alert alert-primary" role="alert">
-              <h4 class="alert-heading">Well done!</h4>
-              <p>Congrats, your user has been activated.</p>
-              <hr>
-              <button onclick="$('#activateButton').html('Account activated').removeClass('btn-success').addClass('btn-primary');" type="button" class="btn btn-lg btn-primary" data-dismiss="modal" style="margin-top: 20px">Finish</button>
+              <h4 class="alert-heading" style="margin-top: 20px">Your user has been activated</h4>
+              <button style="margin-bottom: 20px; margin-top: 20px;" onclick="$('#activateButton').html('Account activated').removeClass('btn-success').addClass('btn-primary');" type="button" class="btn btn-lg btn-primary" data-dismiss="modal" style="margin-top: 20px">Finish</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="modal fade" id="warningBackdrop" data-backdrop="static" tabindex="-1" role="dialog" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+          <div class="modal-content">
+            <div class="alert alert-warning" role="alert">
+              <h4 class="alert-heading" style="margin-top: 20px">Wait for administrator contact</h4>
+              <button style="margin-bottom: 20px; margin-top: 20px;" onclick="$('#activateButton').html('Wait for administrator contact').removeClass('btn-success').addClass('btn-warning');" type="button" class="btn btn-lg btn-warning" data-dismiss="modal">Finish</button>
             </div>
           </div>
         </div>
@@ -138,10 +147,8 @@
         <div class="modal-dialog modal-dialog-centered" role="document">
           <div class="modal-content">
             <div class="alert alert-danger" role="alert">
-              <h4 class="alert-heading">Not done!</h4>
-              <p>Sorry, we can not activate your user.</p>
-              <hr />
-              <button onclick="$('#activateButton').html('Account unactivated').removeClass('btn-success').addClass('btn-danger');" type="button" class="btn btn-lg btn-danger" data-dismiss="modal">Finish</button>
+              <h4 class="alert-heading" style="margin-top: 20px">Sorry, we can not activate your user</h4>
+              <button style="margin-bottom: 20px; margin-top: 20px;" onclick="$('#activateButton').html('Account unactivated').removeClass('btn-success').addClass('btn-danger');" type="button" class="btn btn-lg btn-danger" data-dismiss="modal">Finish</button>
             </div>
           </div>
         </div>
@@ -184,7 +191,13 @@
       }).done(data => {
         $('#successBackdrop').modal('show');
       }).fail(error => {
-        $('#errorBackdrop').modal('show');
+        switch (error.responseJSON.type) {
+          case 'already-verified':
+            $('#warningBackdrop').modal('show');
+            break;
+          default:
+            $('#errorBackdrop').modal('show');
+        }
       });
     };
   </script>
