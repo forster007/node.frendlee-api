@@ -58,7 +58,7 @@ const addressInclude = {
 
 const clockInclude = {
   as: 'clocks',
-  attributes: ['id', 'name', 'state'],
+  attributes: ['id', 'name'],
   model: Clock,
   through: { attributes: [] },
   where: { enabled: true },
@@ -66,7 +66,7 @@ const clockInclude = {
 
 const periodInclude = {
   as: 'periods',
-  attributes: ['id', 'name', 'state'],
+  attributes: ['id', 'name'],
   model: Period,
   through: { attributes: [] },
   where: { enabled: true },
@@ -86,7 +86,7 @@ const serviceInclude = {
 
 const stuffInclude = {
   as: 'stuffs',
-  attributes: ['id', 'name', 'state'],
+  attributes: ['id', 'name'],
   model: Stuff,
   through: { attributes: [] },
   where: { enabled: true },
