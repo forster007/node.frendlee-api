@@ -13,7 +13,7 @@ export default {
         {
           action: 'allow',
           methods: ['GET'],
-          resource: `${PREFIX}/providers`,
+          resource: `${PREFIX}/providers/*`,
         },
         {
           action: 'allow',
