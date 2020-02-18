@@ -26,7 +26,7 @@ module.exports = {
         },
         {
           address_id: 2,
-          birthdate: '1994-01-30T00:00:00-03:00',
+          birthdate: '1980-06-11T00:00:00-03:00',
           formation: 'Backend developer',
           gender: 'male',
           gps: null,

@@ -5,12 +5,6 @@ module.exports = {
       [
         {
           provider_id: 1,
-          stuff_id: 1,
-          created_at: new Date(),
-          updated_at: new Date(),
-        },
-        {
-          provider_id: 1,
           stuff_id: 2,
           created_at: new Date(),
           updated_at: new Date(),
@@ -24,18 +18,6 @@ module.exports = {
         {
           provider_id: 1,
           stuff_id: 4,
-          created_at: new Date(),
-          updated_at: new Date(),
-        },
-        {
-          provider_id: 2,
-          stuff_id: 1,
-          created_at: new Date(),
-          updated_at: new Date(),
-        },
-        {
-          provider_id: 2,
-          stuff_id: 2,
           created_at: new Date(),
           updated_at: new Date(),
         },
