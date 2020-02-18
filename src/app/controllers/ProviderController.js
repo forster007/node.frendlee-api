@@ -99,9 +99,7 @@ const stuffInclude = {
 
 const ratingInclude = {
   as: 'ratings',
-  attributes: {
-    exclude: ['createdAt', 'updatedAt'],
-  },
+  attributes: [],
   model: Rating,
 };
 
@@ -160,6 +158,7 @@ class ProviderController {
             periodInclude,
             serviceInclude,
             stuffInclude,
+            ratingInclude,
           ],
         });
 
