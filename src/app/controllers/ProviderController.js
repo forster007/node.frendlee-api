@@ -160,7 +160,6 @@ class ProviderController {
             periodInclude,
             serviceInclude,
             stuffInclude,
-            ratingInclude,
           ],
         });
 
