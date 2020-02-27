@@ -25,6 +25,7 @@ module.exports = {
       },
       status: {
         allowNull: false,
+        defaultValue: 'opened',
         type: Sequelize.ENUM,
         values: [
           'canceled',
@@ -41,15 +42,9 @@ module.exports = {
         allowNull: false,
         type: Sequelize.DOUBLE,
       },
-      address_id: {
+      address: {
         allowNull: false,
-        onDelete: 'SET NULL',
-        onUpdate: 'CASCADE',
-        references: {
-          key: 'id',
-          model: 'addresses',
-        },
-        type: Sequelize.INTEGER,
+        type: Sequelize.STRING,
       },
       customer_id: {
         allowNull: false,

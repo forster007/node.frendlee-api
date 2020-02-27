@@ -54,9 +54,13 @@ class CustomerController {
   }
 
   async show(req, res) {
-    const { params } = req;
-    const { id } = params;
-    const customer = await Customer.findByPk(id);
+    const { headers } = req;
+    const { id } = headers;
+
+    const customer = await Customer.findByPk(id, {
+      attributes,
+      include: [userInclude, addressInclude],
+    });
 
     return res.json(customer);
   }

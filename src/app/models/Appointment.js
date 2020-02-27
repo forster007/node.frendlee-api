@@ -9,6 +9,7 @@ class Appointment extends Model {
         finish_at: Sequelize.DATE,
         observation: Sequelize.STRING,
         status: {
+          defaultValue: 'opened',
           type: Sequelize.ENUM,
           values: [
             'canceled',
@@ -22,7 +23,7 @@ class Appointment extends Model {
           ],
         },
         value: Sequelize.DOUBLE,
-        address_id: Sequelize.INTEGER,
+        address: Sequelize.STRING,
         customer_id: Sequelize.INTEGER,
         provider_id: Sequelize.INTEGER,
         provider_service_id: Sequelize.INTEGER,
@@ -36,11 +37,6 @@ class Appointment extends Model {
   }
 
   static associate(models) {
-    this.belongsTo(models.Address, {
-      as: 'address',
-      foreignKey: 'address_id',
-    });
-
     this.belongsTo(models.Customer, {
       as: 'customer',
       foreignKey: 'customer_id',

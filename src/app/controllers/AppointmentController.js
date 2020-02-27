@@ -53,22 +53,26 @@ class AppointmentController {
   }
 
   async index(req, res) {
-    const appointments = await Appointment.findAll({
-      attributes: ['id', 'date'],
-      include: [
-        {
-          as: 'provider',
-          attributes: ['email', 'name'],
-          model: User,
-        },
-      ],
-      order: ['date'],
-      where: {
-        user_id: req.headers.id,
-      },
-    });
+    const { account_type, id } = req.headers;
 
-    return res.json(appointments);
+    switch (account_type) {
+      case 'customer': {
+        const appointments = await Appointment.findAll({
+          where: { customer_id: id },
+        });
+
+        return res.json(appointments);
+      }
+      case 'provider': {
+        const appointments = await Appointment.findAll({
+          where: { provider_id: id },
+        });
+
+        return res.json(appointments);
+      }
+      default:
+        return res.status(400).json({});
+    }
   }
 
   async store(req, res) {
@@ -113,7 +117,14 @@ class AppointmentController {
           );
         }
 
-        const { date, duration, observation, status } = body;
+        const {
+          address,
+          date,
+          duration,
+          observation,
+          provider_service_id,
+          status,
+        } = body;
 
         const dateNow = moment().toDate();
         const start_at = moment(date).toDate();
@@ -168,14 +179,14 @@ class AppointmentController {
         }
 
         const providerService = await ProviderServices.findByPk(
-          body.provider_service_id
+          provider_service_id
         );
 
         if (isEmpty(providerService)) {
           throw new Error('This provider service is not avaiable');
         }
 
-        const value = providerService.value * body.duration;
+        const value = providerService.value * duration;
 
         const appointment = await Appointment.create({
           start_at,
@@ -184,7 +195,7 @@ class AppointmentController {
           observation,
           status,
           value,
-          address_id: body.address_id,
+          address,
           customer_id: customer.id,
           provider_id: provider.id,
           provider_service_id: providerService.id,

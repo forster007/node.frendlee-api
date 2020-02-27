@@ -8,7 +8,7 @@ import multerConfig from '../config/multer';
 const router = express.Router();
 const upload = multer(multerConfig);
 
-router.get('/', CustomerController.index);
+router.get('/', CustomerController.show);
 router.get('/:id', CustomerController.show);
 router.post('/', CustomerController.store);
 router.put('/', CustomerController.update);

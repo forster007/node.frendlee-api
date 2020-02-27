@@ -13,12 +13,22 @@ export default {
         {
           action: 'allow',
           methods: ['GET'],
-          resource: `${PREFIX}/providers`,
+          resource: `${PREFIX}/appointments`,
+        },
+        {
+          action: 'allow',
+          methods: ['GET'],
+          resource: `${PREFIX}/customers/*`,
         },
         {
           action: 'allow',
           methods: ['POST'],
           resource: `${PREFIX}/customers/files`,
+        },
+        {
+          action: 'allow',
+          methods: ['GET'],
+          resource: `${PREFIX}/providers`,
         },
       ],
     },
