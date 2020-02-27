@@ -77,6 +77,10 @@ class Provider extends Model {
       foreignKey: 'provider_id',
       through: 'provider_stuffs',
     });
+
+    this.hasMany(models.Rating, {
+      as: 'ratings',
+    });
   }
 }
 

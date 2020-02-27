@@ -9,6 +9,7 @@ const router = express.Router();
 const upload = multer(multerConfig);
 
 router.get('/', ProviderController.index);
+router.get('/:id', ProviderController.show);
 router.post('/', ProviderController.store);
 router.put('/', ProviderController.update);
 

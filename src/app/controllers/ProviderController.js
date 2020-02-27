@@ -1,11 +1,14 @@
 import crypto from 'crypto';
 import jwt from 'jsonwebtoken';
+import squel from 'squel';
+
 import {
   Address,
   Clock,
   Period,
   Provider,
   ProviderServices,
+  Rating,
   Service,
   Stuff,
   User,
@@ -15,6 +18,8 @@ import SignUpMail from '../jobs/SignUpMail';
 import isEmpty from '../../lib/Helpers';
 import Queue from '../../lib/Queue';
 import { authConfig } from '../../config';
+
+squel.useFlavour('postgres');
 
 const attributes = [
   'id',
@@ -92,6 +97,12 @@ const stuffInclude = {
   where: { enabled: true },
 };
 
+const ratingInclude = {
+  as: 'ratings',
+  attributes: [],
+  model: Rating,
+};
+
 class ProviderController {
   async index(req, res) {
     const { account_type } = req.headers;
@@ -116,8 +127,30 @@ class ProviderController {
       }
 
       default: {
+        const subQuery = ({ field }) => {
+          const query = squel
+            .select({ autoQuoteAliasNames: false })
+            .field(field)
+            .where('"Provider"."id" = "ratings"."provider_id"')
+            .from('ratings as', 'rating')
+            .toString();
+          return `(${query})`;
+        };
+
+        const GENERATE_COUNT = subQuery({
+          field: 'CAST(COUNT(*) AS int)',
+        });
+
+        const GENERATE_SUM = subQuery({
+          field: 'CAST(COALESCE(AVG("rating"."provider_rating"), 0) as float)',
+        });
+
         const providers = await Provider.findAll({
-          attributes,
+          attributes: [
+            ...attributes,
+            [GENERATE_COUNT, `treatments`],
+            [GENERATE_SUM, `stars`],
+          ],
           include: [
             userInclude,
             addressInclude,
@@ -125,12 +158,54 @@ class ProviderController {
             periodInclude,
             serviceInclude,
             stuffInclude,
+            ratingInclude,
           ],
         });
 
         return res.json(providers);
       }
     }
+  }
+
+  async show(req, res) {
+    const { id } = req.params;
+
+    const subQuery = ({ field }) => {
+      const query = squel
+        .select({ autoQuoteAliasNames: false })
+        .field(field)
+        .where('"Provider"."id" = "ratings"."provider_id"')
+        .from('ratings as', 'rating')
+        .toString();
+      return `(${query})`;
+    };
+
+    const GENERATE_COUNT = subQuery({
+      field: 'CAST(COUNT(*) AS int)',
+    });
+
+    const GENERATE_SUM = subQuery({
+      field: 'CAST(COALESCE(AVG("rating"."provider_rating"), 0) as float)',
+    });
+
+    const provider = await Provider.findByPk(id, {
+      attributes: [
+        ...attributes,
+        [GENERATE_COUNT, `treatments`],
+        [GENERATE_SUM, `stars`],
+      ],
+      include: [
+        userInclude,
+        addressInclude,
+        clockInclude,
+        periodInclude,
+        serviceInclude,
+        stuffInclude,
+        ratingInclude,
+      ],
+    });
+
+    return res.json(provider);
   }
 
   async store(req, res) {

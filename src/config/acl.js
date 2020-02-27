@@ -30,6 +30,11 @@ export default {
           methods: ['GET'],
           resource: `${PREFIX}/providers`,
         },
+        {
+          action: 'allow',
+          methods: ['GET'],
+          resource: `${PREFIX}/providers/*`,
+        },
       ],
     },
     {
