@@ -58,6 +58,18 @@ class AppointmentController {
     switch (account_type) {
       case 'customer': {
         const appointments = await Appointment.findAll({
+          include: [
+            {
+              as: 'provider',
+              attributes: [
+                'lastname',
+                'name',
+                'picture_profile',
+                'picture_profile_url',
+              ],
+              model: Provider,
+            },
+          ],
           where: { customer_id: id },
         });
 
