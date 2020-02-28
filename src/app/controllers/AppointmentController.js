@@ -1,5 +1,5 @@
 import moment from 'moment';
-import { Op } from 'sequelize';
+import sequelize, { Op } from 'sequelize';
 import {
   Appointment,
   Customer,
@@ -84,6 +84,9 @@ class AppointmentController {
             },
           ],
           where: { customer_id: id },
+          order: sequelize.literal(
+            "CASE status WHEN 'opened' THEN 1 WHEN 'finished' THEN 2 ELSE 3 END"
+          ),
         });
 
         return res.json(appointments);
