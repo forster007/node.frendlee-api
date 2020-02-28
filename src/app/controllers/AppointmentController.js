@@ -5,6 +5,7 @@ import {
   Customer,
   Provider,
   ProviderServices,
+  Service,
   User,
 } from '../models';
 import { Notification } from '../schemas';
@@ -68,6 +69,18 @@ class AppointmentController {
                 'picture_profile_url',
               ],
               model: Provider,
+            },
+            {
+              as: 'detail',
+              attributes: ['id'],
+              include: [
+                {
+                  as: 'service',
+                  attributes: ['name'],
+                  model: Service,
+                },
+              ],
+              model: ProviderServices,
             },
           ],
           where: { customer_id: id },
