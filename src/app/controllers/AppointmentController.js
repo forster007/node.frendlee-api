@@ -154,7 +154,7 @@ class AppointmentController {
         });
 
         if (!isEmpty(customerAvailable)) {
-          throw new Error('You are not avaiable on this date');
+          throw new Error('You already have an appointment on this date');
         }
 
         const providerAvailable = await Appointment.findOne({
