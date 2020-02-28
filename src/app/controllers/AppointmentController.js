@@ -123,7 +123,6 @@ class AppointmentController {
           duration,
           observation,
           provider_service_id,
-          status,
         } = body;
 
         const dateNow = moment().toDate();
@@ -193,7 +192,6 @@ class AppointmentController {
           duration,
           finish_at,
           observation,
-          status,
           value,
           address,
           customer_id: customer.id,

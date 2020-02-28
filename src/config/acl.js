@@ -12,7 +12,7 @@ export default {
       permissions: [
         {
           action: 'allow',
-          methods: ['GET'],
+          methods: ['GET', 'POST'],
           resource: `${PREFIX}/appointments`,
         },
         {
