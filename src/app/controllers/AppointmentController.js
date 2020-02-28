@@ -174,7 +174,9 @@ class AppointmentController {
         });
 
         if (!isEmpty(providerAvailable)) {
-          throw new Error('Provider is not avaiable on this date');
+          throw new Error(
+            'Your provider already have an appointment on this date'
+          );
         }
 
         const providerService = await ProviderServices.findByPk(
@@ -182,7 +184,7 @@ class AppointmentController {
         );
 
         if (isEmpty(providerService)) {
-          throw new Error('This provider service is not avaiable');
+          throw new Error('Your selected provider service is not avaiable');
         }
 
         const value = providerService.value * duration;

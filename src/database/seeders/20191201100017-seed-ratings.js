@@ -93,6 +93,15 @@ module.exports = {
           created_at: new Date(),
           updated_at: new Date(),
         },
+        {
+          appointment_id: 11,
+          customer_id: 2,
+          customer_rating: 5,
+          provider_id: 1,
+          provider_rating: 5,
+          created_at: new Date(),
+          updated_at: new Date(),
+        },
       ],
       {}
     );
