@@ -84,9 +84,12 @@ class AppointmentController {
             },
           ],
           where: { customer_id: id },
-          order: sequelize.literal(
-            "CASE status WHEN 'opened' THEN 1 WHEN 'finished' THEN 2 ELSE 3 END"
-          ),
+          order: [
+            sequelize.literal(
+              "CASE status WHEN 'opened' THEN 1 WHEN 'finished' THEN 2 ELSE 3 END"
+            ),
+            ['start_at', 'DESC'],
+          ],
         });
 
         return res.json(appointments);
