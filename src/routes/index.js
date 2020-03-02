@@ -4,6 +4,7 @@ import checks from './check';
 import clocks from './clock';
 import confirmations from './confirmation';
 import customers from './customer';
+import onesignal from './onesignal';
 import notifications from './notification';
 import periods from './period';
 import providers from './provider';
@@ -22,6 +23,7 @@ export {
   confirmations,
   customers,
   notifications,
+  onesignal,
   periods,
   providers,
   resends,
