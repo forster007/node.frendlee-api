@@ -11,15 +11,7 @@ class Appointment extends Model {
         status: {
           defaultValue: 'opened',
           type: Sequelize.ENUM,
-          values: [
-            'started',
-            'opened',
-            'confirmed',
-            'payed',
-            'waiting rate',
-            'finished',
-            'canceled',
-          ],
+          values: ['started', 'opened', 'confirmed', 'payed', 'waiting rate', 'finished', 'canceled'],
         },
         value: Sequelize.DOUBLE,
         address: Sequelize.STRING,

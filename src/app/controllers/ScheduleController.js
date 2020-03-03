@@ -1,22 +1,7 @@
 import moment from 'moment';
-import {
-  Address,
-  Appointment,
-  Customer,
-  Provider,
-  ProviderServices,
-  Rating,
-  Service,
-  User,
-} from '../models';
+import { Address, Appointment, Customer, Provider, ProviderServices, Rating, Service, User } from '../models';
 
 const exclude = ['createdAt', 'updatedAt'];
-
-const userInclude = {
-  as: 'user',
-  attributes: ['email'],
-  model: User,
-};
 
 class ScheduleController {
   async index(req, res) {
@@ -26,7 +11,7 @@ class ScheduleController {
       switch (account_type) {
         case 'customer': {
           const customer = await Customer.findByPk(id, {
-            include: [userInclude],
+            include: [{ as: 'user', attributes: ['email'], model: User }],
           });
 
           const appointments = await Appointment.findAll({
@@ -40,9 +25,7 @@ class ScheduleController {
               {
                 as: 'detail',
                 attributes: ['id'],
-                include: [
-                  { as: 'service', attributes: ['name'], model: Service },
-                ],
+                include: [{ as: 'service', attributes: ['name'], model: Service }],
                 model: ProviderServices,
               },
               {
@@ -82,7 +65,7 @@ class ScheduleController {
 
         case 'provider': {
           const provider = await Provider.findByPk(id, {
-            include: [userInclude],
+            include: [{ as: 'user', attributes: ['email'], model: User }],
           });
 
           const appointments = await Appointment.findAll({
@@ -96,9 +79,7 @@ class ScheduleController {
               {
                 as: 'detail',
                 attributes: ['id'],
-                include: [
-                  { as: 'service', attributes: ['name'], model: Service },
-                ],
+                include: [{ as: 'service', attributes: ['name'], model: Service }],
                 model: ProviderServices,
               },
               {
@@ -130,10 +111,9 @@ class ScheduleController {
           return res.json(schedule);
         }
 
-        default:
-          throw new Error(
-            'User does not match with any account types available'
-          );
+        default: {
+          throw new Error('User does not match with any account types available');
+        }
       }
     } catch (e) {
       return res.status(e.status || 400).json({

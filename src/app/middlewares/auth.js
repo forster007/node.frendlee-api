@@ -39,10 +39,7 @@ export default async (req, res, next) => {
     }
 
     const [, token] = authorization.split(' ');
-    const { account_type, id } = await promisify(jwt.verify)(
-      token,
-      authConfig.secret
-    );
+    const { account_type, id } = await promisify(jwt.verify)(token, authConfig.secret);
 
     req.headers.account_type = account_type;
     req.headers.id = id;

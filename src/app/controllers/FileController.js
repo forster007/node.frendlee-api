@@ -6,7 +6,6 @@ class FileController {
     try {
       const { files, headers } = req;
       const { picture_profile } = files;
-
       const { id } = headers;
       const customer = await Customer.findByPk(id);
       const body = {};
@@ -28,13 +27,7 @@ class FileController {
   async storeProvider(req, res) {
     try {
       const { files, headers } = req;
-      const {
-        picture_address,
-        picture_certification,
-        picture_license,
-        picture_profile,
-      } = files;
-
+      const { picture_address, picture_certification, picture_license, picture_profile } = files;
       const { id } = headers;
       const provider = await Provider.findByPk(id);
       const body = {};

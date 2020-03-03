@@ -22,32 +22,14 @@ const attributes = [
   'ssn',
 ];
 
-const userInclude = {
-  as: 'user',
-  attributes: ['email', 'status'],
-  model: User,
-};
-
-const addressInclude = {
-  as: 'address',
-  attributes: [
-    'city',
-    'complement',
-    'country',
-    'district',
-    'number',
-    'postal_code',
-    'state',
-    'street',
-  ],
-  model: Address,
-};
-
 class CustomerController {
   async index(req, res) {
     const customers = await Customer.findAll({
       attributes,
-      include: [userInclude, addressInclude],
+      include: [
+        { as: 'user', model: User, attributes: ['email', 'status'] },
+        { as: 'address', model: Address, attributes: ['city', 'complement', 'country', 'district', 'number', 'postal_code', 'state', 'street'] },
+      ],
     });
 
     return res.json(customers);
@@ -59,7 +41,10 @@ class CustomerController {
 
     const customer = await Customer.findByPk(id, {
       attributes,
-      include: [userInclude, addressInclude],
+      include: [
+        { as: 'user', model: User, attributes: ['email', 'status'] },
+        { as: 'address', model: Address, attributes: ['city', 'complement', 'country', 'district', 'number', 'postal_code', 'state', 'street'] },
+      ],
     });
 
     return res.json(customer);
@@ -76,11 +61,7 @@ class CustomerController {
         ],
       });
 
-      customer.dataValues.token = jwt.sign(
-        { account_type: 'customer', id: customer.id },
-        authConfig.secret,
-        { expiresIn: authConfig.expiresIn }
-      );
+      customer.dataValues.token = jwt.sign({ account_type: 'customer', id: customer.id }, authConfig.secret, { expiresIn: authConfig.expiresIn });
 
       const tokenVerification = await TokenVerification.create({
         user: customer.dataValues.user.id,

@@ -45,17 +45,10 @@ class App {
   }
 
   routes() {
-    this.app.use(
-      '/files',
-      express.static(path.resolve(__dirname, '..', 'tmp', 'uploads'))
-    );
+    this.app.use('/files', express.static(path.resolve(__dirname, '..', 'tmp', 'uploads')));
 
     this.app.use(`/confirmation`, (req, res) => {
-      res.sendFile(
-        path.resolve(
-          path.join(`${__dirname}/app/views/htmls/confirmation.html`)
-        )
-      );
+      res.sendFile(path.resolve(path.join(`${__dirname}/app/views/htmls/confirmation.html`)));
     });
 
     this.app.use(`${PREFIX}/administrators`, router.administrators);

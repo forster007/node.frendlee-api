@@ -37,11 +37,7 @@ class SessionController {
           });
 
           return res.json({
-            token: jwt.sign(
-              { account_type, id: administrator.id },
-              authConfig.secret,
-              { expiresIn: authConfig.expiresIn }
-            ),
+            token: jwt.sign({ account_type, id: administrator.id }, authConfig.secret, { expiresIn: authConfig.expiresIn }),
             user: {
               account_type,
               email,
@@ -53,9 +49,7 @@ class SessionController {
 
         case 'customer': {
           if (status === 'locked') {
-            throw new Error(
-              'Your user was not be able to signin yet. We will tell you when all it done.'
-            );
+            throw new Error('Your user was not be able to signin yet. We will tell you when all it done.');
           }
 
           const customer = await Customer.findOne({
@@ -63,11 +57,7 @@ class SessionController {
           });
 
           return res.json({
-            token: jwt.sign(
-              { account_type, id: customer.id },
-              authConfig.secret,
-              { expiresIn: authConfig.expiresIn }
-            ),
+            token: jwt.sign({ account_type, id: customer.id }, authConfig.secret, { expiresIn: authConfig.expiresIn }),
             user: {
               account_type,
               email,
@@ -79,15 +69,11 @@ class SessionController {
 
         case 'provider': {
           if (status === 'disabled') {
-            throw new Error(
-              'Your user was not be able to signin yet. Maybe you forgot to activate then first.'
-            );
+            throw new Error('Your user was not be able to signin yet. Maybe you forgot to activate then first.');
           }
 
           if (status === 'locked') {
-            throw new Error(
-              'Your user was not be able to signin yet. We will tell you when all it done.'
-            );
+            throw new Error('Your user was not be able to signin yet. We will tell you when all it done.');
           }
 
           const provider = await Provider.findOne({
@@ -95,11 +81,7 @@ class SessionController {
           });
 
           return res.json({
-            token: jwt.sign(
-              { account_type, id: provider.id },
-              authConfig.secret,
-              { expiresIn: authConfig.expiresIn }
-            ),
+            token: jwt.sign({ account_type, id: provider.id }, authConfig.secret, { expiresIn: authConfig.expiresIn }),
             user: {
               account_type,
               email,
@@ -109,10 +91,9 @@ class SessionController {
           });
         }
 
-        default:
-          throw new Error(
-            'User does not match with any account types available'
-          );
+        default: {
+          throw new Error('User does not match with any account types available');
+        }
       }
     } catch (e) {
       return res.status(e.status || 400).json({

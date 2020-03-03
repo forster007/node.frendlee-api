@@ -2,17 +2,7 @@ import crypto from 'crypto';
 import jwt from 'jsonwebtoken';
 import squel from 'squel';
 
-import {
-  Address,
-  Clock,
-  Period,
-  Provider,
-  ProviderServices,
-  Rating,
-  Service,
-  Stuff,
-  User,
-} from '../models';
+import { Address, Clock, Period, Provider, ProviderServices, Rating, Service, Stuff, User } from '../models';
 import { TokenVerification } from '../schemas';
 import SignUpMail from '../jobs/SignUpMail';
 import isEmpty from '../../lib/Helpers';
@@ -48,16 +38,7 @@ const userInclude = {
 
 const addressInclude = {
   as: 'address',
-  attributes: [
-    'city',
-    'complement',
-    'country',
-    'district',
-    'number',
-    'postal_code',
-    'state',
-    'street',
-  ],
+  attributes: ['city', 'complement', 'country', 'district', 'number', 'postal_code', 'state', 'street'],
   model: Address,
 };
 
@@ -113,14 +94,7 @@ class ProviderController {
 
         const providers = await Provider.findAll({
           attributes,
-          include: [
-            userInclude,
-            addressInclude,
-            clockInclude,
-            periodInclude,
-            serviceInclude,
-            stuffInclude,
-          ],
+          include: [userInclude, addressInclude, clockInclude, periodInclude, serviceInclude, stuffInclude],
         });
 
         return res.json(providers);
@@ -146,20 +120,8 @@ class ProviderController {
         });
 
         const providers = await Provider.findAll({
-          attributes: [
-            ...attributes,
-            [GENERATE_COUNT, `treatments`],
-            [GENERATE_SUM, `stars`],
-          ],
-          include: [
-            userInclude,
-            addressInclude,
-            clockInclude,
-            periodInclude,
-            serviceInclude,
-            stuffInclude,
-            ratingInclude,
-          ],
+          attributes: [...attributes, [GENERATE_COUNT, `treatments`], [GENERATE_SUM, `stars`]],
+          include: [userInclude, addressInclude, clockInclude, periodInclude, serviceInclude, stuffInclude, ratingInclude],
         });
 
         return res.json(providers);
@@ -189,20 +151,8 @@ class ProviderController {
     });
 
     const provider = await Provider.findByPk(id, {
-      attributes: [
-        ...attributes,
-        [GENERATE_COUNT, `treatments`],
-        [GENERATE_SUM, `stars`],
-      ],
-      include: [
-        userInclude,
-        addressInclude,
-        clockInclude,
-        periodInclude,
-        serviceInclude,
-        stuffInclude,
-        ratingInclude,
-      ],
+      attributes: [...attributes, [GENERATE_COUNT, `treatments`], [GENERATE_SUM, `stars`]],
+      include: [userInclude, addressInclude, clockInclude, periodInclude, serviceInclude, stuffInclude, ratingInclude],
     });
 
     return res.json(provider);
@@ -210,13 +160,7 @@ class ProviderController {
 
   async store(req, res) {
     try {
-      const {
-        provider_clocks,
-        provider_periods,
-        provider_services,
-        provider_stuffs,
-        ...body
-      } = req.body;
+      const { provider_clocks, provider_periods, provider_services, provider_stuffs, ...body } = req.body;
 
       const provider = await Provider.create(body, {
         include: [
@@ -246,11 +190,7 @@ class ProviderController {
         await provider.setStuffs(provider_stuffs);
       }
 
-      provider.dataValues.token = jwt.sign(
-        { account_type: 'provider', id: provider.id },
-        authConfig.secret,
-        { expiresIn: authConfig.expiresIn }
-      );
+      provider.dataValues.token = jwt.sign({ account_type: 'provider', id: provider.id }, authConfig.secret, { expiresIn: authConfig.expiresIn });
 
       const tokenVerification = await TokenVerification.create({
         user: provider.dataValues.user.id,
@@ -273,12 +213,7 @@ class ProviderController {
     try {
       const { body, files, headers, params } = req;
 
-      const {
-        provider_clocks,
-        provider_periods,
-        provider_services,
-        provider_stuffs,
-      } = body;
+      const { provider_clocks, provider_periods, provider_services, provider_stuffs } = body;
       const { picture_address, picture_profile } = files;
       const id = params.id || headers.id;
       const provider = await Provider.findByPk(id);
@@ -320,14 +255,7 @@ class ProviderController {
 
       const updated = await Provider.findByPk(id, {
         attributes,
-        include: [
-          userInclude,
-          addressInclude,
-          clockInclude,
-          periodInclude,
-          serviceInclude,
-          stuffInclude,
-        ],
+        include: [userInclude, addressInclude, clockInclude, periodInclude, serviceInclude, stuffInclude],
       });
 
       return res.json(updated);

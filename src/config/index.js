@@ -5,11 +5,4 @@ import mailConfig from './mail';
 import redisConfig from './redis';
 import unlessConfig from './unless';
 
-export {
-  aclConfig,
-  authConfig,
-  databaseConfig,
-  mailConfig,
-  redisConfig,
-  unlessConfig,
-};
+export { aclConfig, authConfig, databaseConfig, mailConfig, redisConfig, unlessConfig };

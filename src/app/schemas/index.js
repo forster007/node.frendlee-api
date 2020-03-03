@@ -5,11 +5,4 @@ import storeSessionSchema from './storeSession';
 import storeUserSchema from './storeUser';
 import updateUserSchema from './updateUser';
 
-export {
-  Notification,
-  TokenVerification,
-  storeAppointment,
-  storeSessionSchema,
-  storeUserSchema,
-  updateUserSchema,
-};
+export { Notification, TokenVerification, storeAppointment, storeSessionSchema, storeUserSchema, updateUserSchema };

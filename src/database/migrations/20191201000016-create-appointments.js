@@ -27,15 +27,7 @@ module.exports = {
         allowNull: false,
         defaultValue: 'opened',
         type: Sequelize.ENUM,
-        values: [
-          'started',
-          'opened',
-          'confirmed',
-          'payed',
-          'waiting rate',
-          'finished',
-          'canceled',
-        ],
+        values: ['started', 'opened', 'confirmed', 'payed', 'waiting rate', 'finished', 'canceled'],
       },
       value: {
         allowNull: false,

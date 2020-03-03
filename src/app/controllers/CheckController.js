@@ -20,10 +20,7 @@ class CheckController {
         });
 
         return res.json({
-          available:
-            !!isEmpty(administrator) &&
-            !!isEmpty(customer) &&
-            !!isEmpty(provider),
+          available: !!isEmpty(administrator) && !!isEmpty(customer) && !!isEmpty(provider),
         });
       }
 
@@ -49,10 +46,7 @@ class CheckController {
         });
 
         return res.json({
-          available:
-            !!isEmpty(administrator) &&
-            !!isEmpty(customer) &&
-            !!isEmpty(provider),
+          available: !!isEmpty(administrator) && !!isEmpty(customer) && !!isEmpty(provider),
         });
       }
 

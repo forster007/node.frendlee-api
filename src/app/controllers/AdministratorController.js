@@ -1,29 +1,11 @@
 import { Administrator, User } from '../models';
 
-const attributes = [
-  'id',
-  'birthdate',
-  'gender',
-  'lastname',
-  'name',
-  'phone_number',
-  'phone_number_is_whatsapp',
-  'picture_profile',
-  'ssn',
-];
-
-const userInclude = {
-  as: 'user',
-  attributes: ['account_type', 'email'],
-  model: User,
-};
-
 class AdministratorController {
   async index(req, res) {
     try {
       const administrators = await Administrator.findAll({
-        attributes,
-        include: [userInclude],
+        attributes: ['id', 'birthdate', 'gender', 'lastname', 'name', 'phone_number', 'phone_number_is_whatsapp', 'picture_profile', 'ssn'],
+        include: [{ attributes: ['account_type', 'email'], model: User }],
       });
 
       return res.json(administrators);
@@ -36,7 +18,7 @@ class AdministratorController {
     try {
       const { body } = req;
       const administrator = await Administrator.create(body, {
-        include: [userInclude],
+        include: [{ attributes: ['account_type', 'email'], model: User }],
       });
 
       return res.json(administrator);
@@ -54,8 +36,8 @@ class AdministratorController {
       await administrator.update(body);
 
       const updated = await Administrator.findByPk(id, {
-        attributes,
-        include: [userInclude],
+        attributes: ['id', 'birthdate', 'gender', 'lastname', 'name', 'phone_number', 'phone_number_is_whatsapp', 'picture_profile', 'ssn'],
+        include: [{ attributes: ['account_type', 'email'], model: User }],
       });
 
       return res.json(updated);

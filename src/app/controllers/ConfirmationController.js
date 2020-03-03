@@ -16,10 +16,7 @@ class ConfirmationController {
     const { user: id } = response;
     const user = await User.findByPk(id);
 
-    if (
-      (user.account_type === 'customer' || user.account_type === 'provider') &&
-      user.status === 'enabled'
-    ) {
+    if ((user.account_type === 'customer' || user.account_type === 'provider') && user.status === 'enabled') {
       return res.json(user);
     }
 
