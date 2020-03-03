@@ -12,8 +12,8 @@ export default {
       permissions: [
         {
           action: 'allow',
-          methods: ['GET', 'POST'],
-          resource: `${PREFIX}/appointments`,
+          methods: ['GET', 'POST', 'PUT'],
+          resource: `${PREFIX}/appointments/*`,
         },
         {
           action: 'allow',
@@ -45,6 +45,11 @@ export default {
     {
       group: 'provider',
       permissions: [
+        {
+          action: 'allow',
+          methods: ['GET', 'PUT'],
+          resource: `${PREFIX}/appointments/*`,
+        },
         {
           action: 'allow',
           methods: ['POST'],

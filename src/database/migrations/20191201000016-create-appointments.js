@@ -28,14 +28,13 @@ module.exports = {
         defaultValue: 'opened',
         type: Sequelize.ENUM,
         values: [
-          'canceled',
-          'confirmed',
-          'finished',
+          'started',
           'opened',
+          'confirmed',
           'payed',
-          'waiting payment',
-          'waiting rating',
-          'waiting start',
+          'waiting rate',
+          'finished',
+          'canceled',
         ],
       },
       value: {
@@ -78,6 +77,15 @@ module.exports = {
       },
       created_at: {
         allowNull: false,
+        type: Sequelize.DATE,
+      },
+      payed_at: {
+        type: Sequelize.DATE,
+      },
+      started_at: {
+        type: Sequelize.DATE,
+      },
+      stopped_at: {
         type: Sequelize.DATE,
       },
       updated_at: {

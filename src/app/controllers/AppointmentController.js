@@ -86,15 +86,17 @@ class AppointmentController {
           ],
           where: { customer_id: id },
           order: [
-            sequelize.literal(
-              "CASE status WHEN 'opened' THEN 1 WHEN 'finished' THEN 2 ELSE 3 END"
-            ),
+            // sequelize.literal(
+            //   "CASE status WHEN 'opened' THEN 1 WHEN 'finished' THEN 2 ELSE 3 END"
+            // ),
+            ['status', 'ASC'],
             ['start_at', 'DESC'],
           ],
         });
 
         return res.json(appointments);
       }
+
       case 'provider': {
         const appointments = await Appointment.findAll({
           where: { provider_id: id },
@@ -102,8 +104,10 @@ class AppointmentController {
 
         return res.json(appointments);
       }
-      default:
+
+      default: {
         return res.status(400).json({});
+      }
     }
   }
 
@@ -304,6 +308,20 @@ class AppointmentController {
         error: e.message || 'Appointment already exists',
       });
     }
+  }
+
+  async update(req, res) {
+    const { body, headers, params } = req;
+    const { account_type, id } = headers;
+    const { id: appointment_id } = params;
+
+    const appointment = await Appointment.findByPk(appointment_id, {
+      include: [{ as: 'provider', attributes: ['onesignal'], model: Provider }],
+    });
+
+    appointment.update({ status });
+
+    return res.json(appointment);
   }
 }
 
