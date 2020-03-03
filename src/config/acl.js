@@ -48,6 +48,11 @@ export default {
         {
           action: 'allow',
           methods: ['POST'],
+          resource: `${PREFIX}/onesignal`,
+        },
+        {
+          action: 'allow',
+          methods: ['POST'],
           resource: `${PREFIX}/providers/files`,
         },
       ],
