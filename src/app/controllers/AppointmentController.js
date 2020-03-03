@@ -1,3 +1,4 @@
+import axios from 'axios';
 import moment from 'moment';
 import sequelize, { Op } from 'sequelize';
 import {
@@ -231,6 +232,14 @@ class AppointmentController {
           provider_id: provider.id,
           provider_service_id: providerService.id,
         });
+
+        axios.post('https://exp.host/--/api/v2/push/send', [
+          {
+            to: provider.onesignal,
+            body: 'You have a new appointmnet.',
+            title: 'New appointment',
+          },
+        ]);
 
         return res.json(appointment);
       }
