@@ -4,9 +4,14 @@ import isEmpty from '../../lib/Helpers';
 class FileController {
   async storeCustomer(req, res) {
     try {
-      const { files, headers } = req;
+      const { files, headers, params } = req;
       const { picture_profile } = files;
       const { id } = headers;
+
+      if (Number(params.id) !== id) {
+        return res.status(403).json({ status: 'Access denied', success: false, message: 'Unauthorized access' });
+      }
+
       const customer = await Customer.findByPk(id);
       const body = {};
 
@@ -17,18 +22,25 @@ class FileController {
       await customer.update(body);
 
       return res.json(customer);
-    } catch (e) {
-      return res.status(e.status || 400).json({
-        error: e.message || 'Internal server error',
+    } catch (error) {
+      console.log('--> FileController - CUSTOMER', error);
+
+      return res.status(500).json({
+        error: 'Internal server error',
       });
     }
   }
 
   async storeProvider(req, res) {
     try {
-      const { files, headers } = req;
+      const { files, headers, params } = req;
       const { picture_address, picture_certification, picture_license, picture_profile } = files;
       const { id } = headers;
+
+      if (Number(params.id) !== id) {
+        return res.status(403).json({ status: 'Access denied', success: false, message: 'Unauthorized access' });
+      }
+
       const provider = await Provider.findByPk(id);
       const body = {};
 
@@ -51,9 +63,11 @@ class FileController {
       await provider.update(body);
 
       return res.json(provider);
-    } catch (e) {
-      return res.status(e.status || 400).json({
-        error: e.message || 'Internal server error',
+    } catch (error) {
+      console.log('--> FileController - PROVIDER', error);
+
+      return res.status(500).json({
+        error: 'Internal server error',
       });
     }
   }

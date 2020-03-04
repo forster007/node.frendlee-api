@@ -13,6 +13,7 @@ squel.useFlavour('postgres');
 
 const attributes = [
   'id',
+  'avatar',
   'birthdate',
   'formation',
   'gender',
@@ -22,10 +23,7 @@ const attributes = [
   'onesignal',
   'phone_number',
   'phone_number_is_whatsapp',
-  'picture_address',
-  'picture_address_url',
   'picture_profile',
-  'picture_profile_url',
   'ssn',
 ];
 
@@ -86,76 +84,82 @@ const ratingInclude = {
 
 class ProviderController {
   async index(req, res) {
-    const { account_type } = req.headers;
+    try {
+      const subQuery = ({ field }) => {
+        const query = squel
+          .select({ autoQuoteAliasNames: false })
+          .field(field)
+          .where('"Provider"."id" = "ratings"."provider_id"')
+          .from('ratings as', 'rating')
+          .toString();
 
-    switch (account_type) {
-      case 'administrator': {
-        delete userInclude.where;
+        return `(${query})`;
+      };
 
-        const providers = await Provider.findAll({
-          attributes,
-          include: [userInclude, addressInclude, clockInclude, periodInclude, serviceInclude, stuffInclude],
-        });
+      const GENERATE_COUNT = subQuery({ field: 'CAST(COUNT(*) AS int)' });
+      const GENERATE_SUM = subQuery({ field: 'CAST(COALESCE(AVG("rating"."provider_rating"), 0) as float)' });
 
-        return res.json(providers);
-      }
+      const providers = await Provider.findAll({
+        attributes: ['avatar', 'formation', 'id', 'lastname', 'name', 'picture_profile', [GENERATE_COUNT, `treatments`], [GENERATE_SUM, `stars`]],
+        include: [serviceInclude, stuffInclude, ratingInclude],
+      });
 
-      default: {
-        const subQuery = ({ field }) => {
-          const query = squel
-            .select({ autoQuoteAliasNames: false })
-            .field(field)
-            .where('"Provider"."id" = "ratings"."provider_id"')
-            .from('ratings as', 'rating')
-            .toString();
-          return `(${query})`;
-        };
+      return res.json(providers);
+    } catch (error) {
+      console.log('--> ProviderController - INDEX', error);
 
-        const GENERATE_COUNT = subQuery({
-          field: 'CAST(COUNT(*) AS int)',
-        });
-
-        const GENERATE_SUM = subQuery({
-          field: 'CAST(COALESCE(AVG("rating"."provider_rating"), 0) as float)',
-        });
-
-        const providers = await Provider.findAll({
-          attributes: [...attributes, [GENERATE_COUNT, `treatments`], [GENERATE_SUM, `stars`]],
-          include: [userInclude, addressInclude, clockInclude, periodInclude, serviceInclude, stuffInclude, ratingInclude],
-        });
-
-        return res.json(providers);
-      }
+      return res.status(500).json({
+        error: 'Internal server error',
+      });
     }
   }
 
   async show(req, res) {
-    const { id } = req.params;
+    try {
+      const { params } = req;
+      const { id } = params;
 
-    const subQuery = ({ field }) => {
-      const query = squel
-        .select({ autoQuoteAliasNames: false })
-        .field(field)
-        .where('"Provider"."id" = "ratings"."provider_id"')
-        .from('ratings as', 'rating')
-        .toString();
-      return `(${query})`;
-    };
+      const subQuery = ({ field }) => {
+        const query = squel
+          .select({ autoQuoteAliasNames: false })
+          .field(field)
+          .where('"Provider"."id" = "ratings"."provider_id"')
+          .from('ratings as', 'rating')
+          .toString();
 
-    const GENERATE_COUNT = subQuery({
-      field: 'CAST(COUNT(*) AS int)',
-    });
+        return `(${query})`;
+      };
 
-    const GENERATE_SUM = subQuery({
-      field: 'CAST(COALESCE(AVG("rating"."provider_rating"), 0) as float)',
-    });
+      const GENERATE_COUNT = subQuery({ field: 'CAST(COUNT(*) AS int)' });
+      const GENERATE_SUM = subQuery({ field: 'CAST(COALESCE(AVG("rating"."provider_rating"), 0) as float)' });
 
-    const provider = await Provider.findByPk(id, {
-      attributes: [...attributes, [GENERATE_COUNT, `treatments`], [GENERATE_SUM, `stars`]],
-      include: [userInclude, addressInclude, clockInclude, periodInclude, serviceInclude, stuffInclude, ratingInclude],
-    });
+      const provider = await Provider.findByPk(id, {
+        attributes: [
+          'avatar',
+          'birthdate',
+          'description',
+          'formation',
+          'id',
+          'gender',
+          'lastname',
+          'name',
+          'phone_number',
+          'phone_number_is_whatsapp',
+          'picture_profile',
+          [GENERATE_COUNT, `treatments`],
+          [GENERATE_SUM, `stars`],
+        ],
+        include: [clockInclude, periodInclude, serviceInclude, stuffInclude, ratingInclude],
+      });
 
-    return res.json(provider);
+      return res.json(provider);
+    } catch (error) {
+      console.log('--> ProviderController - SHOW', error);
+
+      return res.status(500).json({
+        error: 'Internal server error',
+      });
+    }
   }
 
   async store(req, res) {
@@ -204,18 +208,26 @@ class ProviderController {
       });
 
       return res.json(provider);
-    } catch (e) {
-      return res.json(e);
+    } catch (error) {
+      console.log('--> ProviderController - STORE', error);
+
+      return res.status(500).json({
+        error: 'Internal server error',
+      });
     }
   }
 
   async update(req, res) {
     try {
       const { body, files, headers, params } = req;
-
       const { provider_clocks, provider_periods, provider_services, provider_stuffs } = body;
       const { picture_address, picture_profile } = files;
-      const id = params.id || headers.id;
+      const { id } = headers;
+
+      if (Number(params.id) !== id) {
+        return res.status(403).json({ status: 'Access denied', success: false, message: 'Unauthorized access' });
+      }
+
       const provider = await Provider.findByPk(id);
 
       if (!isEmpty(picture_address)) {
@@ -259,8 +271,12 @@ class ProviderController {
       });
 
       return res.json(updated);
-    } catch (e) {
-      return res.json(e);
+    } catch (error) {
+      console.log('--> ProviderController - UPDATE', error);
+
+      return res.status(500).json({
+        error: 'Internal server error',
+      });
     }
   }
 }

@@ -241,7 +241,7 @@ class AppointmentController {
           if (body.status === 'payed') {
             axios.post('https://exp.host/--/api/v2/push/send', [
               {
-                to: appointment.customer.onesignal,
+                to: appointment.provider.onesignal,
                 body: 'Your appointment has been payed by the customer.',
                 title: 'Appointment payed',
               },

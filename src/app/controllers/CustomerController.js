@@ -24,30 +24,78 @@ const attributes = [
 
 class CustomerController {
   async index(req, res) {
-    const customers = await Customer.findAll({
-      attributes,
-      include: [
-        { as: 'user', model: User, attributes: ['email', 'status'] },
-        { as: 'address', model: Address, attributes: ['city', 'complement', 'country', 'district', 'number', 'postal_code', 'state', 'street'] },
-      ],
-    });
+    try {
+      const { headers } = req;
+      const { account_type } = headers;
 
-    return res.json(customers);
+      if (account_type === 'administrator') {
+        const customers = await Customer.findAll({
+          include: [
+            { as: 'user', model: User },
+            { as: 'address', model: Address },
+          ],
+        });
+
+        return res.json(customers);
+      }
+
+      console.log('--> CustomerController - INDEX (default)');
+      return res.status(403).json({ status: 'Access denied', success: false, message: 'Unauthorized access' });
+    } catch (error) {
+      console.log('--> CustomerController - INDEX', error);
+
+      return res.status(500).json({
+        error: 'Internal server error',
+      });
+    }
   }
 
   async show(req, res) {
-    const { headers } = req;
-    const { id } = headers;
+    try {
+      const { headers, params } = req;
+      const { account_type, id } = headers;
 
-    const customer = await Customer.findByPk(id, {
-      attributes,
-      include: [
-        { as: 'user', model: User, attributes: ['email', 'status'] },
-        { as: 'address', model: Address, attributes: ['city', 'complement', 'country', 'district', 'number', 'postal_code', 'state', 'street'] },
-      ],
-    });
+      switch (account_type) {
+        case 'administrator': {
+          const customer = await Customer.findByPk(id, {
+            attributes,
+            include: [
+              { as: 'user', model: User },
+              { as: 'address', model: Address },
+            ],
+          });
 
-    return res.json(customer);
+          return res.json(customer);
+        }
+
+        case 'customer': {
+          if (Number(params.id) !== id) {
+            return res.status(403).json({ status: 'Access denied', success: false, message: 'Unauthorized access' });
+          }
+
+          const customer = await Customer.findByPk(id, {
+            attributes,
+            include: [
+              { as: 'user', model: User, attributes: ['email', 'status'] },
+              { as: 'address', model: Address, attributes: ['city', 'complement', 'country', 'district', 'number', 'postal_code', 'state', 'street'] },
+            ],
+          });
+
+          return res.json(customer);
+        }
+
+        default: {
+          console.log('--> CustomerController - SHOW (default)');
+          return res.status(403).json({ status: 'Access denied', success: false, message: 'Unauthorized access' });
+        }
+      }
+    } catch (error) {
+      console.log('--> CustomerController - SHOW', error);
+
+      return res.status(500).json({
+        error: 'Internal server error',
+      });
+    }
   }
 
   async store(req, res) {
@@ -75,9 +123,11 @@ class CustomerController {
       });
 
       return res.json(customer);
-    } catch (e) {
-      return res.status(e.status || 400).json({
-        error: e.message || 'Internal server error',
+    } catch (error) {
+      console.log('--> CustomerController - STORE', error);
+
+      return res.status(500).json({
+        error: 'Internal server error',
       });
     }
   }
@@ -86,7 +136,12 @@ class CustomerController {
     try {
       const { body, files, headers, params } = req;
       const { picture_profile } = files;
-      const id = params.id || headers.id;
+      const { id } = headers;
+
+      if (Number(params.id) !== id) {
+        return res.status(403).json({ status: 'Access denied', success: false, message: 'Unauthorized access' });
+      }
+
       const customer = await Customer.findByPk(id);
 
       if (!isEmpty(picture_profile)) {
@@ -96,9 +151,11 @@ class CustomerController {
       await customer.update(body);
 
       return res.json(customer);
-    } catch (e) {
-      return res.status(e.status || 400).json({
-        error: e.message || 'Internal server error',
+    } catch (error) {
+      console.log('--> CustomerController - UPDATE', error);
+
+      return res.status(500).json({
+        error: 'Internal server error',
       });
     }
   }

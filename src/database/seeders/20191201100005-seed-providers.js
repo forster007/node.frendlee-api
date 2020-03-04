@@ -6,6 +6,8 @@ module.exports = {
         {
           address_id: 3,
           birthdate: '1994-01-30T00:00:00-03:00',
+          description:
+            'Born into a German Jewish family, he moved to a Switzerland at a young age and began her studies at the Polytechnic School Zurich. After two years looking for a job, a position was selected at the Swiss patent office of Zurich.',
           formation: 'Mobile developer',
           gender: 'male',
           gps: null,
@@ -27,6 +29,8 @@ module.exports = {
         {
           address_id: 4,
           birthdate: '1980-06-11T00:00:00-03:00',
+          description:
+            'Born into a German Jewish family, he moved to a Switzerland at a young age and began her studies at the Polytechnic School Zurich. After two years looking for a job, a position was selected at the Swiss patent office of Zurich.',
           formation: 'Backend developer',
           gender: 'male',
           gps: null,

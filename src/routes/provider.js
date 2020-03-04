@@ -11,15 +11,27 @@ const upload = multer(multerConfig);
 router.get('/', ProviderController.index);
 router.get('/:id', ProviderController.show);
 router.post('/', ProviderController.store);
-router.put('/', ProviderController.update);
+router.put('/:id', ProviderController.update);
 
 router.post(
   '/files',
   upload.fields([
-    { name: 'picture_address', maxCount: 1 },
-    { name: 'picture_certification', maxCount: 1 },
-    { name: 'picture_license', maxCount: 1 },
-    { name: 'picture_profile', maxCount: 1 },
+    {
+      name: 'picture_address',
+      maxCount: 1,
+    },
+    {
+      name: 'picture_certification',
+      maxCount: 1,
+    },
+    {
+      name: 'picture_license',
+      maxCount: 1,
+    },
+    {
+      name: 'picture_profile',
+      maxCount: 1,
+    },
   ]),
   FileController.storeProvider
 );
