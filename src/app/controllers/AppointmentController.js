@@ -19,7 +19,7 @@ class AppointmentController {
           include: [
             {
               as: 'provider',
-              attributes: ['lastname', 'name', 'picture_profile', 'picture_profile_url'],
+              attributes: ['avatar', 'lastname', 'name', 'picture_profile'],
               model: Provider,
             },
             {
