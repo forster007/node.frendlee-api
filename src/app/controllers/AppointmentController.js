@@ -10,7 +10,8 @@ const exclude = ['createdAt', 'updatedAt'];
 
 class AppointmentController {
   async index(req, res) {
-    const { account_type, id } = req.headers;
+    const { headers, query } = req;
+    const { account_type, id } = headers;
 
     switch (account_type) {
       case 'customer': {
@@ -36,9 +37,6 @@ class AppointmentController {
           ],
           where: { customer_id: id },
           order: [
-            // sequelize.literal(
-            //   "CASE status WHEN 'opened' THEN 1 WHEN 'finished' THEN 2 ELSE 3 END"
-            // ),
             ['status', 'ASC'],
             ['start_at', 'DESC'],
           ],
@@ -48,8 +46,31 @@ class AppointmentController {
       }
 
       case 'provider': {
+        if (!isEmpty(query)) {
+          const { operation, status } = query;
+
+          const appointments = await Appointment.findAll({
+            where: {
+              status: {
+                [Op[operation]]: status,
+              },
+              provider_id: id,
+            },
+            order: [
+              ['status', 'ASC'],
+              ['start_at', 'DESC'],
+            ],
+          });
+
+          return res.json(appointments);
+        }
+
         const appointments = await Appointment.findAll({
           where: { provider_id: id },
+          order: [
+            ['status', 'ASC'],
+            ['start_at', 'DESC'],
+          ],
         });
 
         return res.json(appointments);
