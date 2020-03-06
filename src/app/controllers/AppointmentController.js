@@ -50,6 +50,25 @@ class AppointmentController {
           const { operation, status } = query;
 
           const appointments = await Appointment.findAll({
+            include: [
+              {
+                as: 'customer',
+                attributes: ['avatar', 'lastname', 'name', 'picture_profile'],
+                model: Customer,
+              },
+              {
+                as: 'detail',
+                attributes: ['id'],
+                include: [
+                  {
+                    as: 'service',
+                    attributes: ['name'],
+                    model: Service,
+                  },
+                ],
+                model: ProviderServices,
+              },
+            ],
             where: {
               status: {
                 [Op[operation]]: status,

@@ -4,6 +4,12 @@ class Customer extends Model {
   static init(sequelize) {
     super.init(
       {
+        avatar: {
+          type: Sequelize.VIRTUAL,
+          get() {
+            return { uri: `${process.env.APP_URL}/files/${this.picture_profile}` };
+          },
+        },
         birthdate: Sequelize.DATE,
         blood_pressure: {
           type: Sequelize.ENUM,
@@ -23,12 +29,6 @@ class Customer extends Model {
         phone_number: Sequelize.STRING,
         phone_number_is_whatsapp: Sequelize.BOOLEAN,
         picture_profile: Sequelize.STRING,
-        picture_profile_url: {
-          type: Sequelize.VIRTUAL,
-          get() {
-            return `${process.env.APP_URL}/files/${this.picture_profile}`;
-          },
-        },
         ssn: Sequelize.STRING,
       },
       {
