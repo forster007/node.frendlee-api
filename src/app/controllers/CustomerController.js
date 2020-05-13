@@ -26,7 +26,7 @@ class CustomerController {
   async index(req, res) {
     try {
       const { headers } = req;
-      const { account_type } = headers;
+      const { account_type, id } = headers;
 
       if (account_type === 'administrator') {
         const customers = await Customer.findAll({
@@ -37,6 +37,17 @@ class CustomerController {
         });
 
         return res.json(customers);
+      }
+
+      if (account_type === 'customer') {
+        const customer = await Customer.findByPk(id, {
+          include: [
+            { as: 'user', model: User },
+            { as: 'address', model: Address },
+          ],
+        });
+
+        return res.json(customer);
       }
 
       console.log('--> CustomerController - INDEX (default)');
