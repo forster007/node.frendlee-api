@@ -257,6 +257,16 @@ class AppointmentController {
 
           await appointment.update(body);
 
+          if (body.status === 'canceled') {
+            axios.post('https://exp.host/--/api/v2/push/send', [
+              {
+                to: appointment.provider.onesignal,
+                body: 'Your appointment has been cancelled by the customer.',
+                title: 'Appointment cancelled',
+              },
+            ]);
+          }
+
           if (body.status === 'payed') {
             axios.post('https://exp.host/--/api/v2/push/send', [
               {
@@ -276,6 +286,16 @@ class AppointmentController {
           }
 
           await appointment.update(body);
+
+          if (body.status === 'canceled') {
+            axios.post('https://exp.host/--/api/v2/push/send', [
+              {
+                to: appointment.customer.onesignal,
+                body: 'Your appointment has been cancelled by the provider.',
+                title: 'Appointment cancelled',
+              },
+            ]);
+          }
 
           if (body.status === 'confirmed') {
             axios.post('https://exp.host/--/api/v2/push/send', [
