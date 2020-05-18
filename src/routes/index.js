@@ -5,6 +5,7 @@ import clocks from './clock';
 import confirmations from './confirmation';
 import customers from './customer';
 import onesignal from './onesignal';
+import messages from './message';
 import notifications from './notification';
 import periods from './period';
 import providers from './provider';
@@ -22,6 +23,7 @@ export {
   clocks,
   confirmations,
   customers,
+  messages,
   notifications,
   onesignal,
   periods,

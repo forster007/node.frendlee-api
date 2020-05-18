@@ -57,7 +57,7 @@ class SessionController {
           });
 
           return res.json({
-            token: jwt.sign({ account_type, id: customer.id }, authConfig.secret, { expiresIn: authConfig.expiresIn }),
+            token: jwt.sign({ account_type, email, id: customer.id, uid: id }, authConfig.secret, { expiresIn: authConfig.expiresIn }),
             user: {
               account_type,
               email,
@@ -81,7 +81,7 @@ class SessionController {
           });
 
           return res.json({
-            token: jwt.sign({ account_type, id: provider.id }, authConfig.secret, { expiresIn: authConfig.expiresIn }),
+            token: jwt.sign({ account_type, email, id: provider.id, uid: id }, authConfig.secret, { expiresIn: authConfig.expiresIn }),
             user: {
               account_type,
               email,

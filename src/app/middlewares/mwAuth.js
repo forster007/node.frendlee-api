@@ -11,10 +11,12 @@ export default async (req, res, next) => {
     }
 
     const [, token] = authorization.split(' ');
-    const { account_type, id } = await promisify(jwt.verify)(token, authConfig.secret);
+    const { account_type, email, id, uid } = await promisify(jwt.verify)(token, authConfig.secret);
 
     req.headers.account_type = account_type;
+    req.headers.email = email;
     req.headers.id = id;
+    req.headers.uid = uid;
 
     return next();
   } catch (e) {

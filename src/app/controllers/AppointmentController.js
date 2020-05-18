@@ -2,8 +2,7 @@ import axios from 'axios';
 import moment from 'moment';
 import { Op } from 'sequelize';
 import { Appointment, Customer, Provider, ProviderServices, Service, User } from '../models';
-// import { Notification } from '../schemas';
-
+import { Message } from '../schemas';
 import isEmpty from '../../lib/Helpers';
 
 const exclude = ['createdAt', 'updatedAt'];
@@ -205,6 +204,8 @@ class AppointmentController {
           provider_service_id: providerService.id,
         });
 
+        await Message.create({ appointment_id: appointment.id });
+
         axios.post('https://exp.host/--/api/v2/push/send', [
           {
             to: provider.onesignal,
@@ -217,17 +218,6 @@ class AppointmentController {
       }
 
       throw new Error('You cannot store an appointment');
-
-      // const appointmentDateTime = moment(dateToStart).format('DD/MM/YYYY');
-      // const appointmentClockTime = moment(dateToStart).format('HH:mm');
-      // const notification = await Notification.create({
-      //   content: `Novo agendamento de ${customer.name} para o dia ${appointmentDateTime} às ${appointmentClockTime}`,
-      //   user: provider.id,
-      // });
-
-      // const socket = req.connected_users[provider.id];
-      // if (socket) req.io.to(socket).emit('notification', notification);
-      // return res.json(appointment);
     } catch (e) {
       console.log(e);
       return res.status(e.status || 400).json({
