@@ -14,7 +14,7 @@ router.post('/', ProviderController.store);
 router.put('/:id', ProviderController.update);
 
 router.post(
-  '/files',
+  '/:id/files',
   upload.fields([
     {
       name: 'picture_address',
