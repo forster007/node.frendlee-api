@@ -83,13 +83,15 @@ class App {
     this.io = io(this.server);
     this.io.on('connection', socket => {
       const { account_type, id } = socket.handshake.query;
-      this.connected_users[account_type][id] = socket.id;
-      console.log(this.connected_users);
-
-      socket.on('disconnect', () => {
-        delete this.connected_users[account_type][id];
+      if (account_type && id) {
+        this.connected_users[account_type][id] = socket.id;
         console.log(this.connected_users);
-      });
+
+        socket.on('disconnect', () => {
+          delete this.connected_users[account_type][id];
+          console.log(this.connected_users);
+        });
+      }
     });
   }
 }
