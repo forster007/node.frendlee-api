@@ -81,11 +81,9 @@ class MessageController {
     try {
       const { body, connected_users, headers, io, params } = req;
       const { text } = body;
-      const { account_type, email, uid: _id } = headers;
+      const { account_type, id, email, uid: _id } = headers;
       const { id: appointment_id } = params;
       const messages = { text, user: { _id, email } };
-      await Message({ appointment_id }, { $push: { messages } });
-
       const appointment = await Appointment.findByPk(appointment_id, {
         include: [
           { as: 'customer', attributes: ['id', 'onesignal'], model: Customer },
@@ -95,36 +93,42 @@ class MessageController {
 
       switch (account_type) {
         case 'customer': {
-          const ownerOnline = connected_users.provider[appointment.dataValues.provider.id];
+          if (appointment.dataValues.customer_id === id) {
+            await Message.findOneAndUpdate({ appointment_id }, { $push: { messages } });
+            const ownerOnline = connected_users.provider[appointment.dataValues.provider.id];
 
-          if (ownerOnline) {
-            io.to(ownerOnline).emit('message', messages);
-          } else if (appointment.dataValues.provider.onesignal) {
-            axios.post('https://exp.host/--/api/v2/push/send', [
-              {
-                to: appointment.dataValues.provider.onesignal,
-                body: text,
-                title: 'New message',
-              },
-            ]);
+            if (ownerOnline) {
+              io.to(ownerOnline).emit('message', messages);
+            } else if (appointment.dataValues.provider.onesignal) {
+              axios.post('https://exp.host/--/api/v2/push/send', [
+                {
+                  to: appointment.dataValues.provider.onesignal,
+                  body: text,
+                  title: 'New message',
+                },
+              ]);
+            }
           }
 
           break;
         }
 
         case 'provider': {
-          const ownerOnline = connected_users.customer[appointment.dataValues.customer.id];
+          if (appointment.dataValues.provider_id === id) {
+            await Message.findOneAndUpdate({ appointment_id }, { $push: { messages } });
+            const ownerOnline = connected_users.customer[appointment.dataValues.customer.id];
 
-          if (ownerOnline) {
-            io.to(ownerOnline).emit('message', messages);
-          } else if (appointment.dataValues.customer.onesignal) {
-            await axios.post('https://exp.host/--/api/v2/push/send', [
-              {
-                to: appointment.dataValues.customer.onesignal,
-                body: text,
-                title: 'New message',
-              },
-            ]);
+            if (ownerOnline) {
+              io.to(ownerOnline).emit('message', messages);
+            } else if (appointment.dataValues.customer.onesignal) {
+              await axios.post('https://exp.host/--/api/v2/push/send', [
+                {
+                  to: appointment.dataValues.customer.onesignal,
+                  body: text,
+                  title: 'New message',
+                },
+              ]);
+            }
           }
           break;
         }
