@@ -15,9 +15,9 @@ class MessageController {
         });
 
         const appointmentids = appointments.map(appointment => appointment.id);
-        const messages = await Message.find({ appointment_id: appointmentids }).lean(true);
+        const messages = await Message.find({ appointment_id: appointmentids });
 
-        return res.json({ ...messages });
+        return res.json({ messages });
       }
 
       case 'provider': {
@@ -27,9 +27,9 @@ class MessageController {
         });
 
         const appointmentids = appointments.map(appointment => appointment.id);
-        const messages = await Message.find({ appointment_id: appointmentids }).lean(true);
+        const messages = await Message.find({ appointment_id: appointmentids });
 
-        return res.json({ ...messages });
+        return res.json({ messages });
       }
 
       default:
@@ -54,7 +54,7 @@ class MessageController {
     switch (account_type) {
       case 'customer': {
         if (appointment.dataValues.customer_id === id) {
-          const messages = await Message.findOne({ appointment_id }).lean(true);
+          const messages = await Message.findOne({ appointment_id });
           return res.json({ ...messages });
         }
 
@@ -63,7 +63,7 @@ class MessageController {
 
       case 'provider': {
         if (appointment.dataValues.provider_id === id) {
-          const messages = await Message.findOne({ appointment_id }).lean(true);
+          const messages = await Message.findOne({ appointment_id });
           return res.json({ ...messages });
         }
 
