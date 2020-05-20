@@ -12,7 +12,7 @@ export default {
       permissions: [
         { action: 'allow', methods: ['GET', 'POST', 'PUT'], resource: `${PREFIX}/appointments/*` },
         { action: 'allow', methods: ['GET', 'POST'], resource: `${PREFIX}/customers/*` },
-        { action: 'allow', methods: ['PUT'], resource: `${PREFIX}/messages/*` },
+        { action: 'allow', methods: ['GET', 'PUT'], resource: `${PREFIX}/messages/*` },
         { action: 'allow', methods: ['POST'], resource: `${PREFIX}/onesignal` },
         { action: 'allow', methods: ['GET'], resource: `${PREFIX}/providers/*` },
       ],
@@ -21,7 +21,7 @@ export default {
       group: 'provider',
       permissions: [
         { action: 'allow', methods: ['GET', 'PUT'], resource: `${PREFIX}/appointments/*` },
-        { action: 'allow', methods: ['PUT'], resource: `${PREFIX}/messages/*` },
+        { action: 'allow', methods: ['GET', 'PUT'], resource: `${PREFIX}/messages/*` },
         { action: 'allow', methods: ['POST'], resource: `${PREFIX}/onesignal` },
         { action: 'allow', methods: ['GET', 'POST'], resource: `${PREFIX}/providers/*` },
       ],

@@ -1,26 +1,80 @@
 import axios from 'axios';
-import { Appointment, Customer, Provider, User } from '../models';
+import { Appointment, Customer, Provider } from '../models';
 import { Message } from '../schemas';
-
-import isEmpty from '../../lib/Helpers';
 
 class MessageController {
   async index(req, res) {
-    const provider = await User.findOne({
-      where: { id: req.headers.user_id, provider: true },
-    });
+    const { headers } = req;
+    const { account_type, id } = headers;
 
-    if (isEmpty(provider)) {
-      return res.status(400).json({
-        error: 'User is not a provider or does not exists',
-      });
+    switch (account_type) {
+      case 'customer': {
+        const appointments = await Appointment.findAll({
+          include: [{ as: 'customer', attributes: ['id', 'onesignal'], model: Customer }],
+          where: { customer_id: id },
+        });
+
+        const appointmentids = appointments.map(appointment => appointment.id);
+        const messages = await Message.find({ appointment_id: appointmentids }).lean(true);
+
+        return res.json({ ...messages });
+      }
+
+      case 'provider': {
+        const appointments = await Appointment.findAll({
+          include: [{ as: 'provider', attributes: ['id', 'onesignal'], model: Provider }],
+          where: { provider_id: id },
+        });
+
+        const appointmentids = appointments.map(appointment => appointment.id);
+        const messages = await Message.find({ appointment_id: appointmentids }).lean(true);
+
+        return res.json({ ...messages });
+      }
+
+      default:
+        break;
     }
 
-    const notifications = await Message.find({
-      user: req.headers.user_id,
-    }).sort({ createdAt: 'desc' });
+    return res.json({ success: true });
+  }
 
-    return res.json(notifications);
+  async show(req, res) {
+    const { headers, params } = req;
+    const { account_type, id } = headers;
+    const { id: appointment_id } = params;
+
+    const appointment = await Appointment.findByPk(appointment_id, {
+      include: [
+        { as: 'customer', attributes: ['id', 'onesignal'], model: Customer },
+        { as: 'provider', attributes: ['id', 'onesignal'], model: Provider },
+      ],
+    });
+
+    switch (account_type) {
+      case 'customer': {
+        if (appointment.dataValues.customer_id === id) {
+          const messages = await Message.findOne({ appointment_id }).lean(true);
+          return res.json({ ...messages });
+        }
+
+        break;
+      }
+
+      case 'provider': {
+        if (appointment.dataValues.provider_id === id) {
+          const messages = await Message.findOne({ appointment_id }).lean(true);
+          return res.json({ ...messages });
+        }
+
+        break;
+      }
+
+      default:
+        break;
+    }
+
+    return res.json({ success: true });
   }
 
   async update(req, res) {
