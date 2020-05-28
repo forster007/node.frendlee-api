@@ -267,6 +267,18 @@ class AppointmentController {
             ]);
           }
 
+          if (body.status === 'started') {
+            await appointment.update({ started_at: moment().toDate() });
+
+            axios.post('https://exp.host/--/api/v2/push/send', [
+              {
+                to: appointment.provider.onesignal,
+                body: 'Your appointment has been started by the customer.',
+                title: 'Appointment started',
+              },
+            ]);
+          }
+
           return res.json(appointment);
         }
 
