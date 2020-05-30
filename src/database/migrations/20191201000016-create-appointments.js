@@ -27,7 +27,7 @@ module.exports = {
         allowNull: false,
         defaultValue: 'opened',
         type: Sequelize.ENUM,
-        values: ['started', 'opened', 'confirmed', 'payed', 'waiting rate', 'finished', 'canceled'],
+        values: ['started', 'opened', 'confirmed', 'payed', 'finished', 'canceled'],
       },
       value: {
         allowNull: false,
@@ -47,6 +47,9 @@ module.exports = {
         },
         type: Sequelize.INTEGER,
       },
+      customer_rate: {
+        type: Sequelize.BOOLEAN,
+      },
       provider_id: {
         allowNull: false,
         onDelete: 'SET NULL',
@@ -56,6 +59,9 @@ module.exports = {
           model: 'providers',
         },
         type: Sequelize.INTEGER,
+      },
+      provider_rate: {
+        type: Sequelize.BOOLEAN,
       },
       provider_service_id: {
         allowNull: false,
@@ -77,7 +83,7 @@ module.exports = {
       started_at: {
         type: Sequelize.DATE,
       },
-      stopped_at: {
+      finished_at: {
         type: Sequelize.DATE,
       },
       updated_at: {

@@ -279,6 +279,18 @@ class AppointmentController {
             ]);
           }
 
+          if (body.status === 'finished') {
+            await appointment.update({ stopped_at: moment().toDate() });
+
+            axios.post('https://exp.host/--/api/v2/push/send', [
+              {
+                to: appointment.provider.onesignal,
+                body: 'Your appointment has been finished by the customer.',
+                title: 'Appointment finished',
+              },
+            ]);
+          }
+
           return res.json(appointment);
         }
 
