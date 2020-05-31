@@ -1,4 +1,4 @@
-import moment from 'moment';
+const moment = require('moment');
 
 module.exports = {
   up: queryInterface => {
@@ -6,9 +6,13 @@ module.exports = {
       'appointments',
       [
         {
-          start_at: moment().add(1, 'hour'),
+          start_at: moment()
+            .add(1, 'hours')
+            .format(),
           duration: 1,
-          finish_at: null,
+          finish_at: moment()
+            .add(2, 'hours')
+            .format(),
           observation:
             'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industrys standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.',
           status: 'opened',
