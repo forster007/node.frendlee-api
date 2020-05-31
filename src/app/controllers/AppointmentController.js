@@ -280,7 +280,7 @@ class AppointmentController {
           }
 
           if (body.status === 'finished') {
-            await appointment.update({ stopped_at: moment().toDate() });
+            await appointment.update({ finished_at: moment().toDate() });
 
             axios.post('https://exp.host/--/api/v2/push/send', [
               {
