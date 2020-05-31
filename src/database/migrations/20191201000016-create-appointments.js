@@ -48,6 +48,7 @@ module.exports = {
         type: Sequelize.INTEGER,
       },
       customer_rate: {
+        defaultValue: false,
         type: Sequelize.BOOLEAN,
       },
       provider_id: {
@@ -61,6 +62,7 @@ module.exports = {
         type: Sequelize.INTEGER,
       },
       provider_rate: {
+        defaultValue: false,
         type: Sequelize.BOOLEAN,
       },
       provider_service_id: {
