@@ -61,6 +61,7 @@ class App {
     this.app.use(`${PREFIX}/onesignal`, router.onesignal);
     this.app.use(`${PREFIX}/periods`, router.periods);
     this.app.use(`${PREFIX}/providers`, router.providers);
+    this.app.use(`${PREFIX}/ratings`, router.ratings);
     this.app.use(`${PREFIX}/resends`, router.resends);
     this.app.use(`${PREFIX}/schedules`, router.schedules);
     this.app.use(`${PREFIX}/services`, router.services);

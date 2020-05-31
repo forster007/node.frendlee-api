@@ -15,6 +15,7 @@ export default {
         { action: 'allow', methods: ['GET', 'PUT'], resource: `${PREFIX}/messages/*` },
         { action: 'allow', methods: ['POST'], resource: `${PREFIX}/onesignal` },
         { action: 'allow', methods: ['GET'], resource: `${PREFIX}/providers/*` },
+        { action: 'allow', methods: ['POST'], resource: `${PREFIX}/ratings` },
       ],
     },
     {
@@ -24,6 +25,7 @@ export default {
         { action: 'allow', methods: ['GET', 'PUT'], resource: `${PREFIX}/messages/*` },
         { action: 'allow', methods: ['POST'], resource: `${PREFIX}/onesignal` },
         { action: 'allow', methods: ['GET', 'POST'], resource: `${PREFIX}/providers/*` },
+        { action: 'allow', methods: ['POST'], resource: `${PREFIX}/ratings` },
       ],
     },
     {

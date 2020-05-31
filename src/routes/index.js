@@ -9,6 +9,7 @@ import messages from './message';
 import notifications from './notification';
 import periods from './period';
 import providers from './provider';
+import ratings from './rating';
 import resends from './resend';
 import schedules from './schedule';
 import services from './service';
@@ -28,6 +29,7 @@ export {
   onesignal,
   periods,
   providers,
+  ratings,
   resends,
   schedules,
   services,
