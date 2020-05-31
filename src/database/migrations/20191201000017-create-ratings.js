@@ -17,6 +17,11 @@ module.exports = {
         },
         type: Sequelize.INTEGER,
       },
+      customer_comment: Sequelize.STRING,
+      customer_compliment: {
+        type: Sequelize.ENUM,
+        values: ['nice', 'organized', 'professional', 'informed', 'effective', 'mannerly'],
+      },
       customer_id: {
         allowNull: false,
         onDelete: 'SET NULL',
@@ -30,6 +35,11 @@ module.exports = {
       customer_rating: {
         defaultValue: 0,
         type: Sequelize.INTEGER,
+      },
+      provider_comment: Sequelize.STRING,
+      provider_compliment: {
+        type: Sequelize.ENUM,
+        values: ['nice', 'organized', 'professional', 'informed', 'effective', 'mannerly'],
       },
       provider_id: {
         allowNull: false,

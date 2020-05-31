@@ -7,7 +7,6 @@ class Rating extends Model {
         appointment_id: Sequelize.INTEGER,
         customer_comment: Sequelize.STRING,
         customer_compliment: {
-          defaultValue: 'opened',
           type: Sequelize.ENUM,
           values: ['nice', 'organized', 'professional', 'informed', 'effective', 'mannerly'],
         },
@@ -15,7 +14,6 @@ class Rating extends Model {
         customer_rating: Sequelize.INTEGER,
         provider_comment: Sequelize.STRING,
         provider_compliment: {
-          defaultValue: 'opened',
           type: Sequelize.ENUM,
           values: ['nice', 'organized', 'professional', 'informed', 'effective', 'mannerly'],
         },
