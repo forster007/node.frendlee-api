@@ -28,10 +28,14 @@ class RatingController {
 
           if (!existRating) {
             const rating = await Rating.create(obj);
+            await appointment.update({ customer_rating: true });
+
             return res.json(rating);
           }
 
           const rating = await existRating.update(obj);
+          await appointment.update({ customer_rating: true });
+
           return res.json(rating);
         }
 
@@ -52,19 +56,26 @@ class RatingController {
 
           if (!existRating) {
             const rating = await Rating.create(obj);
+            await appointment.update({ provider_rating: true });
+
             return res.json(rating);
           }
 
           const rating = await existRating.update(obj);
+          await appointment.update({ provider_rating: true });
+
           return res.json(rating);
         }
 
         break;
       }
 
-      default:
-        break;
+      default: {
+        return res.status(400).json({ error: 'not allowed ' });
+      }
     }
+
+    return res.status(400).json({ error: 'not allowed ' });
   }
 }
 
