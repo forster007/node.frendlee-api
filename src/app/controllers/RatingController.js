@@ -18,8 +18,8 @@ class RatingController {
         if (id === appointment.customer.id) {
           const existRating = await Rating.findOne({ where: { appointment_id } });
           const obj = {
+            appointment_id,
             customer_id: appointment.customer.id,
-
             provider_comment: body.comment,
             provider_compliment: body.compliment,
             provider_id: appointment.provider.id,
@@ -42,8 +42,8 @@ class RatingController {
         if (id === appointment.provider.id) {
           const existRating = await Rating.findOne({ where: { appointment_id } });
           const obj = {
+            appointment_id,
             provider_id: appointment.provider.id,
-
             customer_comment: body.comment,
             customer_compliment: body.compliment,
             customer_id: appointment.customer.id,
