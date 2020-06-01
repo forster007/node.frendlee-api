@@ -17,15 +17,21 @@ class RatingController {
       case 'customer': {
         if (id === appointment.customer.id) {
           const existRating = await Rating.findOne({ where: { appointment_id } });
-          body.customer_id = appointment.customer.id;
-          body.provider_id = appointment.provider.id;
+          const obj = {
+            customer_id: appointment.customer.id,
+
+            provider_comment: body.comment,
+            provider_compliment: body.compliment,
+            provider_id: appointment.provider.id,
+            provider_rating: body.rating,
+          };
 
           if (!existRating) {
-            const rating = await Rating.create(body);
+            const rating = await Rating.create(obj);
             return res.json(rating);
           }
 
-          const rating = await existRating.update(body);
+          const rating = await existRating.update(obj);
           return res.json(rating);
         }
 
@@ -35,15 +41,21 @@ class RatingController {
       case 'provider': {
         if (id === appointment.provider.id) {
           const existRating = await Rating.findOne({ where: { appointment_id } });
-          body.customer_id = appointment.customer.id;
-          body.provider_id = appointment.provider.id;
+          const obj = {
+            provider_id: appointment.provider.id,
+
+            customer_comment: body.comment,
+            customer_compliment: body.compliment,
+            customer_id: appointment.customer.id,
+            customer_rating: body.rating,
+          };
 
           if (!existRating) {
-            const rating = await Rating.create(body);
+            const rating = await Rating.create(obj);
             return res.json(rating);
           }
 
-          const rating = await existRating.update(body);
+          const rating = await existRating.update(obj);
           return res.json(rating);
         }
 
@@ -53,8 +65,6 @@ class RatingController {
       default:
         break;
     }
-
-    return res.json({ data: true });
   }
 }
 
