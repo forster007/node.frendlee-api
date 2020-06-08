@@ -1,6 +1,4 @@
-import stripe from 'stripe';
-
-stripe('sk_test_7PfaWB0jUhqz2FbM5HyNizhF00UK36N7ps');
+const stripe = require('stripe')('sk_test_7PfaWB0jUhqz2FbM5HyNizhF00UK36N7ps');
 
 class PeriodController {
   async store(req, res) {
