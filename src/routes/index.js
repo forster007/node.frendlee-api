@@ -7,6 +7,7 @@ import customers from './customer';
 import onesignal from './onesignal';
 import messages from './message';
 import notifications from './notification';
+import payments from './payment';
 import periods from './period';
 import providers from './provider';
 import ratings from './rating';
@@ -27,6 +28,7 @@ export {
   messages,
   notifications,
   onesignal,
+  payments,
   periods,
   providers,
   ratings,

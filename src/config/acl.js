@@ -14,6 +14,7 @@ export default {
         { action: 'allow', methods: ['GET', 'POST'], resource: `${PREFIX}/customers/*` },
         { action: 'allow', methods: ['GET', 'PUT'], resource: `${PREFIX}/messages/*` },
         { action: 'allow', methods: ['POST'], resource: `${PREFIX}/onesignal` },
+        { action: 'allow', methods: ['POST'], resource: `${PREFIX}/payments` },
         { action: 'allow', methods: ['GET'], resource: `${PREFIX}/providers/*` },
         { action: 'allow', methods: ['POST'], resource: `${PREFIX}/ratings` },
       ],
