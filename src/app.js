@@ -13,8 +13,6 @@ import { aclConfig, unlessConfig } from './config';
 import * as router from './routes';
 import mwAuth from './app/middlewares/mwAuth';
 
-const PREFIX = process.env.BASE_PREFIX;
-
 class App {
   constructor() {
     this.app = express();
@@ -39,7 +37,7 @@ class App {
       next();
     });
 
-    this.app.use(PREFIX, mwAuth.unless(unlessConfig));
+    this.app.use(mwAuth.unless(unlessConfig));
     this.app.use(acl.authorize.unless(unlessConfig));
   }
 
@@ -50,25 +48,25 @@ class App {
       res.sendFile(path.resolve(path.join(`${__dirname}/app/views/htmls/confirmation.html`)));
     });
 
-    this.app.use(`${PREFIX}/administrators`, router.administrators);
-    this.app.use(`${PREFIX}/appointments`, router.appointments);
-    this.app.use(`${PREFIX}/checks`, router.checks);
-    this.app.use(`${PREFIX}/clocks`, router.clocks);
-    this.app.use(`${PREFIX}/confirmations`, router.confirmations);
-    this.app.use(`${PREFIX}/customers`, router.customers);
-    this.app.use(`${PREFIX}/messages`, router.messages);
-    this.app.use(`${PREFIX}/notifications`, router.notifications);
-    this.app.use(`${PREFIX}/onesignal`, router.onesignal);
-    this.app.use(`${PREFIX}/payments`, router.payments);
-    this.app.use(`${PREFIX}/periods`, router.periods);
-    this.app.use(`${PREFIX}/providers`, router.providers);
-    this.app.use(`${PREFIX}/ratings`, router.ratings);
-    this.app.use(`${PREFIX}/resends`, router.resends);
-    this.app.use(`${PREFIX}/schedules`, router.schedules);
-    this.app.use(`${PREFIX}/services`, router.services);
-    this.app.use(`${PREFIX}/sessions`, router.sessions);
-    this.app.use(`${PREFIX}/stuffs`, router.stuffs);
-    this.app.use(`${PREFIX}/users`, router.users);
+    this.app.use('/administrators', router.administrators);
+    this.app.use('/appointments', router.appointments);
+    this.app.use('/checks', router.checks);
+    this.app.use('/clocks', router.clocks);
+    this.app.use('/confirmations', router.confirmations);
+    this.app.use('/customers', router.customers);
+    this.app.use('/messages', router.messages);
+    this.app.use('/notifications', router.notifications);
+    this.app.use('/onesignal', router.onesignal);
+    this.app.use('/payments', router.payments);
+    this.app.use('/periods', router.periods);
+    this.app.use('/providers', router.providers);
+    this.app.use('/ratings', router.ratings);
+    this.app.use('/resends', router.resends);
+    this.app.use('/schedules', router.schedules);
+    this.app.use('/services', router.services);
+    this.app.use('/sessions', router.sessions);
+    this.app.use('/stuffs', router.stuffs);
+    this.app.use('/users', router.users);
 
     this.app.all('*', (req, res) => {
       const error = {

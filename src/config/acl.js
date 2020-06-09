@@ -1,5 +1,3 @@
-const PREFIX = process.env.BASE_PREFIX;
-
 export default {
   roleSearchPath: 'headers.account_type',
   rules: [
@@ -10,23 +8,23 @@ export default {
     {
       group: 'customer',
       permissions: [
-        { action: 'allow', methods: ['GET', 'POST', 'PUT'], resource: `${PREFIX}/appointments/*` },
-        { action: 'allow', methods: ['GET', 'POST'], resource: `${PREFIX}/customers/*` },
-        { action: 'allow', methods: ['GET', 'PUT'], resource: `${PREFIX}/messages/*` },
-        { action: 'allow', methods: ['POST'], resource: `${PREFIX}/onesignal` },
-        { action: 'allow', methods: ['POST'], resource: `${PREFIX}/payments` },
-        { action: 'allow', methods: ['GET'], resource: `${PREFIX}/providers/*` },
-        { action: 'allow', methods: ['POST'], resource: `${PREFIX}/ratings` },
+        { action: 'allow', methods: ['GET', 'POST', 'PUT'], resource: '/appointments/*' },
+        { action: 'allow', methods: ['GET', 'POST'], resource: '/customers/*' },
+        { action: 'allow', methods: ['GET', 'PUT'], resource: '/messages/*' },
+        { action: 'allow', methods: ['POST'], resource: '/onesignal' },
+        { action: 'allow', methods: ['POST'], resource: '/payments' },
+        { action: 'allow', methods: ['GET'], resource: '/providers/*' },
+        { action: 'allow', methods: ['POST'], resource: '/ratings' },
       ],
     },
     {
       group: 'provider',
       permissions: [
-        { action: 'allow', methods: ['GET', 'PUT'], resource: `${PREFIX}/appointments/*` },
-        { action: 'allow', methods: ['GET', 'PUT'], resource: `${PREFIX}/messages/*` },
-        { action: 'allow', methods: ['POST'], resource: `${PREFIX}/onesignal` },
-        { action: 'allow', methods: ['GET', 'POST'], resource: `${PREFIX}/providers/*` },
-        { action: 'allow', methods: ['POST'], resource: `${PREFIX}/ratings` },
+        { action: 'allow', methods: ['GET', 'PUT'], resource: '/appointments/*' },
+        { action: 'allow', methods: ['GET', 'PUT'], resource: '/messages/*' },
+        { action: 'allow', methods: ['POST'], resource: '/onesignal' },
+        { action: 'allow', methods: ['GET', 'POST'], resource: '/providers/*' },
+        { action: 'allow', methods: ['POST'], resource: '/ratings' },
       ],
     },
     {

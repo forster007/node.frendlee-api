@@ -1,16 +1,14 @@
-const PREFIX = process.env.BASE_PREFIX;
-
 export default {
   path: [
-    { url: `${PREFIX}/checks`, methods: ['GET'] },
-    { url: `${PREFIX}/clocks`, methods: ['GET'] },
-    { url: `${PREFIX}/confirmations`, methods: ['GET'] },
-    { url: `${PREFIX}/periods`, methods: ['GET'] },
-    { url: `${PREFIX}/resends`, methods: ['GET'] },
-    { url: `${PREFIX}/services`, methods: ['GET'] },
-    { url: `${PREFIX}/stuffs`, methods: ['GET'] },
-    { url: `${PREFIX}/customers`, methods: ['POST'] },
-    { url: `${PREFIX}/providers`, methods: ['POST'] },
-    { url: `${PREFIX}/sessions`, methods: ['POST'] },
+    { url: '/checks', methods: ['GET'] },
+    { url: '/clocks', methods: ['GET'] },
+    { url: '/confirmations', methods: ['GET'] },
+    { url: '/periods', methods: ['GET'] },
+    { url: '/resends', methods: ['GET'] },
+    { url: '/services', methods: ['GET'] },
+    { url: '/stuffs', methods: ['GET'] },
+    { url: '/customers', methods: ['POST'] },
+    { url: '/providers', methods: ['POST'] },
+    { url: '/sessions', methods: ['POST'] },
   ],
 };
