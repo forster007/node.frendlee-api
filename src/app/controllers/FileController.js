@@ -1,4 +1,4 @@
-import { Customer, Provider } from '../models';
+import { Customer, Parent, Provider } from '../models';
 import isEmpty from '../../lib/Helpers';
 
 class FileController {
@@ -9,7 +9,11 @@ class FileController {
       const { id } = headers;
 
       if (Number(params.id) !== id) {
-        return res.status(403).json({ status: 'Access denied', success: false, message: 'Unauthorized access' });
+        return res.status(403).json({
+          status: 'Access denied',
+          success: false,
+          message: 'Unauthorized access',
+        });
       }
 
       const customer = await Customer.findByPk(id);
@@ -23,8 +27,37 @@ class FileController {
 
       return res.json(customer);
     } catch (error) {
-      console.log('--> FileController - CUSTOMER', error);
+      return res.status(500).json({
+        error: 'Internal server error',
+      });
+    }
+  }
 
+  async storeParent(req, res) {
+    try {
+      const { files, headers, params } = req;
+      const { picture_profile } = files;
+      const { id } = headers;
+
+      if (Number(params.id) !== id) {
+        return res.status(403).json({
+          status: 'Access denied',
+          success: false,
+          message: 'Unauthorized access',
+        });
+      }
+
+      const parent = await Parent.findByPk(id);
+      const body = {};
+
+      if (!isEmpty(picture_profile)) {
+        body.picture_profile = picture_profile[0].filename;
+      }
+
+      await parent.update(body);
+
+      return res.json(parent);
+    } catch (error) {
       return res.status(500).json({
         error: 'Internal server error',
       });
@@ -38,7 +71,11 @@ class FileController {
       const { id } = headers;
 
       if (Number(params.id) !== id) {
-        return res.status(403).json({ status: 'Access denied', success: false, message: 'Unauthorized access' });
+        return res.status(403).json({
+          status: 'Access denied',
+          success: false,
+          message: 'Unauthorized access',
+        });
       }
 
       const provider = await Provider.findByPk(id);
@@ -64,8 +101,6 @@ class FileController {
 
       return res.json(provider);
     } catch (error) {
-      console.log('--> FileController - PROVIDER', error);
-
       return res.status(500).json({
         error: 'Internal server error',
       });

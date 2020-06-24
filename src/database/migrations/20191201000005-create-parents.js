@@ -1,43 +1,56 @@
 module.exports = {
   up: (queryInterface, Sequelize) => {
-    return queryInterface.createTable('addresses', {
+    return queryInterface.createTable('parents', {
       id: {
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,
         type: Sequelize.INTEGER,
       },
-      city: {
+      birthdate: {
+        allowNull: false,
+        type: Sequelize.DATE,
+      },
+      gender: {
+        allowNull: false,
+        type: Sequelize.ENUM,
+        values: ['female', 'male'],
+      },
+      lastname: {
         allowNull: false,
         type: Sequelize.STRING,
       },
-      complement: {
+      name: {
+        allowNull: false,
+        type: Sequelize.STRING,
+      },
+      onesignal: {
         allowNull: true,
         type: Sequelize.STRING,
       },
-      country: {
+      phone_number: {
         allowNull: false,
         type: Sequelize.STRING,
+        unique: true,
       },
-      district: {
+      phone_number_is_whatsapp: {
         allowNull: false,
+        default: false,
+        type: Sequelize.BOOLEAN,
+      },
+      picture_profile: {
+        allowNull: true,
         type: Sequelize.STRING,
       },
-      number: {
-        allowNull: false,
+      user_id: {
+        allowNull: true,
+        onDelete: 'CASCADE',
+        onUpdate: 'CASCADE',
+        references: {
+          key: 'id',
+          model: 'users',
+        },
         type: Sequelize.INTEGER,
-      },
-      postal_code: {
-        allowNull: false,
-        type: Sequelize.STRING,
-      },
-      state: {
-        allowNull: false,
-        type: Sequelize.STRING,
-      },
-      street: {
-        allowNull: false,
-        type: Sequelize.STRING,
       },
       created_at: {
         allowNull: false,
@@ -49,7 +62,8 @@ module.exports = {
       },
     });
   },
+
   down: queryInterface => {
-    return queryInterface.dropTable('addresses');
+    return queryInterface.dropTable('parents');
   },
 };

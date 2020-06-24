@@ -1,11 +1,12 @@
 module.exports = {
   up: queryInterface => {
     return queryInterface.bulkInsert(
-      'provider_periods',
+      'customer_tokens',
       [
         {
-          period_id: 1,
-          provider_id: 1,
+          id: 1,
+          customer_id: 1,
+          token: 'C$DzHr#N0xSs',
           created_at: new Date(),
           updated_at: new Date(),
         },
@@ -15,6 +16,6 @@ module.exports = {
   },
 
   down: queryInterface => {
-    return queryInterface.bulkDelete('provider_periods', null, {});
+    return queryInterface.bulkDelete('customer_tokens', null, {});
   },
 };

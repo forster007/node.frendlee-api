@@ -13,15 +13,15 @@ module.exports = {
         },
         {
           account_type: 'customer',
-          email: 'imperator.03@hotmail.com',
+          email: 'imperator.18@hotmail.com',
           password_hash: '$2y$08$Ab5XuM1hi6xmQRnH3iIJPOF.hTtWuXUgOIuVrAk2josppnLC4T6A6',
           status: 'enabled',
           created_at: new Date(),
           updated_at: new Date(),
         },
         {
-          account_type: 'customer',
-          email: 'imperator.18@hotmail.com',
+          account_type: 'parent',
+          email: 'imperator.03@hotmail.com',
           password_hash: '$2y$08$Ab5XuM1hi6xmQRnH3iIJPOF.hTtWuXUgOIuVrAk2josppnLC4T6A6',
           status: 'enabled',
           created_at: new Date(),
@@ -30,14 +30,6 @@ module.exports = {
         {
           account_type: 'provider',
           email: 'forster007@gmail.com',
-          password_hash: '$2y$08$Ab5XuM1hi6xmQRnH3iIJPOF.hTtWuXUgOIuVrAk2josppnLC4T6A6',
-          status: 'enabled',
-          created_at: new Date(),
-          updated_at: new Date(),
-        },
-        {
-          account_type: 'provider',
-          email: 'andrescherrer@gmail.com',
           password_hash: '$2y$08$Ab5XuM1hi6xmQRnH3iIJPOF.hTtWuXUgOIuVrAk2josppnLC4T6A6',
           status: 'enabled',
           created_at: new Date(),

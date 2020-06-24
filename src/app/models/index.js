@@ -3,6 +3,9 @@ import Administrator from './Administrator';
 import Appointment from './Appointment';
 import Clock from './Clock';
 import Customer from './Customer';
+import CustomerParent from './CustomerParent';
+import CustomerToken from './CustomerToken';
+import Parent from './Parent';
 import Period from './Period';
 import Profile from './Profile';
 import Provider from './Provider';
@@ -21,6 +24,9 @@ export {
   Appointment,
   Clock,
   Customer,
+  CustomerParent,
+  CustomerToken,
+  Parent,
   Period,
   Profile,
   Provider,

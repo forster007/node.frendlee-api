@@ -1,31 +1,43 @@
 module.exports = {
   up: (queryInterface, Sequelize) => {
-    return queryInterface.createTable('provider_clocks', {
+    return queryInterface.createTable('customer_parents', {
       id: {
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,
         type: Sequelize.INTEGER,
       },
-      clock_id: {
+      customer_id: {
         allowNull: false,
-        onDelete: 'CASCADE',
+        onDelete: 'SET NULL',
         onUpdate: 'CASCADE',
         references: {
           key: 'id',
-          model: 'clocks',
+          model: 'customers',
         },
         type: Sequelize.INTEGER,
       },
-      provider_id: {
+      parent_id: {
         allowNull: false,
-        onDelete: 'CASCADE',
+        onDelete: 'SET NULL',
         onUpdate: 'CASCADE',
         references: {
           key: 'id',
-          model: 'providers',
+          model: 'parents',
         },
         type: Sequelize.INTEGER,
+      },
+      customer_nickname: {
+        type: Sequelize.STRING,
+      },
+      parent_nickname: {
+        type: Sequelize.STRING,
+      },
+      status: {
+        allowNull: false,
+        defaultValue: 'waiting',
+        type: Sequelize.ENUM,
+        values: ['waiting', 'approved', 'rejected'],
       },
       created_at: {
         allowNull: false,
@@ -37,8 +49,7 @@ module.exports = {
       },
     });
   },
-
   down: queryInterface => {
-    return queryInterface.dropTable('provider_clocks');
+    return queryInterface.dropTable('customer_parents');
   },
 };

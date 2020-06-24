@@ -1,18 +1,23 @@
 module.exports = {
   up: (queryInterface, Sequelize) => {
-    return queryInterface.createTable('periods', {
+    return queryInterface.createTable('customer_tokens', {
       id: {
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,
         type: Sequelize.INTEGER,
       },
-      enabled: {
+      customer_id: {
         allowNull: false,
-        defaultValue: true,
-        type: Sequelize.BOOLEAN,
+        onDelete: 'SET NULL',
+        onUpdate: 'CASCADE',
+        references: {
+          key: 'id',
+          model: 'customers',
+        },
+        type: Sequelize.INTEGER,
       },
-      name: {
+      token: {
         allowNull: false,
         type: Sequelize.STRING,
       },
@@ -27,6 +32,6 @@ module.exports = {
     });
   },
   down: queryInterface => {
-    return queryInterface.dropTable('periods');
+    return queryInterface.dropTable('customer_tokens');
   },
 };

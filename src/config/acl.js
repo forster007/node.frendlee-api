@@ -10,11 +10,20 @@ export default {
       permissions: [
         { action: 'allow', methods: ['GET', 'POST', 'PUT'], resource: '/appointments/*' },
         { action: 'allow', methods: ['GET', 'POST'], resource: '/customers/*' },
+        { action: 'allow', methods: ['POST'], resource: '/customertokens/*' },
         { action: 'allow', methods: ['GET', 'PUT'], resource: '/messages/*' },
         { action: 'allow', methods: ['POST'], resource: '/onesignal' },
         { action: 'allow', methods: ['POST'], resource: '/payments' },
         { action: 'allow', methods: ['GET'], resource: '/providers/*' },
         { action: 'allow', methods: ['POST'], resource: '/ratings' },
+      ],
+    },
+    {
+      group: 'parent',
+      permissions: [
+        { action: 'allow', methods: ['POST'], resource: '/customerparents' },
+        { action: 'allow', methods: ['POST'], resource: '/onesignal' },
+        { action: 'allow', methods: ['GET', 'POST'], resource: '/parents/*' },
       ],
     },
     {

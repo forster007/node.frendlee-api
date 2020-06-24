@@ -54,9 +54,12 @@ class App {
     this.app.use('/clocks', router.clocks);
     this.app.use('/confirmations', router.confirmations);
     this.app.use('/customers', router.customers);
+    this.app.use('/customerparents', router.customerparents);
+    this.app.use('/customertokens', router.customertokens);
     this.app.use('/messages', router.messages);
     this.app.use('/notifications', router.notifications);
     this.app.use('/onesignal', router.onesignal);
+    this.app.use('/parents', router.parents);
     this.app.use('/payments', router.payments);
     this.app.use('/periods', router.periods);
     this.app.use('/providers', router.providers);

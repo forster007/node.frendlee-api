@@ -10,7 +10,7 @@ module.exports = {
       account_type: {
         allowNull: false,
         type: Sequelize.ENUM,
-        values: ['administrator', 'customer', 'provider'],
+        values: ['administrator', 'customer', 'parent', 'provider'],
       },
       email: {
         allowNull: false,

@@ -9,6 +9,7 @@ module.exports = {
   },
   dialect: process.env.PG_DIALECT,
   host: process.env.PG_HOST,
+  logging: false,
   password: process.env.PG_PASSWORD,
   username: process.env.PG_USERNAME,
 };

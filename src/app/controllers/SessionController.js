@@ -1,7 +1,7 @@
 import jwt from 'jsonwebtoken';
 import { authConfig } from '../../config';
 import isEmpty from '../../lib/Helpers';
-import { Administrator, Customer, Provider, User } from '../models';
+import { Administrator, Customer, Parent, Provider, User } from '../models';
 
 class SessionController {
   async store(req, res) {
@@ -62,6 +62,22 @@ class SessionController {
               account_type,
               email,
               id: customer.id,
+              uid: id,
+            },
+          });
+        }
+
+        case 'parent': {
+          const parent = await Parent.findOne({
+            where: { user_id: id },
+          });
+
+          return res.json({
+            token: jwt.sign({ account_type, email, id: parent.id, uid: id }, authConfig.secret, { expiresIn: authConfig.expiresIn }),
+            user: {
+              account_type,
+              email,
+              id: parent.id,
               uid: id,
             },
           });

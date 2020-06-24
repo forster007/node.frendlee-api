@@ -1,23 +1,21 @@
 module.exports = {
   up: queryInterface => {
     return queryInterface.bulkInsert(
-      'provider_stuffs',
+      'services',
       [
         {
-          provider_id: 1,
-          stuff_id: 2,
+          enabled: true,
+          max_value: 200.0,
+          min_value: 100.0,
+          name: 'I can provide medical support',
           created_at: new Date(),
           updated_at: new Date(),
         },
         {
-          provider_id: 1,
-          stuff_id: 3,
-          created_at: new Date(),
-          updated_at: new Date(),
-        },
-        {
-          provider_id: 1,
-          stuff_id: 4,
+          enabled: true,
+          max_value: 100.0,
+          min_value: 50.0,
+          name: 'I cannot provide medical support',
           created_at: new Date(),
           updated_at: new Date(),
         },
@@ -27,6 +25,6 @@ module.exports = {
   },
 
   down: queryInterface => {
-    return queryInterface.bulkDelete('provider_stuffs', null, {});
+    return queryInterface.bulkDelete('services', null, {});
   },
 };
