@@ -27,6 +27,18 @@ module.exports = {
           created_at: new Date(),
           updated_at: new Date(),
         },
+        {
+          city: 'Canoas',
+          complement: null,
+          country: 'Brasil',
+          district: 'Igara',
+          number: '75',
+          postal_code: '92410330',
+          state: 'RS',
+          street: 'Rua Apá',
+          created_at: new Date(),
+          updated_at: new Date(),
+        },
       ],
       {}
     );

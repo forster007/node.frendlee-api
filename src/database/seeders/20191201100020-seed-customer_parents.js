@@ -4,12 +4,20 @@ module.exports = {
       'customer_parents',
       [
         {
-          id: 1,
           customer_id: 1,
           parent_id: 1,
           customer_nickname: 'Daughter',
           parent_nickname: 'Mother',
           status: 'approved',
+          created_at: new Date(),
+          updated_at: new Date(),
+        },
+        {
+          customer_id: 2,
+          parent_id: 1,
+          customer_nickname: null,
+          parent_nickname: null,
+          status: 'waiting',
           created_at: new Date(),
           updated_at: new Date(),
         },

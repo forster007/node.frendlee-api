@@ -3,6 +3,7 @@ import CustomerParentController from '../app/controllers/CustomerParentControlle
 
 const router = express.Router();
 
+router.get('/', CustomerParentController.index);
 router.post('/', CustomerParentController.store);
 
 export default router;

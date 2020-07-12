@@ -21,9 +21,12 @@ export default {
     {
       group: 'parent',
       permissions: [
-        { action: 'allow', methods: ['POST'], resource: '/customerparents' },
+        { action: 'allow', methods: ['GET', 'POST', 'PUT'], resource: '/appointments/*' },
+        { action: 'allow', methods: ['GET', 'POST'], resource: '/customerparents' },
+        { action: 'allow', methods: ['GET', 'PUT'], resource: '/messages/*' },
         { action: 'allow', methods: ['POST'], resource: '/onesignal' },
         { action: 'allow', methods: ['GET', 'POST'], resource: '/parents/*' },
+        { action: 'allow', methods: ['GET'], resource: '/providers/*' },
       ],
     },
     {

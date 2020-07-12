@@ -8,6 +8,11 @@ class CustomerParent extends Model {
         parent_id: Sequelize.INTEGER,
         customer_nickname: Sequelize.STRING,
         parent_nickname: Sequelize.STRING,
+        status: {
+          defaultValue: 'waiting',
+          type: Sequelize.ENUM,
+          values: ['waiting', 'approved', 'rejected'],
+        },
       },
       {
         sequelize,

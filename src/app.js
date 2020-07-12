@@ -25,9 +25,6 @@ class App {
   }
 
   middlewares() {
-    acl.config(aclConfig);
-    mwAuth.unless = unless;
-
     this.app.use(cors());
     this.app.use(helmet());
     this.app.use(json({ limit: '50mb' }));
@@ -36,9 +33,6 @@ class App {
       req.connected_users = this.connected_users;
       next();
     });
-
-    this.app.use(mwAuth.unless(unlessConfig));
-    this.app.use(acl.authorize.unless(unlessConfig));
   }
 
   routes() {
@@ -47,6 +41,11 @@ class App {
     this.app.use(`/confirmation`, (req, res) => {
       res.sendFile(path.resolve(path.join(`${__dirname}/app/views/htmls/confirmation.html`)));
     });
+
+    acl.config(aclConfig);
+    mwAuth.unless = unless;
+    this.app.use(mwAuth.unless(unlessConfig));
+    this.app.use(acl.authorize.unless(unlessConfig));
 
     this.app.use('/administrators', router.administrators);
     this.app.use('/appointments', router.appointments);
