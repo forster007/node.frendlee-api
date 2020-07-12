@@ -1,4 +1,4 @@
-import { Customer, CustomerParent, CustomerToken } from '../models';
+import { Customer, CustomerParent, CustomerToken, Parent } from '../models';
 
 class CustomerParentController {
   async index(req, res) {
@@ -7,7 +7,19 @@ class CustomerParentController {
 
     switch (account_type) {
       case 'customer': {
-        return res.json({});
+        const customers = await CustomerParent.findAll({
+          include: [
+            {
+              as: 'parent',
+              attributes: ['avatar', 'birthdate', 'lastname', 'name', 'picture_profile'],
+              model: Parent,
+            },
+          ],
+          order: [['id', 'DESC']],
+          where: { customer_id: id },
+        });
+
+        return res.json(customers);
       }
 
       case 'parent': {
