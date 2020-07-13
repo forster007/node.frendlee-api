@@ -43,6 +43,38 @@ class CustomerParentController {
     }
   }
 
+  async update(req, res) {
+    try {
+      const { body, headers, params } = req;
+      const { account_type, id } = headers;
+      const { id: customerParent_id } = params;
+
+      switch (account_type) {
+        case 'customer': {
+          const customerParent = await CustomerParent.findOne({
+            where: {
+              id: customerParent_id,
+              customer_id: id,
+            },
+          });
+
+          if (!customerParent) {
+            throw new Error('You can not update this customer parent');
+          }
+
+          await customerParent.update(body);
+
+          return res.json(customerParent);
+        }
+
+        default:
+          throw new Error('You can not update this customer parent');
+      }
+    } catch (error) {
+      return res.status(400).json({ message: error.message });
+    }
+  }
+
   async store(req, res) {
     try {
       const { body, headers } = req;

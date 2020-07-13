@@ -10,7 +10,7 @@ export default {
       permissions: [
         { action: 'allow', methods: ['GET', 'POST', 'PUT'], resource: '/appointments/*' },
         { action: 'allow', methods: ['GET', 'POST'], resource: '/customers/*' },
-        { action: 'allow', methods: ['GET', 'POST'], resource: '/customerparents' },
+        { action: 'allow', methods: ['GET', 'POST', 'PUT'], resource: '/customerparents/*' },
         { action: 'allow', methods: ['POST'], resource: '/customertokens/*' },
         { action: 'allow', methods: ['GET', 'PUT'], resource: '/messages/*' },
         { action: 'allow', methods: ['POST'], resource: '/onesignal' },
