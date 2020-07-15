@@ -1,7 +1,7 @@
 import axios from 'axios';
 import moment from 'moment';
 import { Op } from 'sequelize';
-import { Appointment, Customer, Provider, ProviderServices, Service, User } from '../models';
+import { Appointment, Customer, CustomerParent, Provider, ProviderServices, Service, User } from '../models';
 import { Message } from '../schemas';
 import isEmpty from '../../lib/Helpers';
 
@@ -35,6 +35,31 @@ class AppointmentController {
             },
           ],
           where: { customer_id: id },
+          order: [
+            ['status', 'ASC'],
+            ['start_at', 'DESC'],
+          ],
+        });
+
+        return res.json(appointments);
+      }
+
+      case 'parent': {
+        const customerParents = await CustomerParent.findAll({
+          attributes: ['customer_id'],
+          where: { parent_id: id },
+        });
+
+        const customersIdsToRetrieveAppointments = customerParents.map(e => e.customer_id);
+
+        const appointments = await Appointment.findAll({
+          include: [
+            { as: 'provider', attributes: ['avatar', 'lastname', 'name', 'picture_profile'], model: Provider },
+            { as: 'detail', attributes: ['id'], include: [{ as: 'service', attributes: ['name'], model: Service }], model: ProviderServices },
+          ],
+          where: {
+            customer_id: customersIdsToRetrieveAppointments,
+          },
           order: [
             ['status', 'ASC'],
             ['start_at', 'DESC'],

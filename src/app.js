@@ -48,7 +48,6 @@ class App {
     this.app.use(acl.authorize.unless(unlessConfig));
 
     this.app.use('/administrators', router.administrators);
-    this.app.use('/administrators123451233213', router.administrators);
     this.app.use('/appointments', router.appointments);
     this.app.use('/checks', router.checks);
     this.app.use('/clocks', router.clocks);
