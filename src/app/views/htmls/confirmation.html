@@ -1,11 +1,24 @@
 <html>
   <head>
     <title>Express HTML</title>
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+    <link
+      rel="stylesheet"
+      href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
+      integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh"
+      crossorigin="anonymous"
+    />
     <script src="https://kit.fontawesome.com/7ead4cb15d.js" crossorigin="anonymous"></script>
     <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+    <script
+      src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
+      integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo"
+      crossorigin="anonymous"
+    ></script>
+    <script
+      src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"
+      integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6"
+      crossorigin="anonymous"
+    ></script>
   </head>
 
   <style>
@@ -25,7 +38,7 @@
       color: #333;
       text-shadow: none;
       background-color: #fff;
-      border: .05rem solid #fff;
+      border: 0.05rem solid #fff;
     }
 
     .btn-success,
@@ -48,8 +61,8 @@
       display: -ms-flexbox;
       display: flex;
       color: #fff;
-      text-shadow: 0 .05rem .1rem rgba(0, 0, 0, .5);
-      box-shadow: inset 0 0 5rem rgba(0, 0, 0, .5);
+      text-shadow: 0 0.05rem 0.1rem rgba(0, 0, 0, 0.5);
+      box-shadow: inset 0 0 5rem rgba(0, 0, 0, 0.5);
     }
 
     .cover-container {
@@ -65,16 +78,16 @@
     }
 
     .nav-masthead .nav-link {
-      padding: .25rem 0;
+      padding: 0.25rem 0;
       font-weight: 700;
-      color: rgba(255, 255, 255, .5);
+      color: rgba(255, 255, 255, 0.5);
       background-color: transparent;
-      border-bottom: .25rem solid transparent;
+      border-bottom: 0.25rem solid transparent;
     }
 
     .nav-masthead .nav-link:hover,
     .nav-masthead .nav-link:focus {
-      border-bottom-color: rgba(255, 255, 255, .25);
+      border-bottom-color: rgba(255, 255, 255, 0.25);
     }
 
     .nav-masthead .nav-link + .nav-link {
@@ -100,12 +113,12 @@
       padding: 0 1.5rem;
     }
     .cover .btn-lg {
-      padding: .75rem 1.25rem;
+      padding: 0.75rem 1.25rem;
       font-weight: 700;
     }
 
     .mastfoot {
-      color: rgba(255, 255, 255, .5);
+      color: rgba(255, 255, 255, 0.5);
     }
   </style>
 
@@ -113,7 +126,10 @@
     <div class="cover-container d-flex w-100 h-100 p-3 mx-auto flex-column">
       <main role="main" class="inner cover">
         <h1 class="cover-heading">Account activation.</h1>
-        <p class="lead">Cover is a one-page template for building simple and beautiful home pages. Download, edit the text, and add your own fullscreen background photo to make it your own.</p>
+        <p class="lead">
+          Cover is a one-page template for building simple and beautiful home pages. Download, edit the text, and add your own fullscreen background photo to
+          make it your own.
+        </p>
         <p class="lead">
           <button id="activateButton" onclick="activeteAccount()" class="btn btn-lg btn-success">
             Activate account
@@ -126,7 +142,16 @@
           <div class="modal-content">
             <div class="alert alert-primary" role="alert">
               <h4 class="alert-heading" style="margin-top: 20px">Your user has been activated</h4>
-              <button style="margin-bottom: 20px; margin-top: 20px;" onclick="$('#activateButton').html('Account activated').removeClass('btn-success').addClass('btn-primary');" type="button" class="btn btn-lg btn-primary" data-dismiss="modal" style="margin-top: 20px">Finish</button>
+              <button
+                style="margin-bottom: 20px; margin-top: 20px;"
+                onclick="$('#activateButton').html('Account activated').removeClass('btn-success').addClass('btn-primary');"
+                type="button"
+                class="btn btn-lg btn-primary"
+                data-dismiss="modal"
+                style="margin-top: 20px"
+              >
+                Finish
+              </button>
             </div>
           </div>
         </div>
@@ -137,7 +162,15 @@
           <div class="modal-content">
             <div class="alert alert-warning" role="alert">
               <h4 class="alert-heading" style="margin-top: 20px">Wait for administrator contact</h4>
-              <button style="margin-bottom: 20px; margin-top: 20px;" onclick="$('#activateButton').html('Wait for administrator contact').removeClass('btn-success').addClass('btn-warning');" type="button" class="btn btn-lg btn-warning" data-dismiss="modal">Finish</button>
+              <button
+                style="margin-bottom: 20px; margin-top: 20px;"
+                onclick="$('#activateButton').html('Wait for administrator contact').removeClass('btn-success').addClass('btn-warning');"
+                type="button"
+                class="btn btn-lg btn-warning"
+                data-dismiss="modal"
+              >
+                Finish
+              </button>
             </div>
           </div>
         </div>
@@ -148,7 +181,15 @@
           <div class="modal-content">
             <div class="alert alert-danger" role="alert">
               <h4 class="alert-heading" style="margin-top: 20px">Sorry, we can not activate your user</h4>
-              <button style="margin-bottom: 20px; margin-top: 20px;" onclick="$('#activateButton').html('Account unactivated').removeClass('btn-success').addClass('btn-danger');" type="button" class="btn btn-lg btn-danger" data-dismiss="modal">Finish</button>
+              <button
+                style="margin-bottom: 20px; margin-top: 20px;"
+                onclick="$('#activateButton').html('Account unactivated').removeClass('btn-success').addClass('btn-danger');"
+                type="button"
+                class="btn btn-lg btn-danger"
+                data-dismiss="modal"
+              >
+                Finish
+              </button>
             </div>
           </div>
         </div>
@@ -180,25 +221,30 @@
     }
 
     function activeteAccount() {
-      $('#activateButton').html('<i class="fas fa-spinner fa-spin"></i>').attr('disabled', true);
+      $('#activateButton')
+        .html('<i class="fas fa-spinner fa-spin"></i>')
+        .attr('disabled', true);
 
       const token = getUrlParams('token');
-      const url = `http://${window.location.host}/api/confirmations?token=${token}`;
+      const url = `https://${window.location.host}/confirmations?token=${token}`;
 
       $.ajax({
         url,
-        type: 'GET'
-      }).done(data => {
-        $('#successBackdrop').modal('show');
-      }).fail(error => {
-        switch (error.responseJSON.type) {
-          case 'already-verified':
-            $('#warningBackdrop').modal('show');
-            break;
-          default:
-            $('#errorBackdrop').modal('show');
-        }
-      });
-    };
+        type: 'GET',
+      })
+        .done(data => {
+          $('#successBackdrop').modal('show');
+        })
+        .fail(error => {
+          switch (error.responseJSON.type) {
+            case 'already-verified':
+              $('#warningBackdrop').modal('show');
+              break;
+            default:
+              $('#errorBackdrop').modal('show');
+              break;
+          }
+        });
+    }
   </script>
 </html>
