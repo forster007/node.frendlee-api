@@ -47,7 +47,10 @@ class AppointmentController {
       case 'parent': {
         const customerParents = await CustomerParent.findAll({
           attributes: ['customer_id'],
-          where: { parent_id: id },
+          where: {
+            parent_id: id,
+            status: 'accepted',
+          },
         });
 
         const customersIdsToRetrieveAppointments = customerParents.map(e => e.customer_id);
