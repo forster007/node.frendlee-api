@@ -2,8 +2,9 @@ import { Customer, CustomerParent, CustomerToken, Parent } from '../models';
 
 class CustomerParentController {
   async index(req, res) {
-    const { headers } = req;
+    const { headers, query } = req;
     const { account_type, id } = headers;
+    const { all } = query;
 
     switch (account_type) {
       case 'customer': {
@@ -32,7 +33,10 @@ class CustomerParentController {
             },
           ],
           order: [['id', 'DESC']],
-          where: { parent_id: id },
+          where: {
+            parent_id: id,
+            status: all ? ['approved', 'rejected', 'waiting'] : 'approved',
+          },
         });
 
         return res.json(parents);
