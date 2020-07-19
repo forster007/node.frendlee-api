@@ -49,7 +49,7 @@ class AppointmentController {
           attributes: ['customer_id'],
           where: {
             parent_id: id,
-            status: 'accepted',
+            status: 'approved',
           },
         });
 
