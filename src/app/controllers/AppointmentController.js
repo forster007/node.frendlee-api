@@ -1,7 +1,7 @@
 import axios from 'axios';
 import moment from 'moment';
 import { Op } from 'sequelize';
-import { Appointment, Customer, CustomerParent, Provider, ProviderServices, Service, User } from '../models';
+import { Appointment, Customer, CustomerParent, Parent, Provider, ProviderServices, Service, User } from '../models';
 import { Message } from '../schemas';
 import isEmpty from '../../lib/Helpers';
 
@@ -238,6 +238,142 @@ class AppointmentController {
           {
             to: provider.onesignal,
             body: 'You have a new appointmnet.',
+            title: 'New appointment',
+          },
+        ]);
+
+        return res.json(appointment);
+      }
+
+      if (account_type === 'parent') {
+        const parent = await Parent.findOne({
+          attributes: { exclude },
+          where: { id: headers.id },
+        });
+
+        if (isEmpty(parent)) {
+          throw new Error('Your parent can not store an appointment');
+        }
+
+        const { customer_id } = body;
+
+        const customerParent = await CustomerParent.findOne({
+          where: {
+            customer_id,
+            parent_id: headers.id,
+            status: 'approved',
+          },
+        });
+
+        if (isEmpty(customerParent)) {
+          throw new Error('Your parent can not store an appointment');
+        }
+
+        const customer = await Customer.findOne({
+          attributes: { exclude },
+          include: [{ as: 'user', attributes: ['email', 'status'], model: User }],
+          where: { id: customer_id },
+        });
+
+        if (isEmpty(customer)) {
+          throw new Error('You cannot store an appointment');
+        }
+
+        const cUser = customer.user;
+
+        if (cUser.status === 'disabled' || cUser.status === 'locked') {
+          throw new Error(`You cannot store an appointment because your account was ${cUser.status}`);
+        }
+
+        const provider = await Provider.findOne({
+          attributes: { exclude },
+          include: [{ as: 'user', attributes: ['email', 'status'], model: User }],
+          where: { id: body.provider_id },
+        });
+
+        if (isEmpty(provider)) {
+          throw new Error('Provider does not exists or he was unavailable');
+        }
+
+        const pUser = provider.user;
+
+        if (pUser.status === 'disabled' || pUser.status === 'locked') {
+          throw new Error(`You cannot store an appointment because this provider account was ${pUser.status}`);
+        }
+
+        const { address, date, duration, observation, provider_service_id } = body;
+
+        const dateNow = moment().toDate();
+        const start_at = moment(date).toDate();
+        const finish_at = moment(date)
+          .add(duration, 'hour')
+          .toDate();
+
+        if (moment(start_at).isBefore(dateNow)) {
+          throw new Error('You cannot store an appointment because past dates are not permitted');
+        }
+
+        const customerAvailable = await Appointment.findOne({
+          where: {
+            [Op.and]: [
+              {
+                [Op.or]: [{ start_at: { [Op.between]: [start_at, finish_at] } }, { finish_at: { [Op.between]: [start_at, finish_at] } }],
+              },
+              {
+                customer_id: customer.id,
+              },
+            ],
+          },
+        });
+
+        if (!isEmpty(customerAvailable)) {
+          throw new Error('You already have an appointment on this date');
+        }
+
+        const providerAvailable = await Appointment.findOne({
+          where: {
+            [Op.and]: [
+              {
+                [Op.or]: [{ start_at: { [Op.between]: [start_at, finish_at] } }, { finish_at: { [Op.between]: [start_at, finish_at] } }],
+              },
+              {
+                provider_id: provider.id,
+              },
+            ],
+          },
+        });
+
+        if (!isEmpty(providerAvailable)) {
+          throw new Error('Your provider already have an appointment on this date');
+        }
+
+        const providerService = await ProviderServices.findByPk(provider_service_id);
+
+        if (isEmpty(providerService)) {
+          throw new Error('Your selected provider service is not avaiable');
+        }
+
+        const value = providerService.value * duration;
+
+        const appointment = await Appointment.create({
+          start_at,
+          duration,
+          finish_at,
+          observation,
+          value,
+          address,
+          status: 'waiting',
+          customer_id: customer.id,
+          provider_id: provider.id,
+          provider_service_id: providerService.id,
+        });
+
+        await Message.create({ appointment_id: appointment.id });
+
+        axios.post('https://exp.host/--/api/v2/push/send', [
+          {
+            to: customer.onesignal,
+            body: `You have a new appointment created by your parent ${parent.name} ${parent.lastname}.`,
             title: 'New appointment',
           },
         ]);
