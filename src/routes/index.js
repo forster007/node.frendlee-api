@@ -1,3 +1,4 @@
+import addresses from './address';
 import administrators from './administrator';
 import appointments from './appointment';
 import checks from './check';
@@ -22,6 +23,7 @@ import stuffs from './stuff';
 import users from './user';
 
 export {
+  addresses,
   administrators,
   appointments,
   checks,

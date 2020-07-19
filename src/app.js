@@ -47,6 +47,7 @@ class App {
     this.app.use(mwAuth.unless(unlessConfig));
     this.app.use(acl.authorize.unless(unlessConfig));
 
+    this.app.use('/addresses', router.addresses);
     this.app.use('/administrators', router.administrators);
     this.app.use('/appointments', router.appointments);
     this.app.use('/checks', router.checks);

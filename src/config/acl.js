@@ -8,6 +8,7 @@ export default {
     {
       group: 'customer',
       permissions: [
+        { action: 'allow', methods: ['GET'], resource: '/addresses/*' },
         { action: 'allow', methods: ['GET', 'POST', 'PUT'], resource: '/appointments/*' },
         { action: 'allow', methods: ['GET', 'POST'], resource: '/customers/*' },
         { action: 'allow', methods: ['GET', 'POST', 'PUT'], resource: '/customerparents/*' },
@@ -22,6 +23,7 @@ export default {
     {
       group: 'parent',
       permissions: [
+        { action: 'allow', methods: ['GET'], resource: '/addresses/*' },
         { action: 'allow', methods: ['GET', 'POST', 'PUT'], resource: '/appointments/*' },
         { action: 'allow', methods: ['GET', 'POST'], resource: '/customerparents' },
         { action: 'allow', methods: ['GET', 'PUT'], resource: '/messages/*' },
@@ -33,6 +35,7 @@ export default {
     {
       group: 'provider',
       permissions: [
+        { action: 'allow', methods: ['GET'], resource: '/addresses/*' },
         { action: 'allow', methods: ['GET', 'PUT'], resource: '/appointments/*' },
         { action: 'allow', methods: ['GET', 'PUT'], resource: '/messages/*' },
         { action: 'allow', methods: ['POST'], resource: '/onesignal' },
