@@ -1,4 +1,4 @@
-import { Customer, Provider } from '../models';
+import { Customer, Parent, Provider } from '../models';
 
 class OnesignalController {
   async store(req, res) {
@@ -12,6 +12,13 @@ class OnesignalController {
         await customer.update({ onesignal });
 
         return res.json(customer);
+      }
+
+      case 'parent': {
+        const parent = await Parent.findOne({ where: { id } });
+        await parent.update({ onesignal });
+
+        return res.json({ parent });
       }
 
       case 'provider': {
