@@ -16,7 +16,7 @@ import mwAuth from './app/middlewares/mwAuth';
 class App {
   constructor() {
     this.app = express();
-    this.connected_users = { customer: {}, provider: {} };
+    this.connected_users = { customer: {}, parent: {}, provider: {} };
     this.server = http.Server(this.app);
 
     this.middlewares();
@@ -86,6 +86,7 @@ class App {
     this.io = io(this.server);
     this.io.on('connection', socket => {
       const { account_type, id } = socket.handshake.query;
+
       if (account_type && id) {
         this.connected_users[account_type][id] = socket.id;
         console.log(this.connected_users);

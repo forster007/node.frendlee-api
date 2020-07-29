@@ -362,7 +362,6 @@ class AppointmentController {
           observation,
           value,
           address,
-          status: 'waiting',
           customer_id: customer.id,
           provider_id: provider.id,
           provider_service_id: providerService.id,
@@ -378,12 +377,19 @@ class AppointmentController {
           },
         ]);
 
+        axios.post('https://exp.host/--/api/v2/push/send', [
+          {
+            to: provider.onesignal,
+            body: 'You have a new appointment created by the customer parent.',
+            title: 'New appointment',
+          },
+        ]);
+
         return res.json(appointment);
       }
 
       throw new Error('You cannot store an appointment');
     } catch (e) {
-      console.log(e);
       return res.status(e.status || 400).json({
         error: e.message || 'Appointment already exists',
       });
@@ -426,6 +432,81 @@ class AppointmentController {
               {
                 to: appointment.provider.onesignal,
                 body: 'Your appointment has been payed by the customer.',
+                title: 'Appointment payed',
+              },
+            ]);
+          }
+
+          if (body.status === 'started') {
+            await appointment.update({ started_at: moment().toDate() });
+
+            axios.post('https://exp.host/--/api/v2/push/send', [
+              {
+                to: appointment.provider.onesignal,
+                body: 'Your appointment has been started by the customer.',
+                title: 'Appointment started',
+              },
+            ]);
+          }
+
+          if (body.status === 'finished') {
+            await appointment.update({ finished_at: moment().toDate() });
+
+            axios.post('https://exp.host/--/api/v2/push/send', [
+              {
+                to: appointment.provider.onesignal,
+                body: 'Your appointment has been finished by the customer.',
+                title: 'Appointment finished',
+              },
+            ]);
+          }
+
+          return res.json(appointment);
+        }
+
+        case 'parent': {
+          const customerParent = await CustomerParent.findOne({
+            include: [{ as: 'parent', attributes: ['lastname', 'name'], model: Parent }],
+            where: { customer_id: appointment.customer.id, parent_id: id, status: 'approved' },
+          });
+
+          if (!customerParent) {
+            throw new Error('You do not have permission to update this appointment');
+          }
+
+          await appointment.update(body);
+
+          if (body.status === 'canceled') {
+            axios.post('https://exp.host/--/api/v2/push/send', [
+              {
+                to: appointment.customer.onesignal,
+                body: `Your appointment has been cancelled by your parent ${customerParent.parent.name} ${customerParent.parent.lastname}.`,
+                title: 'Appointment cancelled',
+              },
+            ]);
+
+            axios.post('https://exp.host/--/api/v2/push/send', [
+              {
+                to: appointment.provider.onesignal,
+                body: 'Your appointment has been cancelled by the parent of your customer.',
+                title: 'Appointment cancelled',
+              },
+            ]);
+          }
+
+          if (body.status === 'payed') {
+            axios.post('https://exp.host/--/api/v2/push/send', [
+              {
+                to: appointment.customer.onesignal,
+                body: `Your appointment has been payed by your parent ${customerParent.parent.name} ${customerParent.parent.lastname}.`,
+                title: 'Appointment payed',
+              },
+            ]);
+
+            axios.post('https://exp.host/--/api/v2/push/send', [
+              {
+                to: appointment.provider.onesignal,
+                body: 'Your appointment has been payed by the parent of your customer.',
                 title: 'Appointment payed',
               },
             ]);

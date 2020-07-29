@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { Appointment, Customer, Provider } from '../models';
+import { Appointment, Customer, CustomerParent, Parent, Provider } from '../models';
 import { Message } from '../schemas';
 
 class MessageController {
@@ -12,6 +12,29 @@ class MessageController {
         const appointments = await Appointment.findAll({
           include: [{ as: 'customer', attributes: ['avatar', 'id', 'onesignal', 'picture_profile'], model: Customer }],
           where: { customer_id: id },
+        });
+
+        const appointmentids = appointments.map(appointment => appointment.id);
+        const messages = await Message.find({ appointment_id: appointmentids });
+
+        return res.json({ messages });
+      }
+
+      case 'parent': {
+        const customerParent = await CustomerParent.findAll({
+          attributes: ['customer_id', 'parent_id'],
+          where: { parent_id: id, status: 'approved' },
+        });
+
+        if (!customerParent) {
+          throw new Error('You do not talk on this appointment');
+        }
+
+        const customerIds = customerParent.map(e => e.customer_id);
+
+        const appointments = await Appointment.findAll({
+          include: [{ as: 'customer', attributes: ['avatar', 'id', 'onesignal', 'picture_profile'], model: Customer }],
+          where: { customer_id: customerIds },
         });
 
         const appointmentids = appointments.map(appointment => appointment.id);
@@ -59,6 +82,20 @@ class MessageController {
         }
 
         break;
+      }
+
+      case 'parent': {
+        const customerParent = await CustomerParent.findOne({
+          include: [{ as: 'parent', attributes: ['avatar', 'lastname', 'name', 'picture_profile'], model: Parent }],
+          where: { customer_id: appointment.dataValues.customer_id, parent_id: id, status: 'approved' },
+        });
+
+        if (!customerParent) {
+          throw new Error('You do not talk on this appointment');
+        }
+
+        const messages = await Message.findOne({ appointment_id });
+        return res.json({ ...messages });
       }
 
       case 'provider': {
@@ -110,6 +147,44 @@ class MessageController {
                 },
               ]);
             }
+          }
+
+          break;
+        }
+
+        case 'parent': {
+          const customerParent = await CustomerParent.findOne({
+            include: [{ as: 'parent', attributes: ['avatar', 'lastname', 'name', 'picture_profile'], model: Parent }],
+            where: { customer_id: appointment.dataValues.customer_id, parent_id: id, status: 'approved' },
+          });
+
+          if (!customerParent) {
+            throw new Error('You do not talk on this appointment');
+          }
+
+          messages.user.avatar = customerParent.parent.avatar.uri;
+          await Message.findOneAndUpdate({ appointment_id }, { $push: { messages } });
+
+          const ownerOnline = connected_users.provider[appointment.dataValues.provider.id];
+
+          if (ownerOnline) {
+            io.to(ownerOnline).emit('message', messages);
+          } else if (appointment.dataValues.customer.onesignal) {
+            axios.post('https://exp.host/--/api/v2/push/send', [
+              {
+                to: appointment.dataValues.customer.onesignal,
+                body: text,
+                title: 'New message',
+              },
+            ]);
+
+            axios.post('https://exp.host/--/api/v2/push/send', [
+              {
+                to: appointment.dataValues.provider.onesignal,
+                body: text,
+                title: 'New message',
+              },
+            ]);
           }
 
           break;

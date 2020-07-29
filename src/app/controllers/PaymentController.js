@@ -1,4 +1,4 @@
-import { Appointment, Customer, Provider } from '../models';
+import { Appointment, Customer, CustomerParent, Provider } from '../models';
 
 const stripe = require('stripe')('sk_test_7PfaWB0jUhqz2FbM5HyNizhF00UK36N7ps');
 
@@ -9,7 +9,7 @@ class PeriodController {
       const { appointment_id, token } = body;
       const { account_type, id } = headers;
 
-      if (account_type === 'customer') {
+      if (account_type === 'customer' || account_type === 'parent') {
         const appointment = await Appointment.findByPk(appointment_id, {
           include: [
             { as: 'customer', attributes: ['id', 'onesignal'], model: Customer },
@@ -18,6 +18,20 @@ class PeriodController {
         });
 
         const { customer, status, value } = appointment;
+
+        if (account_type === 'parent') {
+          const customerParent = await CustomerParent.findOne({
+            where: {
+              customer_id: customer.id,
+              parent_id: id,
+              status: 'approved',
+            },
+          });
+
+          if (!customerParent) {
+            throw new Error('You do not have permission to pay this appointment');
+          }
+        }
 
         if (customer.id !== id && status !== 'confirmed') {
           throw new Error('You do not have permission to pay this appointment');

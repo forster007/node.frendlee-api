@@ -29,6 +29,7 @@ export default {
         { action: 'allow', methods: ['GET', 'PUT'], resource: '/messages/*' },
         { action: 'allow', methods: ['POST'], resource: '/onesignal' },
         { action: 'allow', methods: ['GET', 'POST'], resource: '/parents/*' },
+        { action: 'allow', methods: ['POST'], resource: '/payments' },
         { action: 'allow', methods: ['GET'], resource: '/providers/*' },
       ],
     },
