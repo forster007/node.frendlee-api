@@ -10,6 +10,7 @@ import { authConfig } from '../../config';
 const attributes = [
   'id',
   'birthdate',
+  'description',
   'gender',
   'gps',
   'lastname',
