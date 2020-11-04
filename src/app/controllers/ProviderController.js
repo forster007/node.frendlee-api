@@ -105,7 +105,7 @@ class ProviderController {
 
         const providers = await Provider.findAll({
           attributes: ['avatar', 'formation', 'id', 'lastname', 'name', 'picture_profile', [GENERATE_COUNT, `treatments`], [GENERATE_SUM, `stars`]],
-          include: [serviceInclude, stuffInclude, ratingInclude],
+          include: [{ as: 'user', model: User, where: { status: 'enabled' } }, serviceInclude, stuffInclude, ratingInclude],
         });
 
         return res.json(providers);
