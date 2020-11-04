@@ -26,6 +26,9 @@ module.exports = {
         type: Sequelize.ENUM,
         values: ['low', 'normal', 'high'],
       },
+      description: {
+        type: Sequelize.STRING,
+      },
       gender: {
         allowNull: false,
         type: Sequelize.ENUM,
