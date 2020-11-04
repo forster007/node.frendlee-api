@@ -126,7 +126,17 @@ class ProviderController {
       const GENERATE_SUM = subQuery({ field: 'CAST(COALESCE(AVG("rating"."provider_rating"), 0) as float)' });
 
       const provider = await Provider.findByPk(id, {
-        attributes: ['avatar', 'formation', 'id', 'lastname', 'name', 'picture_profile', [GENERATE_COUNT, `treatments`], [GENERATE_SUM, `stars`]],
+        attributes: [
+          'avatar',
+          'description',
+          'formation',
+          'id',
+          'lastname',
+          'name',
+          'picture_profile',
+          [GENERATE_COUNT, `treatments`],
+          [GENERATE_SUM, `stars`],
+        ],
         include: [serviceInclude, stuffInclude, ratingInclude],
       });
 
