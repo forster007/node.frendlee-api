@@ -15,6 +15,7 @@ class Customer extends Model {
           type: Sequelize.ENUM,
           values: ['low', 'medium', 'high'],
         },
+        description: Sequelize.STRING,
         gender: {
           type: Sequelize.ENUM,
           values: ['female', 'male'],
