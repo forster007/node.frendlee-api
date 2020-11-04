@@ -85,6 +85,32 @@ const ratingInclude = {
 class ProviderController {
   async index(req, res) {
     try {
+      const { headers } = req;
+      const { account_type, id } = headers;
+
+      if (account_type === 'administrator' || account_type === 'customer') {
+        const subQuery = ({ field }) => {
+          const query = squel
+            .select({ autoQuoteAliasNames: false })
+            .field(field)
+            .where('"Provider"."id" = "ratings"."provider_id"')
+            .from('ratings as', 'rating')
+            .toString();
+
+          return `(${query})`;
+        };
+
+        const GENERATE_COUNT = subQuery({ field: 'CAST(COUNT(*) AS int)' });
+        const GENERATE_SUM = subQuery({ field: 'CAST(COALESCE(AVG("rating"."provider_rating"), 0) as float)' });
+
+        const providers = await Provider.findAll({
+          attributes: ['avatar', 'formation', 'id', 'lastname', 'name', 'picture_profile', [GENERATE_COUNT, `treatments`], [GENERATE_SUM, `stars`]],
+          include: [serviceInclude, stuffInclude, ratingInclude],
+        });
+
+        return res.json(providers);
+      }
+
       const subQuery = ({ field }) => {
         const query = squel
           .select({ autoQuoteAliasNames: false })
@@ -99,12 +125,12 @@ class ProviderController {
       const GENERATE_COUNT = subQuery({ field: 'CAST(COUNT(*) AS int)' });
       const GENERATE_SUM = subQuery({ field: 'CAST(COALESCE(AVG("rating"."provider_rating"), 0) as float)' });
 
-      const providers = await Provider.findAll({
+      const provider = await Provider.findByPk(id, {
         attributes: ['avatar', 'formation', 'id', 'lastname', 'name', 'picture_profile', [GENERATE_COUNT, `treatments`], [GENERATE_SUM, `stars`]],
         include: [serviceInclude, stuffInclude, ratingInclude],
       });
 
-      return res.json(providers);
+      return res.json(provider);
     } catch (error) {
       console.log('--> ProviderController - INDEX', error);
 
