@@ -11,6 +11,7 @@ class Provider extends Model {
           },
         },
         birthdate: Sequelize.DATE,
+        created_at: Sequelize.DATE,
         gender: {
           type: Sequelize.ENUM,
           values: ['female', 'male'],

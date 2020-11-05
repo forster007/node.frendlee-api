@@ -128,14 +128,19 @@ class ProviderController {
       const provider = await Provider.findByPk(id, {
         attributes: [
           'avatar',
+          'birthdate',
+          'created_at',
           'description',
           'formation',
+          'gender',
           'id',
           'lastname',
           'name',
+          'phone_number',
           'picture_profile',
-          [GENERATE_COUNT, `treatments`],
+          'ssn',
           [GENERATE_SUM, `stars`],
+          [GENERATE_COUNT, `treatments`],
         ],
         include: [serviceInclude, stuffInclude, ratingInclude],
       });
