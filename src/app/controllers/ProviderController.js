@@ -88,7 +88,7 @@ class ProviderController {
       const { headers } = req;
       const { account_type, id } = headers;
 
-      if (account_type === 'administrator' || account_type === 'customer') {
+      if (account_type === 'administrator' || account_type === 'customer' || account_type === 'parent') {
         const subQuery = ({ field }) => {
           const query = squel
             .select({ autoQuoteAliasNames: false })
