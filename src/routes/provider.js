@@ -11,7 +11,7 @@ const upload = multer(multerConfig);
 router.get('/', ProviderController.index);
 router.get('/:id', ProviderController.show);
 router.post('/', ProviderController.store);
-router.put('/:id', ProviderController.update);
+router.put('/', ProviderController.update);
 
 router.post(
   '/:id/files',

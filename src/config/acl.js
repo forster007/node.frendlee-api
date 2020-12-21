@@ -40,7 +40,7 @@ export default {
         { action: 'allow', methods: ['GET', 'PUT'], resource: '/appointments/*' },
         { action: 'allow', methods: ['GET', 'PUT'], resource: '/messages/*' },
         { action: 'allow', methods: ['POST'], resource: '/onesignal' },
-        { action: 'allow', methods: ['GET', 'POST'], resource: '/providers/*' },
+        { action: 'allow', methods: ['GET', 'POST', 'PUT'], resource: '/providers/*' },
         { action: 'allow', methods: ['POST'], resource: '/ratings' },
       ],
     },

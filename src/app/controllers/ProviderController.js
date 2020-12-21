@@ -260,14 +260,21 @@ class ProviderController {
 
   async update(req, res) {
     try {
-      const { body, files, headers, params } = req;
+      const { body, files, headers } = req;
       const { provider_clocks, provider_periods, provider_services, provider_stuffs } = body;
-      const { picture_address, picture_profile } = files;
       const { id } = headers;
 
-      if (Number(params.id) !== id) {
-        return res.status(403).json({ status: 'Access denied', success: false, message: 'Unauthorized access' });
+      let picture_address = '';
+      let picture_profile = '';
+
+      if (files) {
+        picture_address = files.picture_address;
+        picture_profile = files.picture_profile;
       }
+
+      // if (Number(params.id) !== id) {
+      //   return res.status(403).json({ status: 'Access denied', success: false, message: 'Unauthorized access' });
+      // }
 
       const provider = await Provider.findByPk(id);
 
