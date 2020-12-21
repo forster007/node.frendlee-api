@@ -142,7 +142,7 @@ class ProviderController {
           [GENERATE_SUM, `stars`],
           [GENERATE_COUNT, `treatments`],
         ],
-        include: [serviceInclude, stuffInclude, ratingInclude],
+        include: [userInclude, serviceInclude, stuffInclude, ratingInclude],
       });
 
       return res.json(provider);
