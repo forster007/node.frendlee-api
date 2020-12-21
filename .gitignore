@@ -4,3 +4,8 @@ insomnia.json
 .vscode/
 .env
 .DS_Store
+tmp/uploads/*
+!tmp/uploads/6ccdb18a0b085ab02976ab8221a09ea0.jpg
+!tmp/uploads/6ccdb18a0b085ab02976ab8221a09ea1.jpg
+!tmp/uploads/6ccdb18a0b085ab02976ab8221a09ea2.jpg
+!tmp/uploads/6ccdb18a0b085ab02976ab8221a09ea3.jpg
